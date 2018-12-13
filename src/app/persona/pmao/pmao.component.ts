@@ -13,6 +13,7 @@ export class PmaoComponent implements OnInit {
   opcionSeleccionado: any;
   activarModalFormPMAO: boolean = false
   activarModalFormEjecucion: boolean = false
+  listaActividadesFiltrada: any[]
   listaAspectosAmbientales = [
     {
       nombre: "RIESGO E IMPACTO EN EL AGUA",
@@ -208,11 +209,12 @@ export class PmaoComponent implements OnInit {
 
     }
   }
+
   filtrar(nombre: string) {
 
     this.listaActividades = this.listaActividades.filter(ac => ac.nombre == nombre)
   }
-  
+
   toggleModalFormularioPMAO() {
     this.activarModalFormPMAO = !this.activarModalFormPMAO
   }
