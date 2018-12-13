@@ -1,0 +1,33 @@
+
+.body{
+    display: none;
+}
+.collapsie:hover .body{
+display: block;
+}
+
+.ul{
+    font-family: Times New Roman;
+    color: #050505;
+    
+
+}
+.li{
+    text-align: center;
+    background: #eee9e9;
+    margin: 0 0 8px;
+    padding: 3px 10px;
+    font-weight: bold;
+    
+    
+}
+
+.box{ 
+    font-family: Cambria;
+    color:white;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 10px;
+    padding: 3px 10px;
+    border-radius: 20px;
+}

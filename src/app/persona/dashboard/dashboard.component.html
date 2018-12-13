@@ -1,0 +1,48 @@
+<div class="row around-xs">
+  <div class="col-xs-12 ">
+    <form #formControl="ngForm" class="row around-xs" (ngSubmit)="consultarResultados(formControl.value)">
+      <div class="field">
+        <div class="control ">
+          <label for="">
+            Fecha Inicio:<input class="input is-rounded col-xs-12 col-md-5" name="fecha_inicio" ngModel type="date"
+              placeholder="fecha incial">
+
+          </label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="control ">
+          <label for="">
+            Fecha Final<input class="input is-rounded col-xs-12 col-md-5 " name="fecha_final" ngModel type="date"
+              placeholder="fecha incial">
+          </label>
+        </div>
+      </div>
+      <button type="submit" class="button is-success col-xs-12 col-md-2">Consultar</button>
+    </form>
+
+  </div>
+  <div class="col-xs-12 col-md-5  around-md" *ngFor="let indice of (this.listaIndice | async);let i=index">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="border">
+          <h2 class="has-text-centered has-text-link texto_principal  has-background-warning is-info">{{indice.nombre}}</h2>
+          <div class="contenedor_estadistica">
+            <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
+              [chartType]="barChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+          </div>
+          <div class="col-xs-12">
+            <div *ngIf="indice.nombre=='PMAO';else link">
+
+              <a class="button is-info " routerLink="/persona/1/area/1/indice/{{indice.id}}/Pmao/actividades"> actividades</a>
+            </div>
+            <ng-template #link>
+              <a class="button is-info " routerLink="/persona/1/area/1/indice/{{indice.id}}/actividades"> actividades</a>
+
+            </ng-template>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>

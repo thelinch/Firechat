@@ -1,0 +1,69 @@
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="https://bulma.io">
+      APPEQC
+    </a>
+
+    <a role="button" class="navbar-burger burger" aria-label="menu" [ngClass]="{'is-active': activarNavBar}" (click)="toggleNavBar()"
+      aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu" [ngClass]="{'is-active': activarNavBar}">
+    <div class="navbar-start">
+      <a class="navbar-item" routerLink="/persona/{{1}}">
+        <span class="icon">
+          <fa-icon icon="home"></fa-icon>
+        </span>
+      </a>
+      <a [routerLink]="['map']" class="navbar-item">
+        <i class="material-icons">
+          map
+        </i>
+      </a>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          Parametros
+        </a>
+
+        <div class="navbar-dropdown">
+          <a class="navbar-item" [routerLink]="['map','parametros']">
+            Mapeo de Parametros
+          </a>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <figure class="image is-48x48">
+        </figure>
+        <div *ngIf="personaLogeada">
+          <p class="usuario">
+            {{personaLogeada.nombre }}-{{personaLogeada.apellidos }}
+            <strong>AREA:</strong>{{personaLogeada.area?.area }}
+            <strong>CARGO:</strong>{{personaLogeada.tipoPersona?.nombre}}
+
+          </p>
+
+        </div>
+
+        <div *ngIf="personaLogeada.tipoPersona.nombre=='gerente'" [ngClass]="{'isClicked':this.listaIncidenciaCritco.lenght>0}">
+          <i class="material-icons">{{this.listaIncidenciaCritco? 'notifications':'notifications_active'}}</i>
+        </div>
+
+        <div class="alerta">
+          <span class="icon">
+            <fa-icon icon="bell "></fa-icon>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>
