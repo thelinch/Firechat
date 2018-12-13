@@ -10,8 +10,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit {
-  latitudCenter: number = -9.9016775
-  longitudCenter: number = -77.2549935
+  latitudCenter: number = -9.5504168
+  longitudCenter: number = -77.0543888
   listaIncidencia: Observable<incidencias[]>
   colorMolienda = '#7b1fa2'
   poligonMoliendaCoords = [
