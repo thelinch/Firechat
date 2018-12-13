@@ -183,7 +183,8 @@ export class PmaoComponent implements OnInit {
     { name: "Bajo", inicio: 16, fin: 25, color: "#c4bfbd" }]
   idIndice: string
   @ViewChild("clasificacion") clasificacionE: ElementRef
-  listaActividades: Observable<any[]>
+  listaActividades: any[]
+
   constructor(private render: Renderer2, private pmaoService: ActividadPmaoService, private router: ActivatedRoute) { }
   seleccionarOpcion(opcion: any) {
     this.opcionSeleccionado = opcion;
@@ -207,11 +208,18 @@ export class PmaoComponent implements OnInit {
 
     }
   }
+  filtrar(nombre: string) {
+
+    this.listaActividades = this.listaActividades.filter(ac => ac.nombre == nombre)
+  }
+  
   toggleModalFormularioPMAO() {
     this.activarModalFormPMAO = !this.activarModalFormPMAO
   }
   getAllActividades(idIndice) {
-    this.listaActividades = this.pmaoService.getAllActividadPMAO(idIndice)
+    this.pmaoService.getAllActividadPMAO(idIndice).subscribe(lista => {
+      this.listaActividades = lista
+    })
   }
   resetForm(form) {
     form.reset({ nombre: this.opcionSeleccionado.nombre })

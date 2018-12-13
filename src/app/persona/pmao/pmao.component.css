@@ -21,6 +21,9 @@ display: block;
     
     
 }
+li:hover{
+    cursor: pointer;
+}
 
 .box{ 
     font-family: Cambria;
