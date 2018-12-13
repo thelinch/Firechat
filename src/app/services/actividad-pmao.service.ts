@@ -9,8 +9,11 @@ import { Observable } from 'rxjs';
 export class ActividadPmaoService {
   s: AngularFirestoreCollection
   constructor(private afs: AngularFirestore) { }
-  saveActividadPMAO(idIndice: string, actividad) {
-    this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").add(actividad)
+  saveActividadPMAO(idIndice: string, actividad): Observable<boolean> {
+    return Observable.create(obsever => {
+      this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").add(actividad)
+      obsever.next(true)
+    })
   }
   getAllActividadPMAO(idIndice: string): Observable<any[]> {
     return this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").snapshotChanges().pipe(map(actions => actions.map(documentoActividad => {

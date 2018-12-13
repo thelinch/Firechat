@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 export class PmaoComponent implements OnInit {
   opcionSeleccionado: any;
   activarModalFormPMAO: boolean = false
+  activarModalFormEjecucion: boolean = false
   listaAspectosAmbientales = [
     {
       nombre: "RIESGO E IMPACTO EN EL AGUA",
@@ -122,19 +123,19 @@ export class PmaoComponent implements OnInit {
 
 
   serveridadLista = [
-    { item: "CATASTROFICO = 1", valor: 1 },
-    { item: "FATALIDAD    = 2", valor: 2 },
-    { item: "PERMANENTE   = 3", valor: 3 },
-    { item: "TEMPORAL     = 4", valor: 4 },
-    { item: "MENOR        = 5", valor: 5 }
+    { item: "CATASTROFICO", valor: 1 },
+    { item: "FATALIDAD", valor: 2 },
+    { item: "PERMANENTE", valor: 3 },
+    { item: "TEMPORAL", valor: 4 },
+    { item: "MENOR", valor: 5 }
   ]
 
   frecuenciaLista = [
-    { item: "COMUN                = 1", valor: 1 },
-    { item: "HA SUCEDIDO          = 2", valor: 2 },
-    { item: "PODRIA SUCEDER       = 3", valor: 3 },
-    { item: "RARO QUE SUCEDA      = 4", valor: 4 },
-    { item: "IMPOSIBLE QUE SUCEDA = 5", valor: 5 }
+    { item: "COMUN", valor: 1 },
+    { item: "HA SUCEDIDO", valor: 2 },
+    { item: "PODRIA SUCEDER", valor: 3 },
+    { item: "RARO QUE SUCEDA", valor: 4 },
+    { item: "IMPOSIBLE QUE SUCEDA", valor: 5 }
   ]
 
 
@@ -196,6 +197,9 @@ export class PmaoComponent implements OnInit {
   evaluarImpacto(impacto: string) {
 
   }
+  toogleFormEjecucion() {
+    this.activarModalFormEjecucion = !this.activarModalFormEjecucion
+  }
   calcularClasificacion(formulario) {
     if (formulario.Frecuencia !== undefined && formulario.Severidad !== undefined && formulario.Significancia !== undefined) {
       console.log(this.getRiesgoMatrizIper(formulario.Frecuencia.valor, formulario.Severidad.valor))
@@ -230,6 +234,10 @@ export class PmaoComponent implements OnInit {
     return this.matrizIper.find(i => i.frecuencia == frecuencia && i.severidad == severidad)
   }
   save(form) {
-    this.pmaoService.saveActividadPMAO(this.idIndice, form.value)
+    this.pmaoService.saveActividadPMAO(this.idIndice, form.value).subscribe(respuesta => {
+      if (respuesta) {
+        this.toggleModalFormularioPMAO()
+      }
+    })
   }
 }
