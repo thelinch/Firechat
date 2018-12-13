@@ -1,14 +1,14 @@
 <agm-map [panControl]="true"  [disableDefaultUI]="true" [mapTypeId]="'hybrid'" [latitude]="this.latitudCenter" [mapTypeControl]="true" [longitude]="this.longitudCenter">
-  <agm-polygon [paths]="poligonMoliendaCoords" [visible]=options.visible [fillColor]=colorMolienda zIndex=50></agm-polygon>
+  <agm-polygon [paths]="poligonMoliendaCoords" [visible]=options.visible fillOpacity="0" strokeColor="yellow" zIndex=50></agm-polygon>
   <agm-polygon [paths]="poliginoPerforacionCoords" (polyClick)="clickPoligono('D8a5UgSogRhTreAED5BG')" [visible]=options.visibler
-    zIndex=150 fillColor="#00bfa5"></agm-polygon>
-  <agm-polygon [paths]="poligonoantaminaCoords" fillOpacity="0.5" [visible]=options.visible fillColor="#ffffff" zIndex=100></agm-polygon>
-  <agm-polygon [paths]="poligonoPuertoAntaminaCoords" fillColor="#01579b" [visible]=options.visible></agm-polygon>
+    zIndex=150 opacity="0" strokeColor="brown"></agm-polygon>
+  <agm-polygon [paths]="poligonoantaminaCoords" fillOpacity="0" [visible]=options.visible strokeColor="red" zIndex=100></agm-polygon>
+  <agm-polygon [paths]="poligonoPuertoAntaminaCoords" strokeColor="skyblue" opacity="0" [visible]=options.visible></agm-polygon>
   <agm-polyline ngFor="let point of tuberiaCoordinates;let i = index;">
 
   </agm-polyline>
-  <agm-polygon [paths]="flotacionCoords" [visible]=options.visible fillColor="#84ffff"></agm-polygon>
-  <agm-polygon [paths]="relaveCoords" [visible]=options.visible fillColor="#1a237e"></agm-polygon>
+  <agm-polygon [paths]="flotacionCoords" [visible]=options.visible fillOpacity="0" fillColor="#84ffff"></agm-polygon>
+  <agm-polygon [paths]="relaveCoords" [visible]=options.visible fillOpacity="0" strokeColor="blue"></agm-polygon>
   <agm-marker [longitude]="incidencia.longitud" [latitude]="incidencia.latitud" *ngFor="let incidencia of (listaIncidencia | async)">
     <agm-info-window>
       <strong>incidencia:</strong> {{incidencia.detalle}}
