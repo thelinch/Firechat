@@ -9,9 +9,10 @@ export class PmaoDirective {
   @Input() idIndice: string
   constructor(private elementRef: ElementRef, private render: Renderer2, private pmaoService: ActividadPmaoService) { }
   @HostListener("mouseenter") onmouseenter() {
-    this.pmaoService.getAllActividadFromName(this.idIndice, this.nombre).subscribe(listaActividades => {
+    console.log("entro a la directiva")
+    /*this.pmaoService.getAllActividadFromName(this.idIndice, this.nombre).subscribe(listaActividades => {
       console.log(listaActividades)
-    })
+    })*/
   }
 
 }
