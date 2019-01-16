@@ -183,6 +183,33 @@ export class PmaoComponent implements OnInit {
     { name: "Medio", inicio: 9, fin: 15, color: "blue" },
     { name: "Bajo", inicio: 16, fin: 25, color: "#c4bfbd" }]
   idIndice: string
+  template = `
+    <div class="card">
+      <header class="card-header position_relative" [ngClass]="{'has-background-primary': actividad.isResulto}">
+        <div class="card-header-title ">
+          {{actividad.nombre}}
+
+        </div>
+      </header>
+      <div class="card-content ">
+        <div class="content ">
+          {{actividad.comentario}}
+        </div>
+      </div>
+      <footer class="card-footer ">
+        <a class="card-footer-item has-text-link" (click)="toogleFormEjecucion()">
+          <span class="icon is-large ">
+            <i class="material-icons" style="font-size: 2rem">details</i>
+          </span>
+        </a>
+        <a class="card-footer-item has-text-link">
+          <span class="icon is-large ">
+            <i class="material-icons" style="font-size: 2rem">search</i>
+          </span>
+        </a>
+      </footer>
+    </div>
+`
   @ViewChild("clasificacion") clasificacionE: ElementRef
   listaActividades: any[]
 
@@ -210,9 +237,51 @@ export class PmaoComponent implements OnInit {
     }
   }
 
-  filtrar(nombre: string) {
 
-    this.listaActividades = this.listaActividades.filter(ac => ac.nombre == nombre)
+  getActividades(nombre: string, elemento: HTMLDivElement) {
+    console.log()
+
+    let template: string = ""
+    this.pmaoService.getAllActividadFromName(this.idIndice, nombre).subscribe(lista => {
+      lista.forEach(actividad => {
+        template += `
+        <div class="col-xs-12 col-md-4">
+        <div class="card">
+        <header class="card-header position_relative" [ngClass]="{'has-background-primary': ${actividad.isResulto}}">
+          <div class="card-header-title ">
+            ${actividad.nombre}
+  
+          </div>
+        </header>
+        <div class="card-content ">
+          <div class="content ">
+            ${actividad.comentario}
+          </div>
+        </div>
+        <footer class="card-footer ">
+          <a class="card-footer-item has-text-link" (click)="toogleFormEjecucion()">
+            <span class="icon is-large ">
+              <i class="material-icons" style="font-size: 2rem">details</i>
+            </span>
+          </a>
+          <a class="card-footer-item has-text-link">
+            <span class="icon is-large ">
+              <i class="material-icons" style="font-size: 2rem">search</i>
+            </span>
+          </a>
+        </footer>
+      </div>
+        
+        
+        </div>
+       
+    `
+      })
+      // console.log(template)
+      elemento.appendChild(this.render.createElement(template))
+      // this.render.appendChild(elemento.nativeElement, template)
+    })
+
   }
 
   toggleModalFormularioPMAO() {

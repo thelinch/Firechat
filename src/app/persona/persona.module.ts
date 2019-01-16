@@ -18,10 +18,11 @@ import { ChartsModule } from 'ng2-charts';
 import { AgmCoreModule } from '@agm/core';
 import { ResultadoService } from '../services/resultado.service';
 import { PmaoComponent } from './pmao/pmao.component';
+import { PmaoDirective } from '../directivas/pmao.directive';
 @NgModule({
-    declarations: [PersonaComponent, DashboardComponent, MapComponent, ActividadComponent, ParametroMapeoComponent,PmaoComponent],
+    declarations: [PersonaComponent, PmaoDirective, DashboardComponent, MapComponent, ActividadComponent, ParametroMapeoComponent, PmaoComponent],
     imports: [CommonModule,
-    PersonaRoutingModule,
+        PersonaRoutingModule,
         FormsModule,
         ReactiveFormsModule,
         FontAwesomeModule,

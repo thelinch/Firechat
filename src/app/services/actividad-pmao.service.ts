@@ -22,4 +22,11 @@ export class ActividadPmaoService {
       return data
     })))
   }
+  getAllActividadFromName(idIndice: string, nombre: string): Observable<any[]> {
+    return this.afs.collection("indice").doc(idIndice).collection("actividadPMAO", f => f.where("nombre", "==", nombre)).snapshotChanges().pipe(map(actions => actions.map(documentoActividad => {
+      const data = documentoActividad.payload.doc.data()
+      data.id = documentoActividad.payload.doc.id
+      return data;
+    })))
+  }
 }

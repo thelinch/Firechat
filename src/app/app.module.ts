@@ -19,6 +19,7 @@ import localePt from '@angular/common/locales/pt';
 import localeEn from '@angular/common/locales/en';
 import localeEsAr from '@angular/common/locales/es-AR';
 import { AgmCoreModule } from '@agm/core';
+import { PmaoDirective } from './directivas/pmao.directive';
 registerLocaleData(localePy, 'es');
 registerLocaleData(localePt, 'pt');
 registerLocaleData(localeEn, 'en')
@@ -27,6 +28,7 @@ library.add(fas);
 @NgModule({
   declarations: [
     AppComponent,
+    PmaoDirective,
 
   ],
   imports: [
