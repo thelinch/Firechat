@@ -1,6 +1,7 @@
 import { Directive, Input, ElementRef, Renderer2, HostListener } from '@angular/core';
 import { ActividadPmaoService } from '../services/actividad-pmao.service';
 import { Subscriber, Subscription } from 'rxjs';
+import * as $ from 'jquery';
 
 @Directive({
   selector: '[filtradoNombre]'
@@ -14,6 +15,7 @@ export class PmaoDirective {
   constructor(private elementRef: ElementRef, private render: Renderer2, private pmaoService: ActividadPmaoService) { }
   @HostListener("mouseenter") onmouseenter() {
     this.subcripcion = this.pmaoService.getAllActividadFromName(this.idIndice, this.nombre).subscribe(listaActividades => {
+      this.template = ''
       if (listaActividades.length > 1) {
         listaActividades.forEach(actividad => {
           this.template += `
@@ -47,25 +49,15 @@ export class PmaoDirective {
          
       `
         })
-
         this.template = this.parsehtml(this.template)
-
-
-        this.nativeElement = this.elementRef.nativeElement
-        if (this.elementRef.nativeElement.childNodes.length == 3) {
-          console.log()
-          this.render.removeChild(this.elementRef.nativeElement, this.template)
-        }
-        this.render.appendChild(this.nativeElement, this.template)
+        this.render.appendChild(this.elementRef.nativeElement, this.template)
       } else {
-        console.log("no contiene")
+        this.render.appendChild(this.elementRef.nativeElement, this.parsehtml("<div class='row'><strong>No existe resultados</strong></div>"))
       }
     })
   }
   @HostListener("mouseleave") mouseout() {
-
-    console.log("entro al mouseout", this.template)
-
+    $(this.elementRef.nativeElement).find("div.row").remove()
     this.subcripcion.unsubscribe();
   }
   parsehtml(html) {
