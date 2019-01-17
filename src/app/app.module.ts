@@ -30,6 +30,7 @@ library.add(fas);
   ],
   imports: [
     BrowserModule,
+    BlockUIModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule.enablePersistence(),
     BlockUIModule.forRoot(),
@@ -38,7 +39,7 @@ library.add(fas);
     AppRoutingModule,
     FormsModule,
     PersonaModule,
-  
+
 
   ],
   exports: [FontAwesomeModule],

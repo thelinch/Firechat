@@ -11,10 +11,9 @@
         <h3 class="collapsie_header has-background-primary box">{{l.nombre}}</h3>
         <div class="body">
           <ul class="ul">
-            <li class="li" (mouseenter)="getActividades(items.nombre,rowElement)" *ngFor="let items of l.opciones">{{items.nombre}}
-              <a (click)="seleccionarOpcion(items);resetForm(form);toggleModalFormularioPMAO()" class="button is-info is-small is-pulled-right">Agregar</a>
-              
+            <li class="li" filtradoNombre [nombre]="items.nombre" [idIndice]="this.idIndice" *ngFor="let items of l.opciones">{{items.nombre}}
             </li>
+            <a (click)="seleccionarOpcion(items);resetForm(form);toggleModalFormularioPMAO()" class="button is-info is-small is-pulled-right">Agregar</a>
           </ul>
         </div>
       </div>
