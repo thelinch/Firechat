@@ -10,9 +10,7 @@ export class PmaoDirective {
   @Input() idIndice: string
   template: any = ""
   subcripcion: Subscription;
-
   nativeElement: HTMLElement;
-  elementA: ChildNode;
   constructor(private elementRef: ElementRef, private render: Renderer2, private pmaoService: ActividadPmaoService) { }
   @HostListener("mouseenter") onmouseenter() {
     this.subcripcion = this.pmaoService.getAllActividadFromName(this.idIndice, this.nombre).subscribe(listaActividades => {
@@ -49,16 +47,25 @@ export class PmaoDirective {
          
       `
         })
+
         this.template = this.parsehtml(this.template)
+
+
         this.nativeElement = this.elementRef.nativeElement
+        if (this.elementRef.nativeElement.childNodes.length == 3) {
+          console.log()
+          this.render.removeChild(this.elementRef.nativeElement, this.template)
+        }
         this.render.appendChild(this.nativeElement, this.template)
       } else {
         console.log("no contiene")
       }
     })
   }
-  @HostListener("mouseout") mouseout() {
+  @HostListener("mouseleave") mouseout() {
+
     console.log("entro al mouseout", this.template)
+
     this.subcripcion.unsubscribe();
   }
   parsehtml(html) {

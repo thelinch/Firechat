@@ -12,8 +12,8 @@
         <div class="body">
           <ul class="ul">
             <li class="li" filtradoNombre [nombre]="items.nombre" [idIndice]="this.idIndice" *ngFor="let items of l.opciones">{{items.nombre}}
+              <a (click)="seleccionarOpcion(items);resetForm(form);toggleModalFormularioPMAO()" class="button is-info is-small is-pulled-right">Agregar</a>
             </li>
-            <a (click)="seleccionarOpcion(items);resetForm(form);toggleModalFormularioPMAO()" class="button is-info is-small is-pulled-right">Agregar</a>
           </ul>
         </div>
       </div>
