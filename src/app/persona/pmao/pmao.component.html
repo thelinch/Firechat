@@ -17,7 +17,6 @@
           </ul>
         </div>
       </div>
-
     </div>
   </div>
   <div class="col-xs-12 col-md-8">
@@ -27,7 +26,6 @@
           <header class="card-header position_relative" [ngClass]="{'has-background-primary': actividad.isResulto}">
             <div class="card-header-title ">
               {{actividad.nombre}}
-
             </div>
           </header>
           <div class="card-content ">
@@ -36,12 +34,12 @@
             </div>
           </div>
           <footer class="card-footer ">
-            <a class="card-footer-item has-text-link" (click)="seleccionarActividad(actividad);toogleFormEjecucion()">
+            <a class="card-footer-item has-text-link" (click)="this.resetFormEjecucion();seleccionarActividad(actividad);toogleFormEjecucion()">
               <span class="icon is-large ">
                 <i class="material-icons" style="font-size: 2rem">details</i>
               </span>
             </a>
-            <a class="card-footer-item has-text-link" (click)="getMensajeValoracion(actividad)">
+            <a class="card-footer-item has-text-link" *ngIf="actividad.isEjecuciones" (click)="getMensajeValoracion(actividad)">
               <span class="icon is-large ">
                 <i class="material-icons" style="font-size: 2rem">grade</i>
               </span>
@@ -126,7 +124,7 @@
           <div class="field ">
             <label class="label ">Clasificacion</label>
             <div class="control ">
-              <input type="text" class="input" formControlName="clasificacion" #clasificacion>
+              <input type="text" class="input" formControlName="clasificacion" readonly #clasificacion>
             </div>
           </div>
           <div class="field ">
@@ -163,39 +161,44 @@
       <button class="delete" aria-label="close" (click)="toogleFormEjecucion()"></button>
     </header>
     <section class="modal-card-body">
-      <form #formEjecucion="ngForm" (ngSubmit)="saveEjecucion(formEjecucion)">
+      <form [formGroup]="formEjecucion" (ngSubmit)="saveEjecucion(formEjecucion)">
 
         <div class="field">
           <div class="control">
             <label for="">Comentarios de Ejecucion:</label>
-            <textarea name="comentarioEjecucion" ngModel required id="" class="textarea"></textarea>
+            <textarea formControlName="comentarioEjecucion" class="textarea"></textarea>
           </div>
         </div>
 
         <div class="field">
           <div class="control">
             <label for="">Denominacion:</label>
-            <input type="text" class="input" name="denominacion" id="" ngModel required>
+            <input type="text" class="input" formControlName="denominacion">
           </div>
         </div>
-
         <div class="field">
           <div class="control">
             <label for="">Unidad:</label>
-            <input type="text" name="unidad" class="input" id="" ngModel required>
+            <div class="select">
+              <select formControlName="unidad">
+
+                <option value="unidad">Unidad</option>
+              </select>
+            </div>
+
           </div>
         </div>
 
         <div class="field">
           <div class="control">
             <label for="">Actual:</label>
-            <input type="text" name="actual" class="input" id="" ngModel required>
+            <input type="text" formControlName="actual" class="input">
           </div>
         </div>
         <div class="field">
           <div class="control">
             <label for="">Total:</label>
-            <input type="text" class="input" name="total" id="" ngModel>
+            <input type="text" class="input" formControlName="total">
           </div>
         </div>
         <button class="button is-success" [disabled]="!formEjecucion.valid">Guardar</button>
