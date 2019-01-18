@@ -15,6 +15,12 @@ export class ActividadPmaoService {
       obsever.next(true)
     })
   }
+  saveActividadEjecucionPMAOFindIdActividad(idActividad: string, idIndice: string, actividad): Observable<boolean> {
+    return Observable.create(observer => {
+      this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").doc(idActividad).collection("ejecuciones").add(actividad)
+      observer.next(true)
+    })
+  }
   getAllActividadPMAO(idIndice: string): Observable<any[]> {
     return this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").snapshotChanges().pipe(map(actions => actions.map(documentoActividad => {
       const data = documentoActividad.payload.doc.data()
