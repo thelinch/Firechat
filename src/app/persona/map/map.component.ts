@@ -3,12 +3,15 @@ import { IncidenciaService } from 'src/app/services/incidencia.service';
 import { Observable } from 'rxjs';
 import { incidencias } from 'src/app/modelos/incidencias';
 import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
+
+
 export class MapComponent implements OnInit {
   latitudCenter: number = -9.5504168
   longitudCenter: number = -77.0543888
@@ -666,5 +669,22 @@ export class MapComponent implements OnInit {
   }
   incidencia(evento) {
     console.log(evento)
+  }
+  mostrarMensaje(){
+    Swal({
+      title: 'Selecciona una opcion',
+      input: 'select',
+      inputOptions: {
+        'ica': 'ICA',
+        'pmao': 'PMAO',
+        'ia': 'IA',
+        
+      },
+      inputPlaceholder: 'Selecciona una opcion',
+      showCancelButton: true,
+     
+    }).then(respuesta=>{
+      console.log(respuesta.value)
+    })
   }
 }
