@@ -27,7 +27,11 @@
               "src/styles.css"
             ],
             "scripts": [
+<<<<<<< HEAD
              
+=======
+            
+>>>>>>> c259523ef0887f59781dc989ddc435fdba45787b
             ]
           },
           "configurations": {

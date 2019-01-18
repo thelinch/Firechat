@@ -33,7 +33,7 @@ export class PmaoDirective {
             </div>
           </div>
           <footer class="card-footer ">
-            <a class="card-footer-item has-text-link" (click)="toogleFormEjecucion()">
+            <a class="card-footer-item has-text-link"  ng-click="toogleFormEjecucion()">
               <span class="icon is-large ">
                 <i class="material-icons" style="font-size: 2rem">details</i>
               </span>
@@ -53,6 +53,7 @@ export class PmaoDirective {
         this.render.appendChild(this.elementRef.nativeElement, this.template)
       } else {
         this.render.appendChild(this.elementRef.nativeElement, this.parsehtml("<div class='row'><strong>No existe resultados</strong></div>"))
+
       }
     })
   }
