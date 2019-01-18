@@ -1,6 +1,6 @@
 export interface actividadPMAO {
     id?: string
-    nombre:string
+    nombre: string
     condicion: any
     impacto: any
     severidad: any
@@ -8,5 +8,7 @@ export interface actividadPMAO {
     significancia: any
     clasificacion: string
     comentario: string
+    valoracion: number
+    isEjecuciones: boolean
 
 }
