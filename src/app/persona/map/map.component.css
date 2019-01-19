@@ -1,5 +1,5 @@
 agm-map{
-     height: 85%;
+     height: 90%;
 }
 
 .legend {
@@ -9,7 +9,7 @@ agm-map{
      margin: 10px;
      border: 3px solid #000;
      position: absolute;
-     bottom: 20px;
+     bottom: 30px;
      left: 0px;
      
 }
