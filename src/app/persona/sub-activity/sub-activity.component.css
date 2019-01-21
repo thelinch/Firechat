@@ -1,0 +1,14 @@
+.porcentaje{
+    display: inline-block;
+    width: 60px;
+    padding: 10px;
+    height: 40px;
+right: 10px;
+border-radius: 10px;
+}
+.position_relative{
+    position: relative;
+}
+.position_absolute{
+    position: absolute;
+}
