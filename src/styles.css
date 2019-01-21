@@ -22,13 +22,68 @@ html, body {
   border-radius: 20px;
 }
 
+.animation_slideShow{
+  display: block !important;
+  animation-name: slideShow;
+}
+.display_none{
+  display: none;
+}
+.display_flex{
+  display: flex !important;
+}
 .app-mensajes{
   overflow-y:scroll;
   height:270px;
-  /*background:gray;*/
   padding: 5px;
 }
+@keyframes slideShow{
+from{
+  display: none;
+}
+to{
+  display: block !important;
+}
+}
+.body{
+  display: none;
+}
+.animacion_slide{
 
+  animation-iteration-count: 1;
+  animation-name: slideShow;
+  animation-duration: 1.5s;
+}
+
+
+.ul{
+  font-family: Times New Roman;
+  color: #050505;
+  
+
+}
+.li{
+  text-align: center;
+  background: #eee9e9;
+  margin: 0 0 8px;
+  padding: 3px 10px;
+  font-weight: bold;
+  
+  
+}
+li:hover{
+  cursor: pointer;
+}
+
+.box{ 
+  font-family: Cambria;
+  color:white;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 0 10px;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
 
 /* Animaciones */
 .animated {

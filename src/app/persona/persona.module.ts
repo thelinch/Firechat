@@ -19,8 +19,10 @@ import { AgmCoreModule } from '@agm/core';
 import { ResultadoService } from '../services/resultado.service';
 import { PmaoComponent } from './pmao/pmao.component';
 import { PmaoDirective } from '../directivas/pmao.directive';
+import { FilterNamePipe } from '../pipes/filter-name.pipe';
+import { SubActivityComponent } from './sub-activity/sub-activity.component';
 @NgModule({
-    declarations: [PersonaComponent, PmaoDirective, DashboardComponent, MapComponent, ActividadComponent, ParametroMapeoComponent, PmaoComponent],
+    declarations: [PersonaComponent, SubActivityComponent, FilterNamePipe, PmaoDirective, DashboardComponent, MapComponent, ActividadComponent, ParametroMapeoComponent, PmaoComponent],
     imports: [CommonModule,
         PersonaRoutingModule,
         FormsModule,

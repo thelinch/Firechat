@@ -1,55 +1,15 @@
 <div class="row">
-  <div class="col-xs-12 col-md-4 margin_25">
-    <div class="row">
-      <div class="col-xs-12 col-md-4">
-        <a class="button is-info" (click)="this.getAllActividades(this.idIndice)"> <i class="material-icons">refresh</i>
-        </a>
-      </div>
-    </div>
-    <div *ngFor="let l of listaAspectosAmbientales;let i=index ">
-      <div class="collapsie">
-        <h3 class="collapsie_header has-background-primary box">{{l.nombre}}</h3>
-        <div class="body">
+  <div class="col-xs-12  margin_25">
+    <div *ngFor="let aspectoAmbiental of listaAspectosAmbientales;let i=index ">
+      <div class="collapsie" #collapsie>
+        <h3 class="collapsie_header puntero has-background-primary box " (click)="selectionOption(collapsie)">{{aspectoAmbiental.nombre}}</h3>
+        <div class="body animacion_slide" [ngClass]="{'animation_slideShow': aspectoAmbientalSelected==aspectoAmbiental}">
           <ul class="ul">
-            <li class="li" filtradoNombre [nombre]="items.nombre" [idIndice]="this.idIndice" *ngFor="let items of l.opciones">{{items.nombre}}
+            <li class="li" *ngFor="let items of aspectoAmbiental.opciones">
               <a (click)="seleccionarOpcion(items);resetFormActividadPMAO();toggleModalFormularioPMAO()" class="button is-info is-small is-pulled-right">Agregar</a>
+              <app-sub-activity [name]="items.nombre" [idIndice]="this.idIndice"></app-sub-activity>
             </li>
           </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xs-12 col-md-8">
-    <div class="row">
-      <div class="col-xs-12 col-md-4 margin_25" *ngFor="let actividad of listaActividades">
-        <div class="card">
-          <header class="card-header position_relative" [ngClass]="{'has-background-primary': actividad.isResulto}">
-            <div class="card-header-title ">
-              {{actividad.nombre}}
-            </div>
-          </header>
-          <div class="card-content ">
-            <div class="content ">
-              {{actividad.comentario}}
-            </div>
-          </div>
-          <footer class="card-footer ">
-            <a class="card-footer-item has-text-link" (click)="this.resetFormEjecucion();seleccionarActividad(actividad);toogleFormEjecucion()">
-              <span class="icon is-large ">
-                <i class="material-icons" style="font-size: 2rem">details</i>
-              </span>
-            </a>
-            <a class="card-footer-item has-text-link" *ngIf="actividad.isEjecuciones" (click)="getMensajeValoracion(actividad)">
-              <span class="icon is-large ">
-                <i class="material-icons" style="font-size: 2rem">grade</i>
-              </span>
-            </a>
-            <a class="card-footer-item has-text-link">
-              <span class="icon is-large ">
-                <i class="material-icons" style="font-size: 2rem">search</i>
-              </span>
-            </a>
-          </footer>
         </div>
       </div>
     </div>
@@ -149,64 +109,3 @@
   </div>
 </div>
 <!--Fin de Modal para la creacion de Aspecto Ambiental-->
-
-
-<!--Modal para la ejecucion -->
-<div class="modal" [ngClass]="{'is-active': activarModalFormEjecucion}">
-  <div class="modal-background" (click)="toogleFormEjecucion()"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-
-      <p class="modal-card-title">{{opcionSeleccionado?.nombre}}</p>
-      <button class="delete" aria-label="close" (click)="toogleFormEjecucion()"></button>
-    </header>
-    <section class="modal-card-body">
-      <form [formGroup]="formEjecucion" (ngSubmit)="saveEjecucion(formEjecucion)">
-
-        <div class="field">
-          <div class="control">
-            <label for="">Comentarios de Ejecucion:</label>
-            <textarea formControlName="comentarioEjecucion" class="textarea"></textarea>
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="control">
-            <label for="">Denominacion:</label>
-            <input type="text" class="input" formControlName="denominacion">
-          </div>
-        </div>
-        <div class="field">
-          <div class="control">
-            <label for="">Unidad:</label>
-            <div class="select">
-              <select formControlName="unidad">
-
-                <option value="unidad">Unidad</option>
-              </select>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="control">
-            <label for="">Actual:</label>
-            <input type="text" formControlName="actual" class="input">
-          </div>
-        </div>
-        <div class="field">
-          <div class="control">
-            <label for="">Total:</label>
-            <input type="text" class="input" formControlName="total">
-          </div>
-        </div>
-        <button class="button is-success" [disabled]="!formEjecucion.valid">Guardar</button>
-      </form>
-    </section>
-    <footer class="modal-card-foot">
-      <button class="button" (click)="toogleFormEjecucion()">Cancel</button>
-    </footer>
-  </div>
-</div>
-<!---Fin de Modal de Ejecucion-->

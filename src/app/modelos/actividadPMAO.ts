@@ -8,7 +8,8 @@ export interface actividadPMAO {
     significancia: any
     clasificacion: string
     comentario: string
-    valoracion: number
+    valoracion?: { nombre: string, valor: number }
+
     isEjecuciones: boolean
 
 }
