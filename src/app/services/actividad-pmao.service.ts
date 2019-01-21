@@ -19,9 +19,10 @@ export class ActividadPmaoService {
       obsever.next(true)
     })
   }
-  saveActividadEjecucionPMAOFindIdActividad(idActividad: string, idIndice: string, ejecucion): Observable<boolean> {
+  saveActividadEjecucionPMAOFindIdActividad(actividad: actividadPMAO, idIndice: string, ejecucion): Observable<boolean> {
     return Observable.create(observer => {
-      this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").doc(idActividad).collection(Colecciones.ejecuciones).add(ejecucion)
+      this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").doc(actividad.id).collection(Colecciones.ejecuciones).add(ejecucion)
+      this.updateActividadPMAO(actividad, idIndice)
       observer.next(true)
     })
   }

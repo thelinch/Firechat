@@ -18,6 +18,9 @@ import localePy from '@angular/common/locales/es-PY';
 import localePt from '@angular/common/locales/pt';
 import localeEn from '@angular/common/locales/en';
 import localeEsAr from '@angular/common/locales/es-AR';
+import { NgxPermissionsModule } from 'ngx-permissions';
+import { LoginComponent } from './login/login.component';
+import { FilterNamePipe } from './pipes/filter-name.pipe';
 registerLocaleData(localePy, 'es');
 registerLocaleData(localePt, 'pt');
 registerLocaleData(localeEn, 'en')
@@ -26,11 +29,12 @@ library.add(fas);
 @NgModule({
   declarations: [
     AppComponent,
-
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
     BlockUIModule.forRoot(),
+    NgxPermissionsModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule.enablePersistence(),
     BlockUIModule.forRoot(),

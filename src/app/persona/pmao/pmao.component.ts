@@ -8,7 +8,6 @@
 */
 
 import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { timingSafeEqual } from 'crypto';
 import { ActividadPmaoService } from 'src/app/services/actividad-pmao.service';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -18,21 +17,35 @@ import { FormGroup } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { actividadPMAO } from 'src/app/modelos/actividadPMAO';
-
+import * as $ from "jquery"
+import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
 @Component({
   selector: 'app-pmao',
   templateUrl: './pmao.component.html',
   styleUrls: ['./pmao.component.css']
 })
 export class PmaoComponent implements OnInit {
+
+
+  actividadPMAOForm: FormGroup;
+  activarModalFormPMAO: boolean = false;
   opcionSeleccionado: any;
-  activarModalFormPMAO: boolean = false
+  aspectoAmbientalSelected: any;
   activarModalFormEjecucion: boolean = false
   listaActividadesFiltrada: any[]
   actividadSeleccionada: actividadPMAO;
-  actividadPMAOForm: FormGroup;
   formEjecucion: FormGroup
   @ViewChild("clasificacion") elementClasificacion: ElementRef
+  listValoracionesColor = [
+    { valor: 0, color: "#d50000" },
+    { valor: 1, color: "#ff1744" },
+    { valor: 2, color: "#ff5252" },
+    { valor: 3, color: "#ff8a80" },
+    { valor: 4, color: "#ccff90" },
+    { valor: 5, color: "#64dd17" },
+
+  ]
+
   listaAspectosAmbientales = [
     {
       nombre: "RIESGO E IMPACTO EN EL AGUA",
@@ -205,14 +218,13 @@ export class PmaoComponent implements OnInit {
   listaActividades: any[]
   //TODO: Refa
   constructor(private render: Renderer2, private pmaoService: ActividadPmaoService, private router: ActivatedRoute) { }
-  seleccionarOpcion(opcion: any) {
-    this.opcionSeleccionado = opcion;
-  }
+
   ngOnInit() {
     this.router.params.subscribe(dataUrl => {
       this.idIndice = dataUrl.idIndice;
       this.getAllActividades(this.idIndice)
     })
+
     this.actividadPMAOForm = new FormGroup({
       nombre: new FormControl('', Validators.required),
       condicion: new FormControl('', Validators.required),
@@ -223,6 +235,7 @@ export class PmaoComponent implements OnInit {
       clasificacion: new FormControl('', Validators.required),
       comentario: new FormControl('', Validators.required)
     })
+
     this.formEjecucion = new FormGroup({
       comentarioEjecucion: new FormControl('', Validators.required),
       denominacion: new FormControl('', Validators.required),
@@ -231,19 +244,28 @@ export class PmaoComponent implements OnInit {
       total: new FormControl('', Validators.required)
     })
   }
+  getBackgroundColorFindActividad(actividad: actividadPMAO): string {
+    if (actividad.valoracion) {
+      return this.listValoracionesColor.find(exprecion => exprecion.valor == actividad.valoracion.valor).color
 
-  toogleFormEjecucion() {
-    this.activarModalFormEjecucion = !this.activarModalFormEjecucion
-  }
-  calcularClasificacion(formulario) {
-    if (formulario.frecuencia != null && formulario.severidad != null && formulario.significancia != null) {
-      this.getClasificacion(this.getRiesgoMatrizIper(formulario.frecuencia.valor, formulario.severidad.valor).valor, formulario.significancia.valor)
     }
   }
+
+
+
+
+
+
   /**
-   * Seleccionara la actividad para poder usarse en otros metodos
-   * @param {any}  actividad seleccionada por el usuario 
+   * Calcula el total de  la ejecucion que servira para promediar el PMAO
+   * @param{string}
+   * @returns{number}
+   * 
    */
+  calcularTotalFromEjecucion(total: string, actual: string): number {
+    let calculo: number = Math.floor(parseInt(actual) * 5 / parseInt(total))
+    return calculo;
+  }
   seleccionarActividad(actividad: actividadPMAO) {
     this.actividadSeleccionada = actividad;
   }
@@ -257,22 +279,15 @@ export class PmaoComponent implements OnInit {
     //:TODO Falta realizar el update de las actividades
     form.setControl("fechaRegistro", new FormControl(new Date()))
     this.actividadSeleccionada.isEjecuciones = true
-    this.pmaoService.saveActividadEjecucionPMAOFindIdActividad(this.actividadSeleccionada.id, this.idIndice, form.value).subscribe(respuesta => {
+    this.pmaoService.saveActividadEjecucionPMAOFindIdActividad(this.actividadSeleccionada, this.idIndice, form.value).subscribe(respuesta => {
       if (respuesta) {
         this.toogleFormEjecucion();
         sweetAlertMensaje.getMensajeTransaccionExitosa()
       }
     })
   }
-  /**
-   * Calcula el total de  la ejecucion que servira para promediar el PMAO
-   * @param{string}
-   * @returns{number}
-   * 
-   */
-  calcularTotalFromEjecucion(total: string, actual: string): number {
-    let calculo: number = Math.floor(parseInt(actual) * 5 / parseInt(total))
-    return calculo;
+  toogleFormEjecucion() {
+    this.activarModalFormEjecucion = !this.activarModalFormEjecucion
   }
   getActividades(nombre: string, elemento: HTMLDivElement) {
     let template: any = ""
@@ -316,10 +331,24 @@ export class PmaoComponent implements OnInit {
   toggleModalFormularioPMAO() {
     this.activarModalFormPMAO = !this.activarModalFormPMAO
   }
-  getAllActividades(idIndice) {
+
+
+  /**
+   *
+   *
+   * @param {string} idIndice
+   * @memberof PmaoComponent
+   */
+  getAllActividades(idIndice: string) {
     this.pmaoService.getAllActividadPMAO(idIndice).subscribe(lista => {
       this.listaActividades = lista
     })
+  }
+  selectionOption(element: ElementRef) {
+    $(element).find(".body").slideToggle("slow")
+  }
+  seleccionarOpcion(item: any) {
+    this.opcionSeleccionado = item
   }
   resetFormActividadPMAO() {
     this.actividadPMAOForm.reset({ nombre: this.opcionSeleccionado.nombre })
@@ -349,6 +378,8 @@ export class PmaoComponent implements OnInit {
       }
     })
   }
+
+
   resetFormEjecucion() {
     this.formEjecucion.reset()
   }
@@ -356,6 +387,7 @@ export class PmaoComponent implements OnInit {
     Swal({
       title: "Ingrese la valoracion",
       input: "select",
+      inputClass: "select",
       inputOptions: {
         0: "Inconformidad Total",
         1: "Inconformidad Muy Alta",
@@ -368,7 +400,7 @@ export class PmaoComponent implements OnInit {
       showCancelButton: true
     }).then(seleccion => {
       if (seleccion["value"] != null) {
-        actividad.valoracion = (parseInt(seleccion["value"]))
+        actividad.valoracion = { valor: (parseInt(seleccion["value"])), nombre: $("select.select option:selected").text() }
         this.pmaoService.setValoracionFindIdActividad(this.idIndice, actividad).subscribe(respuesta => {
           console.log(respuesta)
         })

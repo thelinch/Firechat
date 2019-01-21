@@ -13,14 +13,14 @@ export class PmaoDirective {
   subcripcion: Subscription;
   nativeElement: HTMLElement;
   constructor(private elementRef: ElementRef, private render: Renderer2, private pmaoService: ActividadPmaoService) { }
-  @HostListener("mouseenter") onmouseenter() {
+  @HostListener("mouseenter") onclick() {
     this.subcripcion = this.pmaoService.getAllActividadFromName(this.idIndice, this.nombre).subscribe(listaActividades => {
       this.template = ''
       if (listaActividades.length > 1) {
         listaActividades.forEach(actividad => {
           this.template += `
           <div class="col-xs-12 col-md-6 margin_25">
-          <div class="card">
+          <div class="card" style="z-index:2000">
           <header class="card-header position_relative">
             <div class="card-header-title ">
               ${actividad.nombre}
@@ -33,7 +33,7 @@ export class PmaoDirective {
             </div>
           </div>
           <footer class="card-footer ">
-            <a class="card-footer-item has-text-link"  ng-click="toogleFormEjecucion()">
+            <a class="card-footer-item has-text-link"  onclick="toogleFormEjecucion()">
               <span class="icon is-large ">
                 <i class="material-icons" style="font-size: 2rem">details</i>
               </span>
@@ -58,8 +58,11 @@ export class PmaoDirective {
     })
   }
   @HostListener("mouseleave") mouseout() {
-    $(this.elementRef.nativeElement).find("div.row").remove()
-    this.subcripcion.unsubscribe();
+    if (this.subcripcion) {
+      $(this.elementRef.nativeElement).find("div.row").remove()
+      this.subcripcion.unsubscribe();
+
+    }
   }
   parsehtml(html) {
     let t = document.createElement("template")

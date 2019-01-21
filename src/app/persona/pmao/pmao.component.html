@@ -1,18 +1,13 @@
 <div class="row">
-  <div class="col-xs-12 col-md-4 margin_25">
-    <div class="row">
-      <div class="col-xs-12 col-md-4">
-        <a class="button is-info" (click)="this.getAllActividades(this.idIndice)"> <i class="material-icons">refresh</i>
-        </a>
-      </div>
-    </div>
-    <div *ngFor="let l of listaAspectosAmbientales;let i=index ">
-      <div class="collapsie">
-        <h3 class="collapsie_header has-background-primary box">{{l.nombre}}</h3>
-        <div class="body">
+  <div class="col-xs-12  margin_25">
+    <div *ngFor="let aspectoAmbiental of listaAspectosAmbientales;let i=index ">
+      <div class="collapsie" #collapsie>
+        <h3 class="collapsie_header puntero has-background-primary box " (click)="selectionOption(collapsie)">{{aspectoAmbiental.nombre}}</h3>
+        <div class="body animacion_slide" [ngClass]="{'animation_slideShow': aspectoAmbientalSelected==aspectoAmbiental}">
           <ul class="ul">
-            <li class="li" filtradoNombre [nombre]="items.nombre" [idIndice]="this.idIndice" *ngFor="let items of l.opciones">{{items.nombre}}
+            <li class="li" *ngFor="let items of aspectoAmbiental.opciones">
               <a (click)="seleccionarOpcion(items);resetFormActividadPMAO();toggleModalFormularioPMAO()" class="button is-info is-small is-pulled-right">Agregar</a>
+              <app-sub-activity [name]="items.nombre" [idIndice]="this.idIndice"></app-sub-activity>
             </li>
           </ul>
         </div>
@@ -148,6 +143,7 @@
     </footer>
   </div>
 </div>
+<!--Fin de Modal para la creacion de Aspecto Ambiental-->
 <!--Fin de Modal para la creacion de Aspecto Ambiental-->
 
 
