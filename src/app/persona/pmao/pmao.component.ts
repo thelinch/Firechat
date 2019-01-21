@@ -1,8 +1,23 @@
+/**
+@fileoverview funcionalidades para calcular,registrar las actividades de PMAO 
+*@author Antony Inga Atunga <Antony.inga@unas.edu.pe>
+*@version 2.0
+*@History
+*V2.0-se agrego las funcionalidades de registro de ejecucion de las actividades.
+*V1.0-se realizaron todas las funcionalidades basicas (crud) 
+*/
+
 import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { timingSafeEqual } from 'crypto';
 import { ActividadPmaoService } from 'src/app/services/actividad-pmao.service';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import Swal from 'sweetalert2'
+import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
+import { FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
+import { Validators } from '@angular/forms';
+import { actividadPMAO } from 'src/app/modelos/actividadPMAO';
 
 @Component({
   selector: 'app-pmao',
@@ -14,6 +29,10 @@ export class PmaoComponent implements OnInit {
   activarModalFormPMAO: boolean = false
   activarModalFormEjecucion: boolean = false
   listaActividadesFiltrada: any[]
+  actividadSeleccionada: actividadPMAO;
+  actividadPMAOForm: FormGroup;
+  formEjecucion: FormGroup
+  @ViewChild("clasificacion") elementClasificacion: ElementRef
   listaAspectosAmbientales = [
     {
       nombre: "RIESGO E IMPACTO EN EL AGUA",
@@ -183,9 +202,8 @@ export class PmaoComponent implements OnInit {
     { name: "Medio", inicio: 9, fin: 15, color: "blue" },
     { name: "Bajo", inicio: 16, fin: 25, color: "#c4bfbd" }]
   idIndice: string
-  @ViewChild("clasificacion") clasificacionE: ElementRef
   listaActividades: any[]
-
+  //TODO: Refa
   constructor(private render: Renderer2, private pmaoService: ActividadPmaoService, private router: ActivatedRoute) { }
   seleccionarOpcion(opcion: any) {
     this.opcionSeleccionado = opcion;
@@ -195,25 +213,68 @@ export class PmaoComponent implements OnInit {
       this.idIndice = dataUrl.idIndice;
       this.getAllActividades(this.idIndice)
     })
+    this.actividadPMAOForm = new FormGroup({
+      nombre: new FormControl('', Validators.required),
+      condicion: new FormControl('', Validators.required),
+      impacto: new FormControl('', Validators.required),
+      severidad: new FormControl('', Validators.required),
+      frecuencia: new FormControl('', Validators.required),
+      significancia: new FormControl('', Validators.required),
+      clasificacion: new FormControl('', Validators.required),
+      comentario: new FormControl('', Validators.required)
+    })
+    this.formEjecucion = new FormGroup({
+      comentarioEjecucion: new FormControl('', Validators.required),
+      denominacion: new FormControl('', Validators.required),
+      unidad: new FormControl('', Validators.required),
+      actual: new FormControl('', Validators.required),
+      total: new FormControl('', Validators.required)
+    })
   }
-  evaluarImpacto(impacto: string) {
 
-  }
   toogleFormEjecucion() {
     this.activarModalFormEjecucion = !this.activarModalFormEjecucion
   }
   calcularClasificacion(formulario) {
-    if (formulario.Frecuencia !== undefined && formulario.Severidad !== undefined && formulario.Significancia !== undefined) {
-      console.log(this.getRiesgoMatrizIper(formulario.Frecuencia.valor, formulario.Severidad.valor))
-      this.getClasificacion(this.getRiesgoMatrizIper(formulario.Frecuencia.valor, formulario.Severidad.valor).valor, formulario.Significancia.valor)
-
+    if (formulario.frecuencia != null && formulario.severidad != null && formulario.significancia != null) {
+      this.getClasificacion(this.getRiesgoMatrizIper(formulario.frecuencia.valor, formulario.severidad.valor).valor, formulario.significancia.valor)
     }
   }
-
-
+  /**
+   * Seleccionara la actividad para poder usarse en otros metodos
+   * @param {any}  actividad seleccionada por el usuario 
+   */
+  seleccionarActividad(actividad: actividadPMAO) {
+    this.actividadSeleccionada = actividad;
+  }
+  /** 
+   * guarda los datos de la ejecucion de la actividad seleccionada
+  *@param {json}  datos que el formulario recopila 
+   */
+  saveEjecucion(form: FormGroup) {
+    form.setControl("calculo", new FormControl(this.calcularTotalFromEjecucion(form.get("total").value, form.get("actual").value)))
+    let fechaActual = new Date();
+    //:TODO Falta realizar el update de las actividades
+    form.setControl("fechaRegistro", new FormControl(new Date()))
+    this.actividadSeleccionada.isEjecuciones = true
+    this.pmaoService.saveActividadEjecucionPMAOFindIdActividad(this.actividadSeleccionada.id, this.idIndice, form.value).subscribe(respuesta => {
+      if (respuesta) {
+        this.toogleFormEjecucion();
+        sweetAlertMensaje.getMensajeTransaccionExitosa()
+      }
+    })
+  }
+  /**
+   * Calcula el total de  la ejecucion que servira para promediar el PMAO
+   * @param{string}
+   * @returns{number}
+   * 
+   */
+  calcularTotalFromEjecucion(total: string, actual: string): number {
+    let calculo: number = Math.floor(parseInt(actual) * 5 / parseInt(total))
+    return calculo;
+  }
   getActividades(nombre: string, elemento: HTMLDivElement) {
-    console.log()
-
     let template: any = ""
     this.pmaoService.getAllActividadFromName(this.idIndice, nombre).subscribe(lista => {
       lista.forEach(actividad => {
@@ -244,15 +305,10 @@ export class PmaoComponent implements OnInit {
           </a>
         </footer>
       </div>
-        
-        
         </div>
-       
     `
       })
-      // console.log(template)
       elemento.appendChild(this.render.createElement(template))
-      // this.render.appendChild(elemento.nativeElement, template)
     })
 
   }
@@ -265,12 +321,12 @@ export class PmaoComponent implements OnInit {
       this.listaActividades = lista
     })
   }
-  resetForm(form) {
-    form.reset({ nombre: this.opcionSeleccionado.nombre })
+  resetFormActividadPMAO() {
+    this.actividadPMAOForm.reset({ nombre: this.opcionSeleccionado.nombre })
   }
   getClasificacion(valor: number, significancia: number) {
 
-    let significanciaValor;
+    let significanciaValor: { name: any; inicio?: number; fin?: number; color: any; };
 
     if (significancia > 0) {
       significanciaValor = this.clasificacion.find(cl => valor >= cl.inicio && valor <= cl.fin)
@@ -278,18 +334,48 @@ export class PmaoComponent implements OnInit {
     } else {
       significanciaValor = this.clasificacion.find(cl => -1 * valor <= cl.inicio && -1 * valor >= cl.fin)
     }
-    this.clasificacionE.nativeElement.value = significanciaValor.name
-    this.render.setStyle(this.clasificacionE.nativeElement, "backgroundColor", significanciaValor.color)
+    this.actividadPMAOForm.get("clasificacion").setValue(significanciaValor.name)
+    this.render.setStyle(this.elementClasificacion.nativeElement, "background", significanciaValor.color)
   }
 
   getRiesgoMatrizIper(frecuencia: number, severidad: number): any {
     return this.matrizIper.find(i => i.frecuencia == frecuencia && i.severidad == severidad)
   }
-  save(form) {
-    this.pmaoService.saveActividadPMAO(this.idIndice, form.value).subscribe(respuesta => {
+  saveActividadPMAO(form: actividadPMAO) {
+    this.pmaoService.saveActividadPMAO(this.idIndice, form).subscribe(respuesta => {
       if (respuesta) {
+        sweetAlertMensaje.getMensajeTransaccionExitosa()
         this.toggleModalFormularioPMAO()
       }
     })
+  }
+  resetFormEjecucion() {
+    this.formEjecucion.reset()
+  }
+  getMensajeValoracion(actividad: actividadPMAO) {
+    Swal({
+      title: "Ingrese la valoracion",
+      input: "select",
+      inputOptions: {
+        0: "Inconformidad Total",
+        1: "Inconformidad Muy Alta",
+        2: "Inconformidad Alta",
+        3: "Inconformidad Media",
+        4: "Inconformidad Baja",
+        5: "Conformidad",
+      },
+      inputPlaceholder: "Valoracion",
+      showCancelButton: true
+    }).then(seleccion => {
+      if (seleccion["value"] != null) {
+        actividad.valoracion = (parseInt(seleccion["value"]))
+        this.pmaoService.setValoracionFindIdActividad(this.idIndice, actividad).subscribe(respuesta => {
+          console.log(respuesta)
+        })
+      }
+
+    })
+
+
   }
 }

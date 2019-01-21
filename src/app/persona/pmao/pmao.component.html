@@ -12,12 +12,11 @@
         <div class="body">
           <ul class="ul">
             <li class="li" filtradoNombre [nombre]="items.nombre" [idIndice]="this.idIndice" *ngFor="let items of l.opciones">{{items.nombre}}
-              <a (click)="seleccionarOpcion(items);resetForm(form);toggleModalFormularioPMAO()" class="button is-info is-small is-pulled-right">Agregar</a>
+              <a (click)="seleccionarOpcion(items);resetFormActividadPMAO();toggleModalFormularioPMAO()" class="button is-info is-small is-pulled-right">Agregar</a>
             </li>
           </ul>
         </div>
       </div>
-
     </div>
   </div>
   <div class="col-xs-12 col-md-8">
@@ -27,7 +26,6 @@
           <header class="card-header position_relative" [ngClass]="{'has-background-primary': actividad.isResulto}">
             <div class="card-header-title ">
               {{actividad.nombre}}
-
             </div>
           </header>
           <div class="card-content ">
@@ -36,9 +34,14 @@
             </div>
           </div>
           <footer class="card-footer ">
-            <a class="card-footer-item has-text-link" (click)="toogleFormEjecucion()">
+            <a class="card-footer-item has-text-link" (click)="this.resetFormEjecucion();seleccionarActividad(actividad);toogleFormEjecucion()">
               <span class="icon is-large ">
                 <i class="material-icons" style="font-size: 2rem">details</i>
+              </span>
+            </a>
+            <a class="card-footer-item has-text-link" *ngIf="actividad.isEjecuciones" (click)="getMensajeValoracion(actividad)">
+              <span class="icon is-large ">
+                <i class="material-icons" style="font-size: 2rem">grade</i>
               </span>
             </a>
             <a class="card-footer-item has-text-link">
@@ -61,13 +64,13 @@
       <button class="delete" aria-label="close" (click)="toggleModalFormularioPMAO()"></button>
     </header>
     <section class="modal-card-body">
-      <form #form="ngForm" (ngSubmit)="save(form)">
-        <input class="input" name="nombre" ngModel>
+      <form [formGroup]="actividadPMAOForm" (ngSubmit)="saveActividadPMAO(actividadPMAOForm.value)">
+        <input class="input" formControlName="nombre" readonly>
         <div class="field ">
           <label class="label">Condicion</label>
           <div class="control ">
             <div class="select">
-              <select name="condicion" id="" required>
+              <select formControlName="condicion">
                 <option value="Normal">Normal</option>
                 <option value="Anormal">Anormal</option>
                 <option value="Emergencia">Emergencia</option>
@@ -79,7 +82,7 @@
           <label class="label ">Impacto</label>
           <div class="control ">
             <div class="select">
-              <select name="impacto" required #impacto ngModel id="">
+              <select formControlName="impacto" #impacto>
                 <option value="Si">Si</option>
                 <option value="No">No</option>
               </select>
@@ -91,7 +94,7 @@
             <label class="label ">Severidad</label>
             <div class="control ">
               <div class="select">
-                <select name="Severidad" required (change)="calcularClasificacion(form.value)" ngModel id="">
+                <select formControlName="severidad" (change)="calcularClasificacion(this.actividadPMAOForm.value)">
                   <option [ngValue]="severidad" *ngFor="let severidad of serveridadLista">{{severidad.item}}</option>
                 </select>
               </div>
@@ -101,7 +104,7 @@
             <label class="label ">Frecuencia</label>
             <div class="control ">
               <div class="select">
-                <select name="Frecuencia" required (change)="calcularClasificacion(form.value)" ngModel id="">
+                <select formControlName="frecuencia" (change)="calcularClasificacion(this.actividadPMAOForm.value)">
                   <option [ngValue]="frecuencia" *ngFor="let frecuencia of frecuenciaLista">
                     {{frecuencia.item}}</option>
                 </select>
@@ -112,7 +115,7 @@
             <label class="label ">Significancia</label>
             <div class="control ">
               <div class="select">
-                <select name="Significancia" (change)="calcularClasificacion(form.value)" ngModel id="">
+                <select formControlName="significancia" (change)="calcularClasificacion(this.actividadPMAOForm.value)">
                   <option [ngValue]="significancia" *ngFor="let significancia of significanciLista">{{significancia.icon}}</option>
                 </select>
               </div>
@@ -121,20 +124,19 @@
           <div class="field ">
             <label class="label ">Clasificacion</label>
             <div class="control ">
-              <input type="text" class="input" #clasificacion ngModel name="clasificacion" id="">
+              <input type="text" class="input" formControlName="clasificacion" readonly #clasificacion>
             </div>
           </div>
           <div class="field ">
             <label class="label ">IMPACTO AMBIENTAL #PMAO #ICA (INTEGRADO CON EL ICA)</label>
             <div class="control ">
-              <textarea name="comentario" ngModel id="" class="textarea"></textarea>
+              <textarea formControlName="comentario" class="textarea"></textarea>
             </div>
           </div>
         </div>
-
         <div class="field is-grouped ">
           <div class="control ">
-            <button type="submit " class="button is-success ">
+            <button type="submit" [disabled]="!this.actividadPMAOForm.valid" class="button is-success ">
               guardar
             </button>
           </div>
@@ -159,39 +161,44 @@
       <button class="delete" aria-label="close" (click)="toogleFormEjecucion()"></button>
     </header>
     <section class="modal-card-body">
-      <form #formEjecucion="ngForm" (ngSubmit)="save(form)">
+      <form [formGroup]="formEjecucion" (ngSubmit)="saveEjecucion(formEjecucion)">
 
         <div class="field">
           <div class="control">
             <label for="">Comentarios de Ejecucion:</label>
-            <textarea name="comentario_ejecucion" ngModel required id="" class="textarea"></textarea>
+            <textarea formControlName="comentarioEjecucion" class="textarea"></textarea>
           </div>
         </div>
 
         <div class="field">
           <div class="control">
             <label for="">Denominacion:</label>
-            <input type="text" class="input" name="denominacion" id="" ngModel required>
+            <input type="text" class="input" formControlName="denominacion">
           </div>
         </div>
-
         <div class="field">
           <div class="control">
             <label for="">Unidad:</label>
-            <input type="text" name="unidad" class="input" id="" ngModel required>
+            <div class="select">
+              <select formControlName="unidad">
+
+                <option value="unidad">Unidad</option>
+              </select>
+            </div>
+
           </div>
         </div>
 
         <div class="field">
           <div class="control">
             <label for="">Actual:</label>
-            <input type="text" name="actual" class="input" id="" ngModel required>
+            <input type="text" formControlName="actual" class="input">
           </div>
         </div>
         <div class="field">
           <div class="control">
             <label for="">Total:</label>
-            <input type="text" class="input" name="total" id="" ngModel>
+            <input type="text" class="input" formControlName="total">
           </div>
         </div>
         <button class="button is-success" [disabled]="!formEjecucion.valid">Guardar</button>
