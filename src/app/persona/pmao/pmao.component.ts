@@ -25,12 +25,22 @@ import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
   styleUrls: ['./pmao.component.css']
 })
 export class PmaoComponent implements OnInit {
+<<<<<<< HEAD
 
 
   actividadPMAOForm: FormGroup;
   activarModalFormPMAO: boolean = false;
   opcionSeleccionado: any;
   aspectoAmbientalSelected: any;
+=======
+  opcionSeleccionado: any;
+  activarModalFormPMAO: boolean = false
+  activarModalFormEjecucion: boolean = false
+  listaActividadesFiltrada: any[]
+  actividadSeleccionada: actividadPMAO;
+  actividadPMAOForm: FormGroup;
+  formEjecucion: FormGroup
+>>>>>>> c62a96733ad87f84e45547f11d9ac9f63a5476f3
   @ViewChild("clasificacion") elementClasificacion: ElementRef
   listValoracionesColor = [
     { valor: 0, color: "#d50000" },
@@ -231,7 +241,17 @@ export class PmaoComponent implements OnInit {
       clasificacion: new FormControl('', Validators.required),
       comentario: new FormControl('', Validators.required)
     })
+<<<<<<< HEAD
 
+=======
+    this.formEjecucion = new FormGroup({
+      comentarioEjecucion: new FormControl('', Validators.required),
+      denominacion: new FormControl('', Validators.required),
+      unidad: new FormControl('', Validators.required),
+      actual: new FormControl('', Validators.required),
+      total: new FormControl('', Validators.required)
+    })
+>>>>>>> c62a96733ad87f84e45547f11d9ac9f63a5476f3
   }
   getBackgroundColorFindActividad(actividad: actividadPMAO): string {
     if (actividad.valoracion) {
@@ -239,8 +259,11 @@ export class PmaoComponent implements OnInit {
 
     }
   }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> c62a96733ad87f84e45547f11d9ac9f63a5476f3
   calcularClasificacion(formulario) {
     if (formulario.frecuencia != null && formulario.severidad != null && formulario.significancia != null) {
       this.getClasificacion(this.getRiesgoMatrizIper(formulario.frecuencia.valor, formulario.severidad.valor).valor, formulario.significancia.valor)
@@ -258,9 +281,79 @@ export class PmaoComponent implements OnInit {
    * @returns{number}
    * 
    */
+<<<<<<< HEAD
   calcularTotalFromEjecucion(total: string, actual: string): number {
     let calculo: number = Math.floor(parseInt(actual) * 5 / parseInt(total))
     return calculo;
+=======
+  seleccionarActividad(actividad: actividadPMAO) {
+    this.actividadSeleccionada = actividad;
+  }
+  /** 
+   * guarda los datos de la ejecucion de la actividad seleccionada
+  *@param {json}  datos que el formulario recopila 
+   */
+  saveEjecucion(form: FormGroup) {
+    form.setControl("calculo", new FormControl(this.calcularTotalFromEjecucion(form.get("total").value, form.get("actual").value)))
+    let fechaActual = new Date();
+    //:TODO Falta realizar el update de las actividades
+    form.setControl("fechaRegistro", new FormControl(new Date()))
+    this.actividadSeleccionada.isEjecuciones = true
+    this.pmaoService.saveActividadEjecucionPMAOFindIdActividad(this.actividadSeleccionada.id, this.idIndice, form.value).subscribe(respuesta => {
+      if (respuesta) {
+        this.toogleFormEjecucion();
+        sweetAlertMensaje.getMensajeTransaccionExitosa()
+      }
+    })
+  }
+  /**
+   * Calcula el total de  la ejecucion que servira para promediar el PMAO
+   * @param{string}
+   * @returns{number}
+   * 
+   */
+  calcularTotalFromEjecucion(total: string, actual: string): number {
+    let calculo: number = Math.floor(parseInt(actual) * 5 / parseInt(total))
+    return calculo;
+  }
+  getActividades(nombre: string, elemento: HTMLDivElement) {
+    let template: any = ""
+    this.pmaoService.getAllActividadFromName(this.idIndice, nombre).subscribe(lista => {
+      lista.forEach(actividad => {
+        template += `
+        <div class="col-xs-12 col-md-4">
+        <div class="card">
+        <header class="card-header position_relative" [ngClass]="{'has-background-primary': ${actividad.isResulto}}">
+          <div class="card-header-title ">
+            ${actividad.nombre}
+  
+          </div>
+        </header>
+        <div class="card-content ">
+          <div class="content ">
+            ${actividad.comentario}
+          </div>
+        </div>
+        <footer class="card-footer ">
+          <a class="card-footer-item has-text-link" (click)="toogleFormEjecucion()">
+            <span class="icon is-large ">
+              <i class="material-icons" style="font-size: 2rem">details</i>
+            </span>
+          </a>
+          <a class="card-footer-item has-text-link">
+            <span class="icon is-large ">
+              <i class="material-icons" style="font-size: 2rem">search</i>
+            </span>
+          </a>
+        </footer>
+      </div>
+        </div>
+    `
+      })
+      elemento.appendChild(this.render.createElement(template))
+    })
+
+>>>>>>> c62a96733ad87f84e45547f11d9ac9f63a5476f3
   }
 
   toggleModalFormularioPMAO() {
@@ -313,6 +406,38 @@ export class PmaoComponent implements OnInit {
       }
     })
   }
+<<<<<<< HEAD
 
 
+=======
+  resetFormEjecucion() {
+    this.formEjecucion.reset()
+  }
+  getMensajeValoracion(actividad: actividadPMAO) {
+    Swal({
+      title: "Ingrese la valoracion",
+      input: "select",
+      inputOptions: {
+        0: "Inconformidad Total",
+        1: "Inconformidad Muy Alta",
+        2: "Inconformidad Alta",
+        3: "Inconformidad Media",
+        4: "Inconformidad Baja",
+        5: "Conformidad",
+      },
+      inputPlaceholder: "Valoracion",
+      showCancelButton: true
+    }).then(seleccion => {
+      if (seleccion["value"] != null) {
+        actividad.valoracion = (parseInt(seleccion["value"]))
+        this.pmaoService.setValoracionFindIdActividad(this.idIndice, actividad).subscribe(respuesta => {
+          console.log(respuesta)
+        })
+      }
+
+    })
+
+
+  }
+>>>>>>> c62a96733ad87f84e45547f11d9ac9f63a5476f3
 }

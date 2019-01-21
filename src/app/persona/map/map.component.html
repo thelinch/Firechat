@@ -4,9 +4,10 @@
     zIndex=150 opacity="0" strokeColor="brown"></agm-polygon>
   <agm-polygon [paths]="poligonoantaminaCoords" fillOpacity="0" [visible]=options.visible strokeColor="red" zIndex=100></agm-polygon>
   <agm-polygon [paths]="poligonoPuertoAntaminaCoords" strokeColor="skyblue" opacity="0" [visible]=options.visible></agm-polygon>
-  <agm-polyline ngFor="let point of tuberiaCoordinates;let i = index;">
+  <agm-polyline *ngFor="let point of  tuberiaCoordinates;let i = index;" fillColor="#84ffff">
 
   </agm-polyline>
+  <agm-polygon [paths]="tuberiaCoordinates" [visible]=options.visible fillOpacity="0" strokeColor="#808080"></agm-polygon >
   <agm-polygon [paths]="flotacionCoords" [visible]=options.visible fillOpacity="0" fillColor="#84ffff"></agm-polygon>
   <agm-polygon [paths]="relaveCoords" [visible]=options.visible fillOpacity="0" strokeColor="blue"></agm-polygon>
   <agm-marker [longitude]="incidencia.longitud" [latitude]="incidencia.latitud" *ngFor="let incidencia of (listaIncidencia | async)">
@@ -15,5 +16,19 @@
       <strong>tipo:</strong>{{incidencia.tipoIncidencia.tipo}}
     </agm-info-window>
   </agm-marker>
+ 
 </agm-map>
-
+<div class="legend">
+  <div id="titulo"><h3>Leyenda</h3></div>
+  <ul>
+    
+      <li (click)="mostrarMensaje()"><i  class="material-icons color_marron">fiber_manual_record</i>Perforacion y Voladura</li>
+      <li (click)="mostrarMensaje()"><i  class="material-icons color_amarillo">fiber_manual_record</i>Molienda </li>
+      <li (click)="mostrarMensaje()"><i  class="material-icons color_rojo">fiber_manual_record</i>Antamina </li>
+      <li (click)="mostrarMensaje()"><i  class="material-icons color_celeste">fiber_manual_record</i>Puerto Antamina </li>
+      <li (click)="mostrarMensaje()"><i  class="material-icons color_azul">fiber_manual_record</i>Relave </li>
+      <li (click)="mostrarMensaje()"><i  class="material-icons color_negro">fiber_manual_record</i>Flotacion </li>
+      <li (click)="mostrarMensaje()"><i  class="material-icons color_gray">fiber_manual_record</i>Carretera </li>
+      
+  </ul>
+</div>
