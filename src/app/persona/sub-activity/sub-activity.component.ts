@@ -137,10 +137,9 @@ export class SubActivityComponent implements OnInit {
       this.getClasificacion(this.getRiesgoMatrizIper(formulario.frecuencia.valor, formulario.severidad.valor).valor, formulario.significancia.valor)
     }
   }
-  optionSelected(name: string, element: ElementRef) {
-    if($(element).find("")){
-
-    }
+  optionSelected(element: ElementRef) {
+    $(element).slideDown("slow")
+    $("li").find("div.row").not(element).slideUp("slow")
     this.optionSelectedActivityName = name
   }
   /**
@@ -156,8 +155,6 @@ export class SubActivityComponent implements OnInit {
    */
   saveEjecucion(form: FormGroup) {
     form.setControl("calculo", new FormControl(this.calcularTotalFromEjecucion(form.get("total").value, form.get("actual").value)))
-    let fechaActual = new Date();
-    //:TODO Falta realizar el update de las actividades
     form.setControl("fechaRegistro", new FormControl(new Date()))
     this.actividadSeleccionada.isEjecuciones = true
     this.pmaoService.saveActividadEjecucionPMAOFindIdActividad(this.actividadSeleccionada, this.idIndice, form.value).subscribe(respuesta => {
@@ -190,10 +187,9 @@ export class SubActivityComponent implements OnInit {
     this.suscripcion = this.listActivityFilter.subscribe()
   }
   calcularTotalFromEjecucion(total: string, actual: string): number {
-    let calculo: number = Math.floor(parseInt(actual) * 5 / parseInt(total))
-    return calculo;
+    let calculo: number = parseInt(actual) * 5 / parseInt(total)
+    return parseFloat(calculo.toFixed(2));
   }
-
   toggleModalFormularioPMAO() {
     this.activarModalFormPMAO = !this.activarModalFormPMAO
   }
@@ -209,6 +205,7 @@ export class SubActivityComponent implements OnInit {
       this.listaActividades = lista
     })
   }
+
   resetFormActividadPMAO() {
     this.actividadPMAOForm.reset({ nombre: this.opcionSeleccionado.nombre })
   }
@@ -259,12 +256,16 @@ export class SubActivityComponent implements OnInit {
       console.log(isNaN(seleccion['value']))
       if (seleccion["value"] != null && seleccion["value"] != "") {
         actividad.valoracion = { nombre: $("select.valoracion option:selected").text(), valor: (parseInt(seleccion["value"])) }
-        this.pmaoService.setValoracionFindIdActividad(this.idIndice, actividad).subscribe(respuesta => {
+        this.pmaoService.getAllEjecutionsFindIdActividad(this.idIndice, actividad.id).subscribe(listEjecutions => {
+          let suma: number = 0;
+          let numeroTotalEjecuciones: number = listEjecutions.length
+          listEjecutions.map(ejecution => ejecution.calculo).forEach(calculo => suma += calculo);
+          let efficiencyOne = parseFloat((suma / numeroTotalEjecuciones).toFixed(2))
+          actividad.porcentageOfImplementation = parseFloat(((efficiencyOne * FunctionsBasics.valueEficiencyOne + actividad.valoracion.valor * FunctionsBasics.valueEficiencyTwo) / 5).toFixed(2));
+          this.pmaoService.updateActividadPMAO(actividad, this.idIndice)
         })
       }
     })
-
-
   }
   closeModal(variable: boolean) {
     variable = FunctionsBasics.closeModal(this.activateModalHistory)

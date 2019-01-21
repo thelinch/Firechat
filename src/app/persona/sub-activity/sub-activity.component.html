@@ -1,11 +1,11 @@
-<div *ngIf="name" #option>
-  <span style="text-align:center" (click)="getFilterListFindName();optionSelected(name,option)">{{name}}</span>
-  <div class="row display_none" [ngClass]="{'display_flex': optionSelectedActivityName==name}">
-    <div class="col-xs-12  margin_25" *ngFor="let actividad of (listActivityFilter | async)">
+<div *ngIf="name">
+  <span style="text-align:center" (click)="getFilterListFindName();optionSelected(rowCard)">{{name}}</span>
+  <div class="row around-xs" #rowCard>
+    <div class="col-xs-12 col-md-6   margin_25 " *ngFor="let actividad of (listActivityFilter | async)">
       <div class="card">
         <header class="card-header position_relative">
           <div class="card-header-title" [ngStyle]="{'backgroundColor': getBackgroundColorFindActividad(actividad)}">
-            {{actividad.nombre}}
+            {{actividad.nombre}}- {{actividad.porcentageOfImplementation | percent}}
           </div>
         </header>
         <div class="card-content ">
