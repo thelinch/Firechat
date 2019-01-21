@@ -13,7 +13,7 @@ export class ActividadPmaoService {
   constructor(private afs: AngularFirestore) {
   }
 
-  saveActividadPMAO(idIndice: string, actividad): Observable<boolean> {
+  saveActividadPMAO(idIndice: string, actividad: actividadPMAO): Observable<boolean> {
     return Observable.create(obsever => {
       this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").add(actividad)
       obsever.next(true)
@@ -33,9 +33,16 @@ export class ActividadPmaoService {
       return data
     })))
   }
-  getAllActividadFromName(idIndice: string, nombre: string): Observable<any[]> {
-    return this.afs.collection("indice").doc(idIndice).collection("actividadPMAO", f => f.where("nombre", "==", nombre)).snapshotChanges().pipe(map(actions => actions.map(documentoActividad => {
+  getAllEjecutionsFindIdActividad(idIndice: string, idActivity: string): Observable<any[]> {
+    return this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").doc(idActivity).collection(Colecciones.ejecuciones).snapshotChanges().pipe(map(actions => actions.map(documentoActividad => {
       const data = documentoActividad.payload.doc.data()
+      data.id = documentoActividad.payload.doc.id
+      return data
+    })))
+  }
+  getAllActividadFromName(idIndice: string, nombre: string): Observable<actividadPMAO[]> {
+    return this.afs.collection("indice").doc(idIndice).collection("actividadPMAO", f => f.where("nombre", "==", nombre)).snapshotChanges().pipe(map(actions => actions.map(documentoActividad => {
+      const data = documentoActividad.payload.doc.data() as actividadPMAO
       data.id = documentoActividad.payload.doc.id
       return data;
     })))

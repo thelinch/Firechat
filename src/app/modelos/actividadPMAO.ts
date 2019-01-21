@@ -9,7 +9,7 @@ export interface actividadPMAO {
     clasificacion: string
     comentario: string
     valoracion?: { nombre: string, valor: number }
-
     isEjecuciones: boolean
+    porcentageOfImplementation: number
 
 }
