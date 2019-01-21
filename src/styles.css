@@ -27,7 +27,7 @@ html, body {
   animation-name: slideShow;
 }
 .display_none{
-  display: none;
+  display: none !important;
 }
 .display_flex{
   display: flex !important;

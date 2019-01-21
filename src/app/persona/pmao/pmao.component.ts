@@ -344,8 +344,9 @@ export class PmaoComponent implements OnInit {
       this.listaActividades = lista
     })
   }
-  selectionOption(element: ElementRef) {
+  selectionOption(element: ElementRef, nombre: string) {
     $(element).find(".body").slideToggle("slow")
+    $(element).parent().parent().find(".collapsie").not(element).find("div.body").slideUp("slow")
   }
   seleccionarOpcion(item: any) {
     this.opcionSeleccionado = item
