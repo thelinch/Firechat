@@ -50,6 +50,7 @@ export class SubActivityComponent implements OnInit {
   actividadPMAOForm: FormGroup;
   formEjecucion: FormGroup;
   activateModalHistory: boolean = false;
+  listEjecutionsFindIdActivity: Observable<any[]>
   @ViewChild("clasificacion") elementClasificacion: ElementRef
   listValoracionesColor = [
     { valor: 0, color: "#d50000" },
@@ -182,7 +183,6 @@ export class SubActivityComponent implements OnInit {
    * 
    */
   getFilterListFindName() {
-
     this.listActivityFilter = this.pmaoService.getAllActividadFromName(this.idIndice, this.name);
     this.suscripcion = this.listActivityFilter.subscribe()
   }
@@ -204,6 +204,9 @@ export class SubActivityComponent implements OnInit {
     this.pmaoService.getAllActividadPMAO(idIndice).subscribe(lista => {
       this.listaActividades = lista
     })
+  }
+  getAllEjecutionsFindIdActividad(idActivity: string) {
+    this.listEjecutionsFindIdActivity = this.pmaoService.getAllEjecutionsFindIdActividad(this.idIndice, idActivity)
   }
 
   resetFormActividadPMAO() {
@@ -267,10 +270,10 @@ export class SubActivityComponent implements OnInit {
       }
     })
   }
-  closeModal(variable: boolean) {
-    variable = FunctionsBasics.closeModal(this.activateModalHistory)
+  closeModal(): boolean {
+    return false;
   }
-  openModal(variable: boolean) {
-    variable = FunctionsBasics.openModal(this.activateModalHistory)
+  openModal(): boolean {
+    return true
   }
 }
