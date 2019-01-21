@@ -332,7 +332,11 @@ export class PmaoComponent implements OnInit {
     this.activarModalFormPMAO = !this.activarModalFormPMAO
   }
 
-
+  calcularClasificacion(formulario) {
+    if (formulario.frecuencia != null && formulario.severidad != null && formulario.significancia != null) {
+      this.getClasificacion(this.getRiesgoMatrizIper(formulario.frecuencia.valor, formulario.severidad.valor).valor, formulario.significancia.valor)
+    }
+  }
   /**
    *
    *

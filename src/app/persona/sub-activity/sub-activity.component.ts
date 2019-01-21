@@ -137,10 +137,9 @@ export class SubActivityComponent implements OnInit {
       this.getClasificacion(this.getRiesgoMatrizIper(formulario.frecuencia.valor, formulario.severidad.valor).valor, formulario.significancia.valor)
     }
   }
-  optionSelected(name: string, element: ElementRef) {
-    if($(element).find("")){
-
-    }
+  optionSelected(element: ElementRef) {
+    $(element).slideDown("slow")
+    $("li").find("div.row").not(element).slideUp("slow")
     this.optionSelectedActivityName = name
   }
   /**

@@ -14,41 +14,7 @@
       </div>
     </div>
   </div>
-  <div class="col-xs-12 col-md-8">
-    <div class="row">
-      <div class="col-xs-12 col-md-4 margin_25" *ngFor="let actividad of listaActividades">
-        <div class="card">
-          <header class="card-header position_relative" [ngClass]="{'has-background-primary': actividad.isResulto}">
-            <div class="card-header-title ">
-              {{actividad.nombre}}
-            </div>
-          </header>
-          <div class="card-content ">
-            <div class="content ">
-              {{actividad.comentario}}
-            </div>
-          </div>
-          <footer class="card-footer ">
-            <a class="card-footer-item has-text-link" (click)="this.resetFormEjecucion();seleccionarActividad(actividad);toogleFormEjecucion()">
-              <span class="icon is-large ">
-                <i class="material-icons" style="font-size: 2rem">details</i>
-              </span>
-            </a>
-            <a class="card-footer-item has-text-link" *ngIf="actividad.isEjecuciones" (click)="getMensajeValoracion(actividad)">
-              <span class="icon is-large ">
-                <i class="material-icons" style="font-size: 2rem">grade</i>
-              </span>
-            </a>
-            <a class="card-footer-item has-text-link">
-              <span class="icon is-large ">
-                <i class="material-icons" style="font-size: 2rem">search</i>
-              </span>
-            </a>
-          </footer>
-        </div>
-      </div>
-    </div>
-  </div>
+ 
 </div>
 <!--Modal para la creacion de Aspecto Ambiental-->
 <div class="modal" [ngClass]="{'is-active': activarModalFormPMAO}">
