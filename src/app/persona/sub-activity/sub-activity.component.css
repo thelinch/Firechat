@@ -12,3 +12,8 @@ border-radius: 10px;
 .position_absolute{
     position: absolute;
 }
+ .wrapper {
+    max-width: 75%;
+    margin: 0 auto;
+  }
+ 

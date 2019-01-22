@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Colecciones } from '../HelperClass/Colecciones';
 import { actividadPMAO } from '../modelos/actividadPMAO';
+import { executionActivityPMAO } from '../modelos/executionActivityPMAO';
 
 @Injectable({
   providedIn: 'root'
@@ -33,9 +34,9 @@ export class ActividadPmaoService {
       return data
     })))
   }
-  getAllEjecutionsFindIdActividad(idIndice: string, idActivity: string): Observable<any[]> {
+  getAllEjecutionsFindIdActividad(idIndice: string, idActivity: string): Observable<executionActivityPMAO[]> {
     return this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").doc(idActivity).collection(Colecciones.ejecuciones).snapshotChanges().pipe(map(actions => actions.map(documentoActividad => {
-      const data = documentoActividad.payload.doc.data()
+      const data = documentoActividad.payload.doc.data() as executionActivityPMAO
       data.id = documentoActividad.payload.doc.id
       return data
     })))
