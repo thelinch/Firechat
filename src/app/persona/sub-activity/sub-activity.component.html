@@ -30,108 +30,119 @@
               <i class="material-icons" style="font-size: 2rem">grade</i>
             </span>
           </a>
-          <a class="card-footer-item has-text-link">
-            <span class="icon is-large ">
-              <i class="material-icons" style="font-size: 2rem">search</i>
-            </span>
-          </a>
+
         </footer>
       </div>
     </div>
   </div>
-</div>
-<!--Modal para la ejecucion -->
-<div class="modal" [ngClass]="{'is-active': activarModalFormEjecucion}">
-  <div class="modal-background" (click)="toogleFormEjecucion()"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
 
-      <p class="modal-card-title">{{opcionSeleccionado?.nombre}}</p>
-      <button class="delete" aria-label="close" (click)="toogleFormEjecucion()"></button>
-    </header>
-    <section class="modal-card-body">
-      <form [formGroup]="formEjecucion" (ngSubmit)="saveEjecucion(formEjecucion)">
+  <!--Modal para la ejecucion -->
+  <div class="modal" [ngClass]="{'is-active': activarModalFormEjecucion}">
+    <div class="modal-background" (click)="toogleFormEjecucion()"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
 
-        <div class="field">
-          <div class="control">
-            <label for="">Comentarios de Ejecucion:</label>
-            <textarea formControlName="comentarioEjecucion" class="textarea"></textarea>
-          </div>
-        </div>
+        <p class="modal-card-title">{{opcionSeleccionado?.nombre}}</p>
+        <button class="delete" aria-label="close" (click)="toogleFormEjecucion()"></button>
+      </header>
+      <section class="modal-card-body">
+        <form [formGroup]="formEjecucion" (ngSubmit)="saveEjecucion(formEjecucion)">
 
-        <div class="field">
-          <div class="control">
-            <label for="">Denominacion:</label>
-            <input type="text" class="input" formControlName="denominacion">
-          </div>
-        </div>
-        <div class="field">
-          <div class="control">
-            <label for="">Unidad:</label>
-            <div class="select">
-              <select formControlName="unidad">
-
-                <option value="unidad">Unidad</option>
-              </select>
+          <div class="field">
+            <div class="control">
+              <label for="">Comentarios de Ejecucion:</label>
+              <textarea formControlName="executionComentary" class="textarea"></textarea>
             </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <div class="custom-file-container" [attr.data-upload-id]="idElementIdUploadFile">
+                <label>Fotos:<a href="javascript:void(0)" class="custom-file-container__image-clear" title="Clear Image">x</a></label>
+                <label class="custom-file-container__custom-file">
+                  <input type="file" formControlName="files" class="custom-file-container__custom-file__custom-file-input"
+                    accept="image/*" multiple>
+                  <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                  <span class="custom-file-container__custom-file__custom-file-control"></span>
+                </label>
+                <div class="custom-file-container__image-preview"></div>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <label for="">Denominacion:</label>
+              <input type="text" class="input" formControlName="denomination">
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <label for="">Unidad:</label>
+              <div class="select">
+                <select formControlName="unity">
 
-          </div>
-        </div>
+                  <option value="unidad">Unidad</option>
+                </select>
+              </div>
 
-        <div class="field">
-          <div class="control">
-            <label for="">Actual:</label>
-            <input type="text" formControlName="actual" class="input">
+            </div>
           </div>
-        </div>
-        <div class="field">
-          <div class="control">
-            <label for="">Total:</label>
-            <input type="text" class="input" formControlName="total">
+          <div class="field">
+            <div class="control">
+              <label for="">Actual:</label>
+              <input type="text" formControlName="current" class="input">
+            </div>
           </div>
-        </div>
-        <footer class="modal-card-foot">
-          <button class="button" (click)="toogleFormEjecucion()">Cancel</button>
-          <button class="button is-success" [disabled]="!formEjecucion.valid">Guardar</button>
-        </footer>
-      </form>
-    </section>
+          <div class="field">
+            <div class="control">
+              <label for="">Total:</label>
+              <input type="text" class="input" formControlName="total">
+            </div>
+          </div>
+          <footer class="modal-card-foot">
+            <button class="button" (click)="toogleFormEjecucion()">Cancel</button>
+            <button class="button is-success" [disabled]="!formEjecucion.valid">Guardar</button>
+          </footer>
+        </form>
+      </section>
+    </div>
   </div>
-</div>
-<!---Fin de Modal de Ejecucion-->
-<!--Inicio de Modal de Historial de Ejecuciones-->
+  <!---Fin de Modal de Ejecucion-->
 
-<div class="modal" [ngClass]="{'is-active': activateModalHistory}">
-  <div class="modal-background" (click)="this.activateModalHistory=closeModal(activateModalHistory)"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">Historial de Ejecuciones</p>
-      <button class="delete" aria-label="close" (click)="this.activateModalHistory=closeModal(activateModalHistory)"></button>
-    </header>
-    <section class="modal-card-body">
-      <table class="table">
-        <thead>
-          <th>Actual</th>
-          <th>Total</th>
-          <th>Comentario de ejecucion</th>
-          <th>Denominacion</th>
-          <th>Unidad</th>
-          <th>Fecha</th>
-        </thead>
-        <tbody>
-          <tr *ngFor="let ejecutions of (listEjecutionsFindIdActivity | async)">
-            <td>{{ejecutions.actual}}</td>
-            <td>{{ejecutions.total}}</td>
-            <td>{{ejecutions.comentarioEjecucion}}</td>
-            <td>{{ejecutions.denominacion}}</td>
-            <td>{{ejecutions.unidad}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-    <footer class="modal-card-foot">
-      <button class="button" (click)="closeModal(activateModalHistory)">Cancel</button>
-    </footer>
+  <!--Inicio de Modal de Historial de Ejecuciones-->
+
+  <div class="modal" [ngClass]="{'is-active': activateModalHistory}">
+    <div class="modal-background" (click)="this.activateModalHistory=closeModal(activateModalHistory)"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Historial de Ejecuciones</p>
+        <button class="delete" aria-label="close" (click)="this.activateModalHistory=closeModal(activateModalHistory)"></button>
+      </header>
+      <section class="modal-card-body">
+        <table class="table is-fullwidth is-hoverable is-striped">
+          <thead>
+            <th>Actual</th>
+            <th>Total</th>
+            <th>Comentario de ejecucion</th>
+            <th>Denominacion</th>
+            <th>Unidad</th>
+            <th>Fecha</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ejecutions of (listEjecutionsFindIdActivity | async)">
+              <td>{{ejecutions.current}}</td>
+              <td>{{ejecutions.total}}</td>
+              <td>{{ejecutions.executionComentary}}</td>
+              <td>{{ejecutions.denomination}}</td>
+              <td>{{ejecutions.unity}}</td>
+              <td>{{ejecutions.registrationDate.seconds*1000 | date:'medium'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button" (click)="closeModal(activateModalHistory)">Cancel</button>
+      </footer>
+    </div>
   </div>
+  <!--Fin de Modal de Historial de Ejecuciones-->
 </div>
-<!--Fin de Modal de Historial de Ejecuciones-->

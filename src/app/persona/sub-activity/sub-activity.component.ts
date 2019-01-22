@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2, AfterViewInit, AfterContentInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { actividadPMAO } from 'src/app/modelos/actividadPMAO';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -7,19 +7,41 @@ import { ActividadPmaoService } from 'src/app/services/actividad-pmao.service';
 import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
 import Swal from 'sweetalert2'
 import * as $ from "jquery"
-
+import { executionActivityPMAO } from 'src/app/modelos/executionActivityPMAO';
+import FileUploadWithPreview from 'file-upload-with-preview'
+import { FileService } from 'src/app/services/file.service';
 @Component({
   selector: 'app-sub-activity',
   templateUrl: './sub-activity.component.html',
   styleUrls: ['./sub-activity.component.css']
 })
-export class SubActivityComponent implements OnInit {
-  @Input("name") name;
+export class SubActivityComponent implements OnInit, AfterContentInit {
+  ngAfterContentInit(): void {
+    console.log("se ii")
+  }
+
+  @Input("name") name: string;
   suscripcion: Subscription
   listActivityFilter: Observable<actividadPMAO[]>
   optionSelectedActivityName: string
-  constructor(private render: Renderer2, private pmaoService: ActividadPmaoService) { }
 
+  fileUploadTemplate: any
+  @Input("idIndice") idIndice: string
+  opcionSeleccionado: any;
+  activarModalFormPMAO: boolean = false
+  activarModalFormEjecucion: boolean = false
+  listaActividadesFiltrada: any[]
+  listItemsFiltrado: Observable<actividadPMAO[]>
+  actividadSeleccionada: actividadPMAO;
+  actividadPMAOForm: FormGroup;
+  formEjecucion: FormGroup;
+  activateModalHistory: boolean = false;
+  listEjecutionsFindIdActivity: Observable<executionActivityPMAO[]>
+  @ViewChild("clasificacion") elementClasificacion: ElementRef
+  idElementIdUploadFile: string
+  constructor(private render: Renderer2, private pmaoService: ActividadPmaoService, private fileService: FileService) {
+
+  }
   ngOnInit() {
     this.actividadPMAOForm = new FormGroup({
       nombre: new FormControl('', Validators.required),
@@ -32,26 +54,17 @@ export class SubActivityComponent implements OnInit {
       comentario: new FormControl('', Validators.required)
     })
     this.formEjecucion = new FormGroup({
-      comentarioEjecucion: new FormControl('', Validators.required),
-      denominacion: new FormControl('', Validators.required),
-      unidad: new FormControl('', Validators.required),
-      actual: new FormControl('', Validators.required),
+      executionComentary: new FormControl('', Validators.required),
+      denomination: new FormControl('', Validators.required),
+      unity: new FormControl('', Validators.required),
+      files: new FormControl('', Validators.required),
+      current: new FormControl('', Validators.required),
       total: new FormControl('', Validators.required)
     })
+
   }
 
-  @Input("idIndice") idIndice: string
-  opcionSeleccionado: any;
-  activarModalFormPMAO: boolean = false
-  activarModalFormEjecucion: boolean = false
-  listaActividadesFiltrada: any[]
-  listItemsFiltrado: Observable<actividadPMAO[]>
-  actividadSeleccionada: actividadPMAO;
-  actividadPMAOForm: FormGroup;
-  formEjecucion: FormGroup;
-  activateModalHistory: boolean = false;
-  listEjecutionsFindIdActivity: Observable<any[]>
-  @ViewChild("clasificacion") elementClasificacion: ElementRef
+
   listValoracionesColor = [
     { valor: 0, color: "#d50000" },
     { valor: 1, color: "#ff1744" },
@@ -132,6 +145,10 @@ export class SubActivityComponent implements OnInit {
 
   toogleFormEjecucion() {
     this.activarModalFormEjecucion = !this.activarModalFormEjecucion
+    if (this.activarModalFormEjecucion && !this.fileUploadTemplate) {
+      this.fileUploadTemplate = new FileUploadWithPreview(this.idElementIdUploadFile)
+      console.log(this.fileUploadTemplate)
+    }
   }
   calcularClasificacion(formulario) {
     if (formulario.frecuencia != null && formulario.severidad != null && formulario.significancia != null) {
@@ -155,15 +172,19 @@ export class SubActivityComponent implements OnInit {
   *@param {json}  datos que el formulario recopila 
    */
   saveEjecucion(form: FormGroup) {
-    form.setControl("calculo", new FormControl(this.calcularTotalFromEjecucion(form.get("total").value, form.get("actual").value)))
-    form.setControl("fechaRegistro", new FormControl(new Date()))
+    form.setControl("calculation", new FormControl(this.calcularTotalFromEjecucion(form.get("total").value, form.get("current").value)))
+    form.setControl("registrationDate", new FormControl(new Date()))
     this.actividadSeleccionada.isEjecuciones = true
-    this.pmaoService.saveActividadEjecucionPMAOFindIdActividad(this.actividadSeleccionada, this.idIndice, form.value).subscribe(respuesta => {
+    this.fileUploadTemplate.cachedFileArray
+    this.fileService.uploadFile(this.fileUploadTemplate.cachedFileArray[0] as File, "executionPMAO")
+    //let executionActivity: executionActivityPMAO = (form.value as executionActivityPMAO)
+
+    /* this.pmaoService.saveActividadEjecucionPMAOFindIdActividad(this.actividadSeleccionada, this.idIndice, form.value as executionActivityPMAO).subscribe(respuesta => {
       if (respuesta) {
         this.toogleFormEjecucion();
         sweetAlertMensaje.getMensajeTransaccionExitosa()
       }
-    })
+    })*/
   }
 
   ocultar() {
@@ -184,7 +205,14 @@ export class SubActivityComponent implements OnInit {
    */
   getFilterListFindName() {
     this.listActivityFilter = this.pmaoService.getAllActividadFromName(this.idIndice, this.name);
-    this.suscripcion = this.listActivityFilter.subscribe()
+    this.suscripcion = this.listActivityFilter.subscribe(list => {
+      if (list) {
+        this.idElementIdUploadFile = list[0].id
+      }
+    })
+  }
+  UploadFiles() {
+
   }
   calcularTotalFromEjecucion(total: string, actual: string): number {
     let calculo: number = parseInt(actual) * 5 / parseInt(total)
@@ -262,7 +290,7 @@ export class SubActivityComponent implements OnInit {
         this.pmaoService.getAllEjecutionsFindIdActividad(this.idIndice, actividad.id).subscribe(listEjecutions => {
           let suma: number = 0;
           let numeroTotalEjecuciones: number = listEjecutions.length
-          listEjecutions.map(ejecution => ejecution.calculo).forEach(calculo => suma += calculo);
+          listEjecutions.map(ejecution => ejecution.calculation).forEach(calculation => suma += calculation);
           let efficiencyOne = parseFloat((suma / numeroTotalEjecuciones).toFixed(2))
           actividad.porcentageOfImplementation = parseFloat(((efficiencyOne * FunctionsBasics.valueEficiencyOne + actividad.valoracion.valor * FunctionsBasics.valueEficiencyTwo) / 5).toFixed(2));
           this.pmaoService.updateActividadPMAO(actividad, this.idIndice)
