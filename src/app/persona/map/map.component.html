@@ -1,7 +1,7 @@
 <agm-map [panControl]="true"  [zoom]=11  [disableDefaultUI]="true" [mapTypeId]="'hybrid'" [latitude]="this.latitudCenter" [mapTypeControl]="true" [longitude]="this.longitudCenter">
   <agm-polygon [paths]="poligonMoliendaCoords" [visible]=options.visible fillOpacity="0" strokeColor="yellow" zIndex=50></agm-polygon>
   <agm-polygon [paths]="poliginoPerforacionCoords" (polyClick)="clickPoligono('D8a5UgSogRhTreAED5BG')" [visible]=options.visibler
-    zIndex=150 opacity="0" strokeColor="brown"></agm-polygon>
+    zIndex=150 opacity="0" strokeColor="brown" ></agm-polygon>
   <agm-polygon [paths]="poligonoantaminaCoords" fillOpacity="0" [visible]=options.visible strokeColor="red" zIndex=100></agm-polygon>
   <agm-polygon [paths]="poligonoPuertoAntaminaCoords" strokeColor="skyblue" opacity="0" [visible]=options.visible></agm-polygon>
   <agm-polyline *ngFor="let point of  tuberiaCoordinates;let i = index;" fillColor="#84ffff">
