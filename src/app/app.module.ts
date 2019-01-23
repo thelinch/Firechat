@@ -4,9 +4,8 @@ import { AppComponent } from './app.component';
 import { registerLocaleData } from '@angular/common';
 import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
-import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { FormsModule } from "@angular/forms"
 import { AngularFireDatabase } from '@angular/fire/database';
 import { PersonaModule } from './persona/persona.module';
 import { AppRoutingModule } from './app.rounting';
@@ -22,6 +21,7 @@ import { NgxPermissionsModule } from 'ngx-permissions';
 import { LoginComponent } from './login/login.component';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { FileService } from './services/file.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 registerLocaleData(localePy, 'es');
 registerLocaleData(localePt, 'pt');
 registerLocaleData(localeEn, 'en')
@@ -43,9 +43,11 @@ library.add(fas);
     FontAwesomeModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     PersonaModule,
   ],
-  exports: [FontAwesomeModule],
+  exports: [FontAwesomeModule, FormsModule,
+    ReactiveFormsModule,],
   providers: [AngularFireDatabase, { provide: LOCALE_ID, useValue: 'es-Ar' }, FileService],
   bootstrap: [AppComponent]
 })

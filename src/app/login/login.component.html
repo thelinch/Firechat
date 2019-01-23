@@ -1,27 +1,24 @@
-<body>
-  
-</body>
- <div class="login-box">
-    <img src="../../assets/img_login/logo.png" class="avatar" alt="Avatar Image">
-    <h1>Login Here</h1>
-    <form>
-      <!-- USERNAME INPUT -->
-      <label for="username">Username</label>
-      <input type="text" placeholder="Enter Username">
-      <!-- select -->
-      <label for="cargo">Cargo</label>
-        <select aria-placeholder="hola">
-          <option value="Administrador">Administrador</option>
-          <option value="Gerente">Gerente</option>
-          <option value="Contratista">Contratista</option>    
-        </select> 
-      
-      <!-- PASSWORD INPUT -->
-      <label for="password">Password</label>
-      <input type="password" placeholder="Enter Password">
-      <input type="submit" value="Log In">
-      <a href="#">Olvido su contraseña?</a><br>
-      <a href="#">No tiene cuenta?</a>
-    </form>
+<div class="login-box">
+  <img src="../../assets/img_login/logo.png" class="avatar" alt="Avatar Image">
+  <h1>Login Here</h1>
+  <form [formGroup]="user" (ngSubmit)="logIn()">
+    <!-- USERNAME INPUT -->
+    <label for="username">Username</label>
+    <input type="email" formControlName="email" placeholder="ingrese su correo">
+    <!-- select -->
+    <label for="cargo">Cargo</label>
+    <select>
+      <option value="Administrador">Administrador</option>
+      <option value="Gerente">Gerente</option>
+      <option value="Contratista">Contratista</option>
+    </select>
 
-  </div>
+    <!-- PASSWORD INPUT -->
+    <label for="password">Password</label>
+    <input type="password" formControlName="password" placeholder="Enter Password">
+    <input type="submit" value="Log In">
+    <a href="#">Olvido su contraseña?</a><br>
+    <a href="#">No tiene cuenta?</a>
+  </form>
+  <strong *ngIf="email">{{email}}</strong>
+</div>

@@ -10,6 +10,7 @@ export interface persona {
     apellidos: string
     area: area
     UserName: string
+    email: string
     password: string
     tipoPersona: tipoPersona
     gerencia: gerencia
