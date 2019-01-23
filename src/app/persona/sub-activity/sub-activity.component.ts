@@ -21,6 +21,7 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
   }
 
   @Input("name") name: string;
+  @Input("idComponent") idComponent;
   suscripcion: Subscription
   listActivityFilter: Observable<actividadPMAO[]>
   optionSelectedActivityName: string
@@ -38,7 +39,6 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
   activateModalHistory: boolean = false;
   listEjecutionsFindIdActivity: Observable<executionActivityPMAO[]>
   @ViewChild("clasificacion") elementClasificacion: ElementRef
-  idElementIdUploadFile: string
   constructor(private render: Renderer2, private pmaoService: ActividadPmaoService, private fileService: FileService) {
 
   }
@@ -142,12 +142,13 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
 
     }
   }
-
+ 
   toogleFormEjecucion() {
     this.activarModalFormEjecucion = !this.activarModalFormEjecucion
     if (this.activarModalFormEjecucion && !this.fileUploadTemplate) {
-      this.fileUploadTemplate = new FileUploadWithPreview(this.idElementIdUploadFile)
-      console.log(this.fileUploadTemplate)
+      this.fileUploadTemplate = new FileUploadWithPreview(this.idComponent)
+    } else if (!this.activarModalFormEjecucion && this.fileUploadTemplate) {
+      this.fileUploadTemplate.clearImagePreviewPanel();
     }
   }
   calcularClasificacion(formulario) {
@@ -205,11 +206,7 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
    */
   getFilterListFindName() {
     this.listActivityFilter = this.pmaoService.getAllActividadFromName(this.idIndice, this.name);
-    this.suscripcion = this.listActivityFilter.subscribe(list => {
-      if (list) {
-        this.idElementIdUploadFile = list[0].id
-      }
-    })
+    this.suscripcion = this.listActivityFilter.subscribe()
   }
   UploadFiles() {
 

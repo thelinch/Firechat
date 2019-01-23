@@ -7,14 +7,14 @@
           <ul class="ul">
             <li class="li" *ngFor="let items of aspectoAmbiental.opciones">
               <a (click)="seleccionarOpcion(items);resetFormActividadPMAO();toggleModalFormularioPMAO()" class="button is-info is-small is-pulled-right">Agregar</a>
-              <app-sub-activity [name]="items.nombre" [idIndice]="this.idIndice"></app-sub-activity>
+              <app-sub-activity [idComponent]="items.id" [name]="items.nombre" [idIndice]="this.idIndice"></app-sub-activity>
             </li>
           </ul>
         </div>
       </div>
     </div>
   </div>
- 
+
 </div>
 <!--Modal para la creacion de Aspecto Ambiental-->
 <div class="modal" [ngClass]="{'is-active': activarModalFormPMAO}">

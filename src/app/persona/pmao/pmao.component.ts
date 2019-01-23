@@ -45,48 +45,48 @@ export class PmaoComponent implements OnInit {
     {
       nombre: "RIESGO E IMPACTO EN EL AGUA",
       opciones: [
-        { nombre: "Uso de agua superficial" },
-        { nombre: "Uso de agua subterranea" },
-        { nombre: "Descargas de agua al mar (Efluentes)" },
-        { nombre: "Descargas de agua a rios y quebradas (Efluentes)" },
-        { nombre: "Descargas a pozos subterraneos (Acuiferos)" },
-        { nombre: "Potencial de contacto con el nivel freatico" },
-        { nombre: "Generacion de lodos y sedimentos (movimiento de tierra, cruces en cuerpos de agua, etc)" },
+        { nombre: "Uso de agua superficial", id: "1" },
+        { nombre: "Uso de agua subterranea", id: "2" },
+        { nombre: "Descargas de agua al mar (Efluentes)", id: "3" },
+        { nombre: "Descargas de agua a rios y quebradas (Efluentes)", id: "4" },
+        { nombre: "Descargas a pozos subterraneos (Acuiferos)", id: "5" },
+        { nombre: "Potencial de contacto con el nivel freatico", id: "6" },
+        { nombre: "Generacion de lodos y sedimentos (movimiento de tierra, cruces en cuerpos de agua, etc)", id: "7" },
         { nombre: "Agregar otros +" },
       ]
     },
     {
       nombre: "RIESGO E IMPACTO EN AIRE",
       opciones: [
-        { nombre: "Generacion de polvo (Uso de vias no pavimentadas)" },
-        { nombre: "Generacion de gases / humos / olores" },
-        { nombre: "Generacion de ruido" },
-        { nombre: "Generacion de vibraciones" },
-        { nombre: "Potencial impacto en una estacion de calidad de aire (Indicar cuales)" },
-        { nombre: "Uso de equipos con fuerte radioactividad" },
-        { nombre: "Uso de equipos con fuerte radiacion no ionizante (Antenas de radio, ceular, lineas electricas)" },
-        { nombre: "Consumo de energia electrica (cambio climatico)" },
+        { nombre: "Generacion de polvo (Uso de vias no pavimentadas)", id: "8" },
+        { nombre: "Generacion de gases / humos / olores", id: "9" },
+        { nombre: "Generacion de ruido", id: "10" },
+        { nombre: "Generacion de vibraciones", id: "11" },
+        { nombre: "Potencial impacto en una estacion de calidad de aire (Indicar cuales)", id: "12" },
+        { nombre: "Uso de equipos con fuerte radioactividad", id: "13" },
+        { nombre: "Uso de equipos con fuerte radiacion no ionizante (Antenas de radio, ceular, lineas electricas)", id: "14" },
+        { nombre: "Consumo de energia electrica (cambio climatico)", id: "15" },
         { nombre: "Agregar otros +" },
       ]
     },
     {
       nombre: "RIESGO E IMPACTO EN BIOLOGIA Y RECURSOS NATURALES",
       opciones: [
-        { nombre: "Perturbacion o disturbacion de cobertura vegetal (Colles, quenuales, pastos, etc)" },
-        { nombre: "Perturbacion o disturbacion de habitats acuaticos o terrestres" },
-        { nombre: "Reubicacion de especies de flora y fauna" },
-        { nombre: "Consumo de papel" },
-        { nombre: " Consumo de hidrocarburos" },
+        { nombre: "Perturbacion o disturbacion de cobertura vegetal (Colles, quenuales, pastos, etc)", id: "16" },
+        { nombre: "Perturbacion o disturbacion de habitats acuaticos o terrestres", id: "17" },
+        { nombre: "Reubicacion de especies de flora y fauna", id: "18" },
+        { nombre: "Consumo de papel", id: "19" },
+        { nombre: " Consumo de hidrocarburos", id: "20" },
         { nombre: "Agregar otros +" },
       ]
     },
     {
       nombre: "RIESGO E IMPACTO EN SUELOS",
       opciones: [
-        { nombre: "Generacion de suelos organico (Retiro de Top soil)" },
-        { nombre: "Generacion de material inerte" },
-        { nombre: "Uso de canteras internas (autorizadas)" },
-        { nombre: "Generacion de erosion" },
+        { nombre: "Generacion de suelos organico (Retiro de Top soil)", id: "21" },
+        { nombre: "Generacion de material inerte", id: "22" },
+        { nombre: "Uso de canteras internas (autorizadas)", id: "23" },
+        { nombre: "Generacion de erosion", id: "24" },
         { nombre: "Agregar otros +" },
       ]
 
@@ -94,21 +94,21 @@ export class PmaoComponent implements OnInit {
     {
       nombre: "RIESGO E IMPACTO EN DESMONTES",
       opciones: [
-        { nombre: " Uso de desmonte para actividades como lastrado (indicar clase)" },
-        { nombre: "Uso de suelos organico" },
+        { nombre: " Uso de desmonte para actividades como lastrado (indicar clase)", id: "25" },
+        { nombre: "Uso de suelos organico", id: "26" },
         { nombre: "Agregar otros +" },
       ]
     },
     {
       nombre: "RIESGO E IMPACTO EN RESIDUOS",
       opciones: [
-        { nombre: "Generacion de residuos peligrosos" },
-        { nombre: "Generacion de residuos no peligrosos" },
-        { nombre: " Uso de insumos quimicos fiscalizados" },
-        { nombre: "Uso de insumos quimicos / reactivos" },
-        { nombre: "Uso de baños (portatiles u otros)" },
-        { nombre: "Potencial derrame de hidrocarburos (transporte / almacenamiento y/o abastecimiento)" },
-        { nombre: "Potencial derrame de productos quimicos / reactivos (Transporte / almacenamiento y/o abastecimiento)" },
+        { nombre: "Generacion de residuos peligrosos", id: "27" },
+        { nombre: "Generacion de residuos no peligrosos", id: "28" },
+        { nombre: " Uso de insumos quimicos fiscalizados", id: "29" },
+        { nombre: "Uso de insumos quimicos / reactivos", id: "30" },
+        { nombre: "Uso de baños (portatiles u otros)", id: "31" },
+        { nombre: "Potencial derrame de hidrocarburos (transporte / almacenamiento y/o abastecimiento)", id: "32" },
+        { nombre: "Potencial derrame de productos quimicos / reactivos (Transporte / almacenamiento y/o abastecimiento)", id: "33" },
         { nombre: "Agregar otros +" },
       ]
 
@@ -117,9 +117,9 @@ export class PmaoComponent implements OnInit {
     {
       nombre: "RIESGO E IMPACTO POR INFRAESTRUCTURA Y EQUIPAMIENTO",
       opciones: [
-        { nombre: "Uso de talleres temporales" },
-        { nombre: "Uso de instalaciones temporales (campamento / almacenes / oficinas)" },
-        { nombre: " Uso de equipos pesados y/o auxiliares" },
+        { nombre: "Uso de talleres temporales", id: "34" },
+        { nombre: "Uso de instalaciones temporales (campamento / almacenes / oficinas)", id: "35" },
+        { nombre: " Uso de equipos pesados y/o auxiliares", id: "36" },
         { nombre: "Agregar otros +" },
       ]
 
@@ -128,9 +128,9 @@ export class PmaoComponent implements OnInit {
     {
       nombre: "RIESGO E IMPACTO POR FUERA DE LA PROPIEDAD",
       opciones: [
-        { nombre: "Ejecucion de actividades fuera del limite de propiedad" },
-        { nombre: "Comunicaciones a las pobaciones vecinas, comunidades y/o autoridades locales" },
-        { nombre: "Contratacion de personal local" },
+        { nombre: "Ejecucion de actividades fuera del limite de propiedad", id: "37" },
+        { nombre: "Comunicaciones a las pobaciones vecinas, comunidades y/o autoridades locales", id: "38" },
+        { nombre: "Contratacion de personal local", id: "39" },
         { nombre: "Agregar otros +" },
       ]
 
