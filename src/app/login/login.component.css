@@ -9,7 +9,7 @@ body {
 
 .login-box {
   width: 320px;
-  height: 420px;
+  height: 480px;
   background:url("../../assets/img_login/fondo.jpg") no-repeat center top;
   color: #fff;
   top: 50%;
@@ -48,7 +48,7 @@ body {
   margin-bottom: 20px;
 }
 
-.login-box input[type="text"], .login-box input[type="password"] {
+.login-box input[type="email"], .login-box input[type="password"] {
   border: none;
   border-bottom: 1px solid #fff;
   background: transparent;
