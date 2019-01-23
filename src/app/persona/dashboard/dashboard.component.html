@@ -1,11 +1,11 @@
 <div class="row around-xs">
   <div class="col-xs-12 ">
-    <form #formControl="ngForm" class="row around-xs" (ngSubmit)="consultarResultados(formControl.value)">
+    <form [formGroup]="formFilterDate" class="row around-xs" (ngSubmit)="consultarResultados(formFilterDate.value)">
       <div class="field">
         <div class="control ">
           <label for="">
-            Fecha Inicio:<input class="input is-rounded col-xs-12 col-md-5" #fechaInicio name="fecha_inicio" ngModel type="date"
-              placeholder="fecha incial">
+            Fecha Inicio:<input class="input is-rounded col-xs-12 col-md-5" formControlName="startDate" type="date"
+              placeholder="fecha incial" [value]="getCurrentDate()">
 
           </label>
         </div>
@@ -13,12 +13,12 @@
       <div class="field">
         <div class="control ">
           <label for="">
-            Fecha Final<input class="input is-rounded col-xs-12 col-md-5 " #fechaFin name="fecha_final" ngModel type="date"
+            Fecha Final<input class="input is-rounded col-xs-12 col-md-5 " formControlName="endDate" type="date"
               placeholder="fecha incial">
           </label>
         </div>
       </div>
-      <button type="submit" class="button is-success col-xs-12 col-md-2">Consultar</button>
+      <button type="submit" [disabled]="!this.formFilterDate.valid" class="button is-success col-xs-12 col-md-2">Consultar</button>
     </form>
 
   </div>
@@ -34,7 +34,8 @@
           <div class="col-xs-12">
             <div *ngIf="indice.nombre=='PMAO';else link">
 
-              <a class="button is-info " routerLink="/persona/1/area/1/indice/{{indice.id}}/Pmao/actividades"> actividades</a>
+              <a class="button is-info " routerLink="/persona/1/area/1/indice/{{indice.id}}/Pmao/actividades">
+                actividades</a>
             </div>
             <ng-template #link>
               <a class="button is-info " routerLink="/persona/1/area/1/indice/{{indice.id}}/actividades"> actividades</a>

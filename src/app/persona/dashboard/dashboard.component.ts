@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ViewChildren, AfterContentInit, AfterViewChecked, AfterContentChecked, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ViewChildren, AfterContentInit, AfterViewChecked, AfterContentChecked, OnChanges, Renderer2 } from '@angular/core';
 import { Chart } from 'chart.js';
 import { ParametroService } from '../../services/parametro.service';
 import { parametro } from '../../modelos/parametro';
@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ActividadService } from 'src/app/services/actividad.service';
 import { actividades } from 'src/app/modelos/actividades';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -25,12 +26,12 @@ export class DashboardComponent implements OnInit, AfterContentInit, AfterConten
     scaleShowVerticalLines: false,
     responsive: true
   };
-  @ViewChild("fechaInicio") fechaInicio:ElementRef
+  @ViewChild("fechaInicio") fechaInicio: ElementRef
 
   public barChartLabels: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
   public barChartType: string = 'bar';
   public barChartLegend: boolean = true;
-
+  formFilterDate: FormGroup
   public barChartData: any[] = [
     { data: [65, 59, 80, 81, 56, 55, 40], label: 'Valor' },
   ];
@@ -59,17 +60,35 @@ export class DashboardComponent implements OnInit, AfterContentInit, AfterConten
   }
 
 
-  constructor(private parametroService: ParametroService, private actividadService: ActividadService, private indiceService: IndiceService, private router: ActivatedRoute) {
+  constructor(private render2: Renderer2, private parametroService: ParametroService, private actividadService: ActividadService, private indiceService: IndiceService, private router: ActivatedRoute) {
 
   }
 
   ngOnInit() {
+    this.formFilterDate = new FormGroup({
+      startDate: new FormControl(this.getCurrentDate(), Validators.compose([Validators.required])),
+      endDate: new FormControl(this.getCurrentDate(), Validators.compose([Validators.required]))
+    })
     this.router.parent.params.subscribe(objetoArea => {
       this.getAllIndiceFindIndArea("D8a5UgSogRhTreAED5BG")
-        
+
     })
     this.actividadService.getAllActividadFindIdIndice
-    
+
+  }
+  getCurrentDate(): string {
+
+    var fecha = new Date(); //Fecha actual
+    let mes: number | string = fecha.getMonth() + 1
+    let dia: number | string = fecha.getDate()
+    var año = fecha.getFullYear()
+    if (dia < 10)
+      dia = '0' + dia; //agrega cero si el menor de 10
+    if (mes < 10)
+      mes = '0' + mes
+    return año + "-" + mes + "-" + dia
+
+
   }
   getAllIndiceFindIndArea(idArea: string) {
     this.listaIndice = this.indiceService.getallIndiceFindIdArea(idArea)
