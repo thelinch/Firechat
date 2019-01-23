@@ -78,12 +78,12 @@ export class DashboardComponent implements OnInit, AfterContentInit, AfterConten
   }
   getCurrentDate(): string {
 
-    var fecha = new Date(); //Fecha actual
+    var fecha = new Date(); 
     let mes: number | string = fecha.getMonth() + 1
     let dia: number | string = fecha.getDate()
     var año = fecha.getFullYear()
     if (dia < 10)
-      dia = '0' + dia; //agrega cero si el menor de 10
+      dia = '0' + dia; 
     if (mes < 10)
       mes = '0' + mes
     return año + "-" + mes + "-" + dia
