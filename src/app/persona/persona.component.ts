@@ -1,11 +1,12 @@
 
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PersonaService } from '../services/persona.service';
 import { persona } from '../modelos/persona';
 import { incidencias } from '../modelos/incidencias';
 import { IncidenciaService } from '../services/incidencia.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 /**
  *
@@ -20,26 +21,32 @@ import { Observable } from 'rxjs';
   styleUrls: ['./persona.component.css']
 })
 
-export class PersonaComponent implements OnInit {
+export class PersonaComponent implements OnInit, OnDestroy {
+  ngOnDestroy(): void {
+    throw new Error("Method not implemented.");
+  }
   personaLogeada: Observable<persona>
   activarNavBar: boolean = false
   listaIncidenciaCritco = new Array<incidencias>();
   colorMolienda = "#7b1fa2";
-
+  Subscription: Subscription
+  idPerson: string;
   /**
    *Creates an instance of PersonaComponent.
    * @param {PersonaService} personaService
    * @param {IncidenciaService} incidenciaService
    * @memberof PersonaComponent
    */
-  constructor(private personaService: PersonaService, private incidenciaService: IncidenciaService) { }
+  constructor(private personaService: PersonaService, private incidenciaService: IncidenciaService, private router: ActivatedRoute) { }
 
   ngOnInit() {
-    setTimeout(() => {
-      this.getPersonFindId();
-
-    }, 1000)
-
+    console.log("se inicio")
+    if (!this.idPerson) {
+      this.router.params.subscribe(params => {
+        this.idPerson = params["id"]
+      })
+    }
+    this.getPersonFindId();
   }
 
   /**
@@ -57,7 +64,7 @@ export class PersonaComponent implements OnInit {
 
   getPersonFindId() {
     // tslint:disable-next-line:no-shadowed-variable
-    this.personaLogeada = this.personaService.getPersonaFindId("8e7UM1jYSu5DsNle827L")
+    this.personaLogeada = this.personaService.getPersonaFindId(this.idPerson)
   }
 
 }

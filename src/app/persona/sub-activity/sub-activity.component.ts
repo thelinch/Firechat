@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2, AfterViewInit, AfterContentInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, from, BehaviorSubject } from 'rxjs';
 import { actividadPMAO } from 'src/app/modelos/actividadPMAO';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
@@ -11,7 +11,7 @@ import { executionActivityPMAO } from 'src/app/modelos/executionActivityPMAO';
 import FileUploadWithPreview from 'file-upload-with-preview'
 import { FileService } from 'src/app/services/file.service';
 import { file } from 'src/app/modelos/File';
-import { finalize, take, flatMap, map } from 'rxjs/operators';
+import { finalize, take, flatMap, map, reduce, mapTo } from 'rxjs/operators';
 @Component({
   selector: 'app-sub-activity',
   templateUrl: './sub-activity.component.html',
@@ -179,10 +179,19 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
     form.setControl("registrationDate", new FormControl(new Date()))
     let executionActivity: executionActivityPMAO = (form.value as executionActivityPMAO)
     executionActivity.UrlListOfPhotos = new Array<file>();
-    this.actividadSeleccionada.isEjecuciones = true
-    /*this.fileService.uploadFile(this.fileUploadTemplate.cachedFileArray as File[], "executionPMAO").subscribe(files => {
-      console.log(files)
-    })*/
+    if (this.actividadSeleccionada.isEjecuciones && !this.actividadSeleccionada.isEjecuciones) {
+      this.actividadSeleccionada.isEjecuciones = true
+    }
+    let sub = new BehaviorSubject('');
+    from(this.fileUploadTemplate.cachedFileArray).pipe(flatMap((file: File) => this.fileService.uploadFile(file, "executionPMAO"))).pipe(finalize(() => {
+      this.pmaoService.saveActividadEjecucionPMAOFindIdActividad(this.actividadSeleccionada, this.idIndice, executionActivity).subscribe(respuesta => {
+        if (respuesta) {
+          sweetAlertMensaje.getMensajeTransaccionExitosa()
+        }
+      })
+    })).subscribe((file) => {
+      executionActivity.UrlListOfPhotos.push(file)
+    }, (error) => { sweetAlertMensaje.getMensajeTransaccionErronea(error) })
     /*  this.fileService.uploadFile(this.fileUploadTemplate.cachedFileArray as File[], "executionPMAO").pipe(take(this.fileUploadTemplate.cachedFileArray.length), flatMap(files => {
         executionActivity.UrlListOfPhotos = files
         return 
@@ -286,16 +295,15 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
       inputPlaceholder: "Seleccione una valoracion",
       showCancelButton: true
     }).then(seleccion => {
-      console.log(isNaN(seleccion['value']))
       if (seleccion["value"] != null && seleccion["value"] != "") {
         actividad.valoracion = { nombre: $("select.valoracion option:selected").text(), valor: (parseInt(seleccion["value"])) }
         this.pmaoService.getAllEjecutionsFindIdActividad(this.idIndice, actividad.id).subscribe(listEjecutions => {
-          let suma: number = 0;
           let numeroTotalEjecuciones: number = listEjecutions.length
-          listEjecutions.map(ejecution => ejecution.calculation).forEach(calculation => suma += calculation);
-          let efficiencyOne = parseFloat((suma / numeroTotalEjecuciones).toFixed(2))
-          actividad.porcentageOfImplementation = parseFloat(((efficiencyOne * FunctionsBasics.valueEficiencyOne + actividad.valoracion.valor * FunctionsBasics.valueEficiencyTwo) / 5).toFixed(2));
-          this.pmaoService.updateActividadPMAO(actividad, this.idIndice)
+          from(listEjecutions).pipe(map(ejecution => ejecution.calculation), reduce((total, current) => total + current), map((totalSum: number) => parseFloat((totalSum / numeroTotalEjecuciones).toFixed(2)))).subscribe(efficiencyOne => {
+            actividad.porcentageOfImplementation = parseFloat(((efficiencyOne * FunctionsBasics.valueEficiencyOne + actividad.valoracion.valor * FunctionsBasics.valueEficiencyTwo) / 5).toFixed(2));
+            this.pmaoService.updateActividadPMAO(actividad, this.idIndice)
+          })
+
         })
       }
     })

@@ -14,8 +14,8 @@
 
   <div id="navbarBasicExample" class="navbar-menu" [ngClass]="{'is-active': activarNavBar}">
     <div class="navbar-start">
-      <a class="navbar-item" routerLink="/persona/{{persona.id}}/area/{{persona.area.id}}">
-        <span class="icon">
+      <a class="navbar-item" [routerLink]="['home']">
+        <span class=" icon">
           <fa-icon icon="home"></fa-icon>
         </span>
       </a>
@@ -30,7 +30,7 @@
         </a>
 
         <div class="navbar-dropdown">
-          <a class="navbar-item" routerLinkActive="is-active" [routerLink]="['map','parametros']">
+          <a class="navbar-item" routerLinkActive="is-active" [routerLink]="['parametros']">
             Mapeo de Parametros
           </a>
 

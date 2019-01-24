@@ -1,22 +1,12 @@
 <div class="login-box">
   <img src="../../assets/img_login/logo.png" class="avatar" alt="Avatar Image">
-  <h1>Login Here</h1>
+  <h1>Coloque sus credenciales</h1>
   <form [formGroup]="user" (ngSubmit)="logIn()">
-    <!-- USERNAME INPUT -->
-    <label for="username">Username</label>
+    <label for="username">Correo</label>
     <input type="email" formControlName="email" placeholder="ingrese su correo">
-    <!-- select -->
-    <label for="cargo">Cargo</label>
-    <select>
-      <option value="Administrador">Administrador</option>
-      <option value="Gerente">Gerente</option>
-      <option value="Contratista">Contratista</option>
-    </select>
-
-    <!-- PASSWORD INPUT -->
-    <label for="password">Password</label>
+    <label for="password">Contraseña</label>
     <input type="password" formControlName="password" placeholder="ingrese contraseña">
-    <input type="submit" value="Log In">
+    <input type="submit" [disabled]="!user.valid" value="Entrar">
     <a href="#">Olvido su contraseña?</a><br>
     <a href="#">No tiene cuenta?</a>
   </form>

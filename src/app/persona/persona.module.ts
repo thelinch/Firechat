@@ -21,8 +21,12 @@ import { PmaoComponent } from './pmao/pmao.component';
 import { PmaoDirective } from '../directivas/pmao.directive';
 import { FilterNamePipe } from '../pipes/filter-name.pipe';
 import { SubActivityComponent } from './sub-activity/sub-activity.component';
+import { PersonaGuard } from './../guards/persona.guard';
+import { PersonaResolver } from '../resolvers/PersonaResolver';
+import { HomeComponent } from './home/home.component';
+
 @NgModule({
-    declarations: [PersonaComponent, SubActivityComponent, FilterNamePipe, PmaoDirective, DashboardComponent, MapComponent, ActividadComponent, ParametroMapeoComponent, PmaoComponent],
+    declarations: [PersonaComponent, HomeComponent, SubActivityComponent, FilterNamePipe, PmaoDirective, DashboardComponent, MapComponent, ActividadComponent, ParametroMapeoComponent, PmaoComponent],
     imports: [CommonModule,
         PersonaRoutingModule,
         FormsModule,
@@ -35,6 +39,6 @@ import { SubActivityComponent } from './sub-activity/sub-activity.component';
     ],
 
     exports: [PersonaComponent],
-    providers: [PersonaService, ResultadoService, IncidenciaService, ActividadService, TipoIncidenciaService, AreaService, ParametroService],
+    providers: [PersonaService, PersonaResolver, PersonaGuard, ResultadoService, IncidenciaService, ActividadService, TipoIncidenciaService, AreaService, ParametroService],
 })
 export class PersonaModule { }

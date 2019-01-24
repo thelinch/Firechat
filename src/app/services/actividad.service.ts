@@ -121,7 +121,6 @@ export class ActividadService {
     this.afs.collection("actividad").doc(activida.id).update(activida)
   }
   getAllActividadFindIdIndice(idIndice: string): Observable<actividades[]> {
-
     let listaActividades = new Array<actividades>()
     return Observable.create(observer => {
       this.afs.collection("indice").doc(idIndice).collection("actividad", ref => ref.where("estado", "==", true)).snapshotChanges().pipe(map(actions => actions.map(documentoActividadIndice => {
@@ -134,7 +133,9 @@ export class ActividadService {
           indiceActividad.actividadRef.get().then(documentoActividad => {
             const id = documentoActividad.id;
             const data = documentoActividad.data() as actividades
-            data.fecha_fin = new Date(data.fecha_fin["seconds"] * 1000)
+            if (data.fecha_fin) {
+              data.fecha_fin = new Date(data.fecha_fin["seconds"] * 1000)
+            }
             data.fecha_inicio = new Date(data.fecha_inicio["seconds"] * 1000)
             listaActividades.push({ id, ...data })
           })

@@ -24,4 +24,13 @@ export class AuthService {
     return this.afAuth
 
   }
+  getCurrentUser(): User {
+    return this.afAuth.auth.currentUser
+  }
+  isLogged(): boolean {
+    if (this.afAuth.auth.currentUser) {
+      return true
+    }
+    return false
+  }
 }
