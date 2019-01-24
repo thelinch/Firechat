@@ -1,4 +1,4 @@
-<nav class="navbar is-transparent" role="navigation" aria-label="main navigation">
+<nav *ngIf="personaLogeada | async;let persona" class="navbar is-transparent" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="https://bulma.io">
       APPEQC
@@ -14,7 +14,7 @@
 
   <div id="navbarBasicExample" class="navbar-menu" [ngClass]="{'is-active': activarNavBar}">
     <div class="navbar-start">
-      <a class="navbar-item" routerLink="/persona/{{personaLogeada.id}}/area/{{personaLogeada.area.id}}">
+      <a class="navbar-item" routerLink="/persona/{{persona.id}}/area/{{persona.area.id}}">
         <span class="icon">
           <fa-icon icon="home"></fa-icon>
         </span>
@@ -47,20 +47,15 @@
       <div class="navbar-item">
         <figure class="image is-48x48">
         </figure>
-        <div *ngIf="personaLogeada">
-          <p class="usuario">
-            {{personaLogeada.nombre }}-{{personaLogeada.apellidos }}
-            <strong>AREA:</strong>{{personaLogeada.area?.area }}
-            <strong>CARGO:</strong>{{personaLogeada.tipoPersona?.nombre}}
+        <p class="usuario">
+          {{persona.nombre }}-{{persona.apellidos }}
+          <strong>AREA:</strong>{{persona.area?.area }}
+          <strong>CARGO:</strong>{{persona.tipoPersona?.nombre}}
 
-          </p>
-
-        </div>
-
-        <div *ngIf="personaLogeada.tipoPersona.nombre=='gerente'" [ngClass]="{'isClicked':this.listaIncidenciaCritco.lenght>0}">
+        </p>
+        <div *ngIf="persona.tipoPersona.nombre=='gerente'" [ngClass]="{'isClicked':this.listaIncidenciaCritco.lenght>0}">
           <i class="material-icons">{{this.listaIncidenciaCritco? 'notifications':'notifications_active'}}</i>
         </div>
-
         <div class="alerta">
           <span class="icon">
             <fa-icon icon="bell "></fa-icon>

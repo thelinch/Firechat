@@ -10,6 +10,8 @@ import * as $ from "jquery"
 import { executionActivityPMAO } from 'src/app/modelos/executionActivityPMAO';
 import FileUploadWithPreview from 'file-upload-with-preview'
 import { FileService } from 'src/app/services/file.service';
+import { file } from 'src/app/modelos/File';
+import { finalize, take, flatMap, map } from 'rxjs/operators';
 @Component({
   selector: 'app-sub-activity',
   templateUrl: './sub-activity.component.html',
@@ -142,7 +144,7 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
 
     }
   }
- 
+
   toogleFormEjecucion() {
     this.activarModalFormEjecucion = !this.activarModalFormEjecucion
     if (this.activarModalFormEjecucion && !this.fileUploadTemplate) {
@@ -175,17 +177,20 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
   saveEjecucion(form: FormGroup) {
     form.setControl("calculation", new FormControl(this.calcularTotalFromEjecucion(form.get("total").value, form.get("current").value)))
     form.setControl("registrationDate", new FormControl(new Date()))
+    let executionActivity: executionActivityPMAO = (form.value as executionActivityPMAO)
+    executionActivity.UrlListOfPhotos = new Array<file>();
     this.actividadSeleccionada.isEjecuciones = true
-    this.fileUploadTemplate.cachedFileArray
-    this.fileService.uploadFile(this.fileUploadTemplate.cachedFileArray[0] as File, "executionPMAO")
-    //let executionActivity: executionActivityPMAO = (form.value as executionActivityPMAO)
-
-    /* this.pmaoService.saveActividadEjecucionPMAOFindIdActividad(this.actividadSeleccionada, this.idIndice, form.value as executionActivityPMAO).subscribe(respuesta => {
-      if (respuesta) {
-        this.toogleFormEjecucion();
-        sweetAlertMensaje.getMensajeTransaccionExitosa()
-      }
+    /*this.fileService.uploadFile(this.fileUploadTemplate.cachedFileArray as File[], "executionPMAO").subscribe(files => {
+      console.log(files)
     })*/
+    /*  this.fileService.uploadFile(this.fileUploadTemplate.cachedFileArray as File[], "executionPMAO").pipe(take(this.fileUploadTemplate.cachedFileArray.length), flatMap(files => {
+        executionActivity.UrlListOfPhotos = files
+        return 
+      })).subscribe(resultado => {
+        if (resultado) {
+          
+        }
+      })*/
   }
 
   ocultar() {
