@@ -1,7 +1,8 @@
 <agm-map [panControl]="true" [zoom]=11 [disableDefaultUI]="true" [mapTypeId]="'hybrid'" [latitude]="this.latitudCenter"
   [mapTypeControl]="true" [longitude]="this.longitudCenter">
-  <agm-polygon [paths]="poligonMoliendaCoords" (polyClick)="mostrarMensaje()" [visible]=options.visible fillOpacity="0"
-    strokeColor="yellow" zIndex=50></agm-polygon>
+
+  <agm-polygon id="Molienda" [paths]="poligonMoliendaCoords"  (polyClick)="mostrarMensaje()" [visible]=options.visible
+    fillOpacity="0" strokeColor="yellow" zIndex=50></agm-polygon>
   <agm-polygon [paths]="poliginoPerforacionCoords" (polyClick)="mostrarMensaje()" [visible]=options.visibler zIndex=150
     opacity="0" strokeColor="brown"></agm-polygon>
   <agm-polygon [paths]="poligonoantaminaCoords" (polyClick)="mostrarMensaje()" fillOpacity="0" [visible]=options.visible

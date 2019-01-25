@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { incidencias } from 'src/app/modelos/incidencias';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2'
+import { LatLngLiteral } from '@agm/core';
 
 @Component({
   selector: 'app-map',
@@ -17,40 +18,9 @@ export class MapComponent implements OnInit {
   longitudCenter: number = -77.0543888
   listaIncidencia: Observable<incidencias[]>
   colorMolienda = '#7b1fa2'
-  poligonMoliendaCoords = [
-    { lat: -9.563204, lng: -77.04613 },
-    { lat: -9.563848, lng: -77.046264 },
-    { lat: -9.564247, lng: -77.046874 },
-    { lat: -9.563711, lng: -77.04768 },
-    { lat: -9.562632, lng: -77.048064 },
-    { lat: -9.560467, lng: -77.050321 },
-    { lat: -9.560095, lng: -77.050131 },
-    { lat: -9.560487, lng: -77.049381 },
-    { lat: -9.559336, lng: -77.047452 },
-    { lat: -9.559714, lng: -77.046615 },
-    { lat: -9.560595, lng: -77.045551 },
-    { lat: -9.561231, lng: -77.04479 },
-    { lat: -9.561473, lng: -77.045137 },
-    { lat: -9.562059, lng: -77.045516 },
-    { lat: -9.562601, lng: -77.046069 },
-    { lat: -9.563204, lng: -77.04613 },
 
-  ]
 
   poliginoPerforacionCoords = [
-    { lat: -9.554696, lng: -77.070709 },
-    { lat: -9.553509, lng: -77.072577 },
-    { lat: -9.551016, lng: -77.073526 },
-    { lat: -9.549108, lng: -77.07255 },
-    { lat: -9.547673, lng: -77.072542 },
-    { lat: -9.549656, lng: -77.076939 },
-    { lat: -9.551063, lng: -77.08167 },
-    { lat: -9.55354, lng: -77.08342 },
-    { lat: -9.553674, lng: -77.084914 },
-    { lat: -9.551574, lng: -77.087131 },
-    { lat: -9.548457, lng: -77.083497 },
-    { lat: -9.546245, lng: -77.078515 },
-    { lat: -9.54478, lng: -77.073536 },
     { lat: -9.540914, lng: -77.07005 },
     { lat: -9.537186, lng: -77.068521 },
     { lat: -9.533748, lng: -77.0685 },
@@ -670,20 +640,22 @@ export class MapComponent implements OnInit {
   incidencia(evento) {
     console.log(evento)
   }
-  mostrarMensaje(){
+
+  mostrarMensaje() {
     Swal({
       title: 'Selecciona una opcion',
       input: 'select',
+      html: "",
       inputOptions: {
         'ica': 'ICA',
         'pmao': 'PMAO',
         'ia': 'IA',
-        
+
       },
       inputPlaceholder: 'Selecciona una opcion',
       showCancelButton: true,
-     
-    }).then(respuesta=>{
+
+    }).then(respuesta => {
       console.log(respuesta.value)
     })
   }
