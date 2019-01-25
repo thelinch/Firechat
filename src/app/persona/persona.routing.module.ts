@@ -11,7 +11,7 @@ import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
     {
-        path: 'persona/:id/area/:idarea', component: PersonaComponent, canActivate: [PersonaGuard], children: [
+        path: '', component: PersonaComponent, canActivate: [PersonaGuard], children: [
             { path: "home", component: HomeComponent },
             { path: "dashboard", component: DashboardComponent },
             { path: "map", component: MapComponent },

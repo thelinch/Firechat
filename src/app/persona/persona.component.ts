@@ -7,6 +7,7 @@ import { incidencias } from '../modelos/incidencias';
 import { IncidenciaService } from '../services/incidencia.service';
 import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { NgxPermissionsService } from 'ngx-permissions';
 
 /**
  *
@@ -37,7 +38,7 @@ export class PersonaComponent implements OnInit, OnDestroy {
    * @param {IncidenciaService} incidenciaService
    * @memberof PersonaComponent
    */
-  constructor(private personaService: PersonaService, private incidenciaService: IncidenciaService, private router: ActivatedRoute) { }
+  constructor(private personaService: PersonaService, private incidenciaService: IncidenciaService, private router: ActivatedRoute, private permissionsService: NgxPermissionsService) { }
 
   ngOnInit() {
     console.log("se inicio")
@@ -65,6 +66,9 @@ export class PersonaComponent implements OnInit, OnDestroy {
   getPersonFindId() {
     // tslint:disable-next-line:no-shadowed-variable
     this.personaLogeada = this.personaService.getPersonaFindId(this.idPerson)
+    this.personaLogeada.subscribe(personPersmissions => {
+      this.permissionsService.loadPermissions([personPersmissions.tipoPersona.nombre])
+    })
   }
 
 }

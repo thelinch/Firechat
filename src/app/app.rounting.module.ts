@@ -7,7 +7,7 @@ const routes: Routes = [
     { path: '', redirectTo: "/login", pathMatch: "full" },
     { path: "login", component: LoginComponent },
     {
-        path: "persona/:id/area/:idarea", component: PersonaComponent
+        path: "persona/:id/area/:idarea", loadChildren: "./persona/persona.module#PersonaModule"
     },
 ];
 

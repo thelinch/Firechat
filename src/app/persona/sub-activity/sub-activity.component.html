@@ -20,11 +20,13 @@
               <i class="material-icons" style="font-size: 2rem">details</i>
             </span>
           </a>
-          <a class="card-footer-item has-text-link" *ngIf="actividad.isEjecuciones" (click)="getAllEjecutionsFindIdActividad(actividad.id);this.activateModalHistory=openModal(activateModalHistory)">
-            <span class="icon is-large ">
-              <i class="material-icons" style="font-size: 2rem">view_list</i>
-            </span>
-          </a>
+          <div *ngxPermissionsOnly="['SUPERVISOR']">
+            <a class="card-footer-item has-text-link" *ngIf="actividad.isEjecuciones" (click)="getAllEjecutionsFindIdActividad(actividad.id);this.activateModalHistory=openModal(activateModalHistory)">
+              <span class="icon is-large ">
+                <i class="material-icons" style="font-size: 2rem">view_list</i>
+              </span>
+            </a>
+          </div>
           <a class="card-footer-item has-text-warning" *ngIf="actividad.isEjecuciones" (click)="getMensajeValoracion(actividad)">
             <span class="icon is-large ">
               <i class="material-icons" style="font-size: 2rem">grade</i>

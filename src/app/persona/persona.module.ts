@@ -24,6 +24,7 @@ import { SubActivityComponent } from './sub-activity/sub-activity.component';
 import { PersonaGuard } from './../guards/persona.guard';
 import { PersonaResolver } from '../resolvers/PersonaResolver';
 import { HomeComponent } from './home/home.component';
+import { NgxPermissionsModule } from 'ngx-permissions';
 
 @NgModule({
     declarations: [PersonaComponent, HomeComponent, SubActivityComponent, FilterNamePipe, PmaoDirective, DashboardComponent, MapComponent, ActividadComponent, ParametroMapeoComponent, PmaoComponent],
@@ -32,6 +33,7 @@ import { HomeComponent } from './home/home.component';
         FormsModule,
         ReactiveFormsModule,
         FontAwesomeModule,
+        NgxPermissionsModule.forChild(),
         ChartsModule,
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyDjUlVzErtcnc8NA2PY4SyxDOcZf3az6DY'

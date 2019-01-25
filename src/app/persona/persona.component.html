@@ -53,7 +53,7 @@
           <strong>CARGO:</strong>{{persona.tipoPersona?.nombre}}
 
         </p>
-        <div *ngIf="persona.tipoPersona.nombre=='gerente'" [ngClass]="{'isClicked':this.listaIncidenciaCritco.lenght>0}">
+        <div *ngxPermissionsOnly="['GERENTE']" [ngClass]="{'isClicked':this.listaIncidenciaCritco.lenght>0}">
           <i class="material-icons">{{this.listaIncidenciaCritco? 'notifications':'notifications_active'}}</i>
         </div>
         <div class="alerta">

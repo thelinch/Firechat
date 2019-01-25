@@ -7,8 +7,7 @@ import { environment } from '../environments/environment';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireDatabase } from '@angular/fire/database';
-import { PersonaModule } from './persona/persona.module';
-import { AppRoutingModule } from './app.rounting';
+import { AppRoutingModule } from './app.rounting.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -41,13 +40,12 @@ library.add(fas);
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     FontAwesomeModule,
-    AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    PersonaModule,
+    AppRoutingModule,
   ],
   exports: [FontAwesomeModule, FormsModule,
-    ReactiveFormsModule,],
+    ReactiveFormsModule],
   providers: [AngularFireDatabase, { provide: LOCALE_ID, useValue: 'es-Ar' }, FileService],
   bootstrap: [AppComponent]
 })
