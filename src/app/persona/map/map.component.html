@@ -1,17 +1,8 @@
 <agm-map [panControl]="true" [zoom]=11 [disableDefaultUI]="true" [mapTypeId]="'hybrid'" [latitude]="this.latitudCenter"
   [mapTypeControl]="true" [longitude]="this.longitudCenter">
-  <agm-polygon [paths]="poligonoantaminaCoords" (polyClick)="mostrarMensaje()" fillOpacity="0" [visible]=options.visible
-    strokeColor="red" zIndex=100></agm-polygon>
-  <agm-polygon [paths]="poligonoPuertoAntaminaCoords" strokeColor="skyblue" opacity="0" [visible]=options.visible></agm-polygon>
-  <agm-polyline *ngFor="let point of  tuberiaCoordinates;let i = index;" fillColor="#84ffff">
+  <agm-polygon *ngFor="let area of (listArea | async)" [paths]="area.paths" (polyClick)="mostrarMensaje(area.id,area.area)"
+    [strokeColor]="area.color" [zIndex]="area.zIndex"></agm-polygon>
 
-  </agm-polyline>
-  <agm-polygon [paths]="tuberiaCoordinates" (polyClick)="mostrarMensaje()" [visible]=options.visible fillOpacity="0"
-    strokeColor="#808080"></agm-polygon>
-  <agm-polygon [paths]="flotacionCoords" (polyClick)="mostrarMensaje()" [visible]=options.visible fillOpacity="0"
-    fillColor="#84ffff"></agm-polygon>
-  <agm-polygon [paths]="relaveCoords" (polyClick)="mostrarMensaje()" [visible]=options.visible fillOpacity="0"
-    strokeColor="blue"></agm-polygon>
   <agm-marker [longitude]="incidencia.longitud" [latitude]="incidencia.latitud" *ngFor="let incidencia of (listaIncidencia | async)">
     <agm-info-window>
       <strong>incidencia:</strong> {{incidencia.detalle}}

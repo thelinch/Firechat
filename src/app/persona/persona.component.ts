@@ -6,8 +6,10 @@ import { persona } from '../modelos/persona';
 import { incidencias } from '../modelos/incidencias';
 import { IncidenciaService } from '../services/incidencia.service';
 import { Observable, Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxPermissionsService } from 'ngx-permissions';
+import { AuthService } from '../services/auth.service';
+import { sweetAlertMensaje } from '../HelperClass/SweetAlertMensaje';
 
 /**
  *
@@ -38,15 +40,12 @@ export class PersonaComponent implements OnInit, OnDestroy {
    * @param {IncidenciaService} incidenciaService
    * @memberof PersonaComponent
    */
-  constructor(private personaService: PersonaService, private incidenciaService: IncidenciaService, private router: ActivatedRoute, private permissionsService: NgxPermissionsService) { }
+  constructor(private personaService: PersonaService, private authService: AuthService, private router: Router, private incidenciaService: IncidenciaService, private activatedRouter: ActivatedRoute, private permissionsService: NgxPermissionsService) { }
 
   ngOnInit() {
-    console.log("se inicio")
-    if (!this.idPerson) {
-      this.router.params.subscribe(params => {
-        this.idPerson = params["id"]
-      })
-    }
+    this.activatedRouter.params.subscribe(params => {
+      this.idPerson = params["id"]
+    })
     this.getPersonFindId();
   }
 
@@ -55,6 +54,12 @@ export class PersonaComponent implements OnInit, OnDestroy {
    *
    * @memberof PersonaComponent
    */
+  onlogout() {
+    this.authService.logout().then(loged => {
+      sweetAlertMensaje.getMensajeTransaccionExitosa()
+      sessionStorage.removeItem("loget")
+    })
+  }
   toggleNavBar() {
     this.activarNavBar = !this.activarNavBar;
   }

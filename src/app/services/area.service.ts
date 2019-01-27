@@ -16,7 +16,7 @@ export class AreaService {
 
   getAllIndiceFindAreaId(idArea: string): Observable<indice[]> {
     let listaIndice = new Array<indice>();
-return Observable.create(observable => {
+    return Observable.create(observable => {
       this.afs.collection("area").doc(idArea).collection("indice").snapshotChanges().pipe(map(actions => actions.map(documentoIndice => {
         const data = documentoIndice.payload.doc.data() as area_indice
         const id = documentoIndice.payload.doc.id
@@ -30,5 +30,12 @@ return Observable.create(observable => {
         observable.next(listaIndice)
       })
     })
+  }
+  getAllarea(): Observable<area[]> {
+    return this.afs.collection("area").snapshotChanges().pipe(map(actions => actions.map(documentArea => {
+      const dataArea = documentArea.payload.doc.data() as area
+      dataArea.id = documentArea.payload.doc.id
+      return dataArea
+    })))
   }
 }

@@ -246,9 +246,23 @@
             <textarea class="textarea " formControlName="detalle" placeholder="lo que se va a hacer "></textarea>
           </div>
         </div>
+        <div class="field">
+          <div class="control">
+            <div class="custom-file-container" data-upload-id="template">
+              <label>Fotos:<a href="javascript:void(0)" class="custom-file-container__image-clear" title="Clear Image">x</a></label>
+              <label class="custom-file-container__custom-file">
+                <input type="file" formControlName="files" class="custom-file-container__custom-file__custom-file-input"
+                  accept="image/*" multiple>
+                <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                <span class="custom-file-container__custom-file__custom-file-control"></span>
+              </label>
+              <div class="custom-file-container__image-preview"></div>
+            </div>
+          </div>
+        </div>
         <div class="select ">
           <select formControlName="tipoIncidencia">
-            <option [ngValue]="tipoIncidenica" *ngFor="let tipoIncidenica of listaTipoIncidencias ">{{tipoIncidenica.tipo}}</option>
+            <option [ngValue]="tipoIncidenica" *ngFor="let tipoIncidenica of (listaTipoIncidencias | async )">{{tipoIncidenica.tipo}}</option>
           </select>
         </div>
         <div class="field is-grouped ">

@@ -4,7 +4,10 @@ import { Observable } from 'rxjs';
 import { incidencias } from 'src/app/modelos/incidencias';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2'
-import { LatLngLiteral } from '@agm/core';
+import { LatLngLiteral, GoogleMapsAPIWrapper } from '@agm/core';
+import { area } from 'src/app/modelos/area';
+import { AreaService } from 'src/app/services/area.service';
+import { google } from '@agm/core/services/google-maps-types';
 
 @Component({
   selector: 'app-map',
@@ -18,7 +21,7 @@ export class MapComponent implements OnInit {
   longitudCenter: number = -77.0543888
   listaIncidencia: Observable<incidencias[]>
   colorMolienda = '#7b1fa2'
-
+  listArea: Observable<area[]>
 
   poliginoPerforacionCoords = [
     { lat: -9.540914, lng: -77.07005 },
@@ -626,10 +629,13 @@ export class MapComponent implements OnInit {
     editable: true,
     visible: true
   };
-  constructor(private incidenciaService: IncidenciaService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private incidenciaService: IncidenciaService, private areaService: AreaService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.listaIncidencia = this.incidenciaService.getAllIncidencia()
+    this.listArea = this.areaService.getAllarea()
+
+
   }
 
 
@@ -640,10 +646,13 @@ export class MapComponent implements OnInit {
   incidencia(evento) {
     console.log(evento)
   }
+  getAllArea() {
 
-  mostrarMensaje() {
+  }
+  mostrarMensaje(idArea: string, nameArea: string) {
+    console.log(idArea)
     Swal({
-      title: 'Selecciona una opcion',
+      title: nameArea,
       input: 'select',
       html: "",
       inputOptions: {

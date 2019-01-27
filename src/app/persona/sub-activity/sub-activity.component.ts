@@ -11,7 +11,8 @@ import { executionActivityPMAO } from 'src/app/modelos/executionActivityPMAO';
 import FileUploadWithPreview from 'file-upload-with-preview'
 import { FileService } from 'src/app/services/file.service';
 import { file } from 'src/app/modelos/File';
-import { finalize, take, flatMap, map, reduce, mapTo } from 'rxjs/operators';
+import { take, flatMap, map, reduce, mapTo } from 'rxjs/operators';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 @Component({
   selector: 'app-sub-activity',
   templateUrl: './sub-activity.component.html',
@@ -24,6 +25,7 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
 
   @Input("name") name: string;
   @Input("idComponent") idComponent;
+  @BlockUI() blockUI: NgBlockUI;
   suscripcion: Subscription
   listActivityFilter: Observable<actividadPMAO[]>
   optionSelectedActivityName: string
@@ -178,28 +180,25 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
     form.setControl("calculation", new FormControl(this.calcularTotalFromEjecucion(form.get("total").value, form.get("current").value)))
     form.setControl("registrationDate", new FormControl(new Date()))
     let executionActivity: executionActivityPMAO = (form.value as executionActivityPMAO)
-    executionActivity.UrlListOfPhotos = new Array<file>();
-    if (this.actividadSeleccionada.isEjecuciones && !this.actividadSeleccionada.isEjecuciones) {
-      this.actividadSeleccionada.isEjecuciones = true
-    }
-    let sub = new BehaviorSubject('');
-    from(this.fileUploadTemplate.cachedFileArray).pipe(flatMap((file: File) => this.fileService.uploadFile(file, "executionPMAO"))).pipe(finalize(() => {
-      this.pmaoService.saveActividadEjecucionPMAOFindIdActividad(this.actividadSeleccionada, this.idIndice, executionActivity).subscribe(respuesta => {
-        if (respuesta) {
-          sweetAlertMensaje.getMensajeTransaccionExitosa()
+    executionActivity.urlListOfPhotos = new Array<file>();
+    this.actividadSeleccionada.isEjecuciones = true
+    from(this.fileUploadTemplate.cachedFileArray).pipe(take(this.fileUploadTemplate.cachedFileArray.length), flatMap((file: File) => this.fileService.uploadFile(file, "executionPMAO"))).subscribe(
+      {
+        next: file => {
+          executionActivity.urlListOfPhotos.push(file)
+        },
+        error: err => console.log(err),
+        complete: () => {
+          console.log(executionActivity)
+          this.pmaoService.saveActividadEjecucionPMAOFindIdActividad(this.actividadSeleccionada, this.idIndice, executionActivity).subscribe(respuesta => {
+            if (respuesta) {
+              sweetAlertMensaje.getMensajeTransaccionExitosa()
+              this.toogleFormEjecucion();
+            }
+          })
         }
       })
-    })).subscribe((file) => {
-      executionActivity.UrlListOfPhotos.push(file)
-    }, (error) => { sweetAlertMensaje.getMensajeTransaccionErronea(error) })
-    /*  this.fileService.uploadFile(this.fileUploadTemplate.cachedFileArray as File[], "executionPMAO").pipe(take(this.fileUploadTemplate.cachedFileArray.length), flatMap(files => {
-        executionActivity.UrlListOfPhotos = files
-        return 
-      })).subscribe(resultado => {
-        if (resultado) {
-          
-        }
-      })*/
+
   }
 
   ocultar() {

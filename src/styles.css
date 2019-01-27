@@ -74,15 +74,25 @@ to{
 li:hover{
   cursor: pointer;
 }
-
-.box{ 
+.center_text{
+  text-align: center;
+}
+.border_top_left_radius{
+  
+  border-top-left-radius: 6px;
+}
+.border_top_right_radius{
+  border-top-right-radius: 6px;
+}
+.text_title{ 
   font-family: Cambria;
   color:white;
   font-size: 18px;
-  font-weight: bold;
-  margin: 0 0 10px;
   padding: 3px 10px;
-  border-radius: 20px;
+}
+.margin_bottom_5rem{
+  margin-bottom: .5rem;
+
 }
 
 /* Animaciones */

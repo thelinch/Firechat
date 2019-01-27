@@ -5,7 +5,7 @@
         <div class="control ">
           <label for="">
             Fecha Inicio:<input class="input is-rounded col-xs-12 col-md-5" formControlName="startDate" type="date"
-              placeholder="fecha incial" [value]="getCurrentDate()">
+              placeholder="fecha incial">
 
           </label>
         </div>
@@ -31,17 +31,17 @@
             <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
               [chartType]="barChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
           </div>
-          <div class="col-xs-12" *ngxPermissionsOnly="['GERENTE']">
-
-            <div  *ngIf="indice.nombre=='PMAO';else link">
-
-              <a class="button is-info " routerLink="/persona/1/area/1/indice/{{indice.id}}/Pmao/actividades">
-                actividades</a>
+          <div class="col-xs-12" *ngxPermissionsOnly="['GERENTE','SUPERVISOR']">
+            <div *ngIf="objetoUrl | async;let url">
+              <div *ngIf="indice.nombre=='PMAO' ;else link">
+                <a class="button is-info " routerLink="/persona/{{url.id}}/area/{{url.idarea}}/indice/{{indice.id}}/Pmao/actividades">
+                  actividades</a>
+              </div>
+              <ng-template #link>
+                <a class="button is-info " routerLink="/persona/{{url.id}}/area/{{url.idarea}}/indice/{{indice.id}}/actividades">
+                  actividades</a>
+              </ng-template>
             </div>
-            <ng-template #link>
-              <a class="button is-info " routerLink="/persona/1/area/1/indice/{{indice.id}}/actividades"> actividades</a>
-
-            </ng-template>
           </div>
 
         </div>

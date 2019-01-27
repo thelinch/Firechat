@@ -22,11 +22,12 @@ export class ActividadPmaoService {
   }
   saveActividadEjecucionPMAOFindIdActividad(actividad: actividadPMAO, idIndice: string, execution: executionActivityPMAO): Observable<boolean> {
     return Observable.create(observer => {
-      console.log("entro al collecion", execution)
-      this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").doc(actividad.id).collection(Colecciones.ejecuciones).add(execution)
-      this.updateActividadPMAO(actividad, idIndice)
+      this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").doc(actividad.id).collection(Colecciones.ejecuciones).add(execution).then(respuest => {
+        this.updateActividadPMAO(actividad, idIndice)
+        observer.next(true)
 
-      observer.next(true)
+      })
+
     })
   }
   getAllActividadPMAO(idIndice: string): Observable<actividadPMAO[]> {

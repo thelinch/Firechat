@@ -19,7 +19,9 @@ export class FileService {
       const task = fileRef.put(file).then((result) => {
         fileRef.getDownloadURL().subscribe(url => {
           let fileReturn: file = { name: file.name, url: url, id: path }
+
           Observer.next(fileReturn)
+          Observer.complete()
         })
       })
     })

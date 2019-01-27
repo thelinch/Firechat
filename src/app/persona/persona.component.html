@@ -14,7 +14,7 @@
 
   <div id="navbarBasicExample" class="navbar-menu" [ngClass]="{'is-active': activarNavBar}">
     <div class="navbar-start">
-      <a class="navbar-item" [routerLink]="['home']">
+      <a class="navbar-item" [routerLink]="['home']" routerLinkActive="is-active">
         <span class=" icon">
           <fa-icon icon="home"></fa-icon>
         </span>
@@ -36,7 +36,7 @@
 
         </div>
       </div>
-      <a routerLink='dashboard' class="navbar-item">
+      <a [routerLink]="['dashboard']" class="navbar-item" routerLinkActive="is-active">
         <i class="material-icons">
           insert_chart
         </i>
@@ -56,10 +56,13 @@
         <div *ngxPermissionsOnly="['GERENTE']" [ngClass]="{'isClicked':this.listaIncidenciaCritco.lenght>0}">
           <i class="material-icons">{{this.listaIncidenciaCritco? 'notifications':'notifications_active'}}</i>
         </div>
-        <div class="alerta">
-          <span class="icon">
-            <fa-icon icon="bell "></fa-icon>
-          </span>
+
+      </div>
+      <div class="navbar-item">
+        <div class="buttons">
+          <a class="button is-primary">
+            <strong>Salir</strong>
+          </a>
         </div>
       </div>
     </div>

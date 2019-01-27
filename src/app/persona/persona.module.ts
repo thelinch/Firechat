@@ -25,10 +25,12 @@ import { PersonaGuard } from './../guards/persona.guard';
 import { PersonaResolver } from '../resolvers/PersonaResolver';
 import { HomeComponent } from './home/home.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
+import { BlockUIModule } from 'ng-block-ui';
 
 @NgModule({
     declarations: [PersonaComponent, HomeComponent, SubActivityComponent, FilterNamePipe, PmaoDirective, DashboardComponent, MapComponent, ActividadComponent, ParametroMapeoComponent, PmaoComponent],
     imports: [CommonModule,
+        BlockUIModule.forRoot(),
         PersonaRoutingModule,
         FormsModule,
         ReactiveFormsModule,

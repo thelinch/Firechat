@@ -12,8 +12,7 @@ export class PersonaGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    let userLoged = this.authService.getCurrentUser()
-    if (userLoged) {
+    if (sessionStorage.getItem("loget")) {
       return true
     }
     this.router.navigate(["/"])

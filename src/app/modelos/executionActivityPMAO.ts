@@ -9,5 +9,5 @@ export interface executionActivityPMAO {
     total: string
     calculation: number
     registrationDate: Date
-    UrlListOfPhotos: file[]
+    urlListOfPhotos: file[]
 }

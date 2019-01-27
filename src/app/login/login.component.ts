@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, private personaService: PersonaService, private router: Router) { }
 
   ngOnInit() {
-    this.authService.logout()
+    sessionStorage.clear()
     this.user = new FormGroup({
       email: new FormControl("", Validators.compose([Validators.required, Validators.email])),
       password: new FormControl("", Validators.compose([Validators.required]))
@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
       if (this.emailLoged) {
         this.personaService.getPersonaFindCorreo(this.authService.getAuth().auth.currentUser.email).subscribe(persona => {
           sweetAlertMensaje.getMensajeTransaccionExitosa();
+          sessionStorage.setItem("loget", re.user.uid)
           this.router.navigateByUrl("/persona/" + persona[0].id + "/area/" + persona[0].area.id + "/map")
         })
       }

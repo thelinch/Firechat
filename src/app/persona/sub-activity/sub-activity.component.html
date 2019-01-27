@@ -15,24 +15,25 @@
           </div>
         </div>
         <footer class="card-footer ">
-          <a class="card-footer-item has-text-success" (click)="this.resetFormEjecucion();seleccionarActividad(actividad);toogleFormEjecucion()">
-            <span class="icon is-large ">
-              <i class="material-icons" style="font-size: 2rem">details</i>
-            </span>
-          </a>
-          <div *ngxPermissionsOnly="['SUPERVISOR']">
-            <a class="card-footer-item has-text-link" *ngIf="actividad.isEjecuciones" (click)="getAllEjecutionsFindIdActividad(actividad.id);this.activateModalHistory=openModal(activateModalHistory)">
+          <ng-template [ngxPermissionsOnly]="['CONTRATISTA','GERENTE']">
+            <a class="card-footer-item has-text-success" (click)="this.resetFormEjecucion();seleccionarActividad(actividad);toogleFormEjecucion()">
               <span class="icon is-large ">
-                <i class="material-icons" style="font-size: 2rem">view_list</i>
+                <i class="material-icons" style="font-size: 2rem">details</i>
               </span>
             </a>
-          </div>
-          <a class="card-footer-item has-text-warning" *ngIf="actividad.isEjecuciones" (click)="getMensajeValoracion(actividad)">
+          </ng-template>
+          <a class="card-footer-item has-text-link" *ngIf="actividad.isEjecuciones" (click)="getAllEjecutionsFindIdActividad(actividad.id);this.activateModalHistory=openModal(activateModalHistory)">
             <span class="icon is-large ">
-              <i class="material-icons" style="font-size: 2rem">grade</i>
+              <i class="material-icons" style="font-size: 2rem">view_list</i>
             </span>
           </a>
-
+          <ng-template [ngxPermissionsOnly]="['SUPERVISOR']">
+            <a class="card-footer-item has-text-warning" *ngIf="actividad.isEjecuciones" (click)="getMensajeValoracion(actividad)">
+              <span class="icon is-large ">
+                <i class="material-icons" style="font-size: 2rem">grade</i>
+              </span>
+            </a>
+          </ng-template>
         </footer>
       </div>
     </div>
@@ -128,6 +129,7 @@
             <th>Denominacion</th>
             <th>Unidad</th>
             <th>Fecha</th>
+            <th>Fotos</th>
           </thead>
           <tbody>
             <tr *ngFor="let ejecutions of (listEjecutionsFindIdActivity | async)">
@@ -137,6 +139,9 @@
               <td>{{ejecutions.denomination}}</td>
               <td>{{ejecutions.unity}}</td>
               <td>{{ejecutions.registrationDate.seconds*1000 | date:'medium'}}</td>
+              <td *ngFor="let foto of ejecutions.urlListOfPhotos">
+                <img [src]="foto.url" [alt]="foto.name">
+              </td>
             </tr>
           </tbody>
         </table>
@@ -148,3 +153,5 @@
   </div>
   <!--Fin de Modal de Historial de Ejecuciones-->
 </div>
+<block-ui>
+</block-ui>

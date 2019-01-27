@@ -11,7 +11,6 @@ import { AppRoutingModule } from './app.rounting.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import { BlockUIModule } from 'ng-block-ui';
 import localePy from '@angular/common/locales/es-PY';
 import localePt from '@angular/common/locales/pt';
 import localeEn from '@angular/common/locales/en';
@@ -33,7 +32,7 @@ library.add(fas);
   ],
   imports: [
     BrowserModule,
-    BlockUIModule.forRoot(),
+
     NgxPermissionsModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,

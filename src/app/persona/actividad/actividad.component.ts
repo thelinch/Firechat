@@ -10,10 +10,14 @@ import { tipoIncidencia } from '../../modelos/TipoIncidencia';
 import { IncidenciaService } from '../../services/incidencia.service';
 import { incidencias } from '../../modelos/incidencias';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { parametro } from 'src/app/modelos/parametro';
 import { resultado } from 'src/app/modelos/resultado';
 import { ResultadoService } from 'src/app/services/resultado.service';
+import FileUploadWithPreview from 'file-upload-with-preview'
+import { file } from 'src/app/modelos/File';
+import { flatMap, take } from 'rxjs/operators';
+import { FileService } from 'src/app/services/file.service';
 @Component({
   selector: 'app-actividad',
   templateUrl: './actividad.component.html',
@@ -26,7 +30,7 @@ export class ActividadComponent implements OnInit {
   incidenciaForm: FormGroup;
   activarFormActividad: boolean = false
   activarFormIncidencia: boolean = false;
-  listaTipoIncidencias: tipoIncidencia[]
+  listaTipoIncidencias: Observable<tipoIncidencia[]>
   idIndice: string;
   actividadSeleccionada: actividades
   activarListaIncidencia: boolean = false
@@ -36,13 +40,13 @@ export class ActividadComponent implements OnInit {
   listaParametros: parametro[]
   listParametrosSeleccionados = new Array<parametro>()
   activarModalEstadistica: boolean = false
-
-  private idArea;
+  fileUploadTemplate: any
+  idArea: string;
   lineChartData: Array<any>
   dataEstadistica = new Array<any>();
   public lineChartLabels: Array<any> = ['enero', 'febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'];
   private listaResultado = new Array<resultado>()
-  constructor(private actividadService: ActividadService, private parametroService: ParametroService, private componenteService: ComponenteService,
+  constructor(private actividadService: ActividadService, private fileService: FileService, private parametroService: ParametroService, private componenteService: ComponenteService,
     private tipoIncidenciaService: TipoIncidenciaService, private resultadoService: ResultadoService, private render: Renderer2, private incidenciaService: IncidenciaService, private router: ActivatedRoute) { }
 
 
@@ -62,8 +66,11 @@ export class ActividadComponent implements OnInit {
     })
     this.incidenciaForm = new FormGroup({
       detalle: new FormControl("", Validators.required),
-      tipoIncidencia: new FormControl("", Validators.required)
+      tipoIncidencia: new FormControl("", Validators.required),
+      files: new FormControl("", Validators.required)
     })
+    this.listaTipoIncidencias = this.tipoIncidenciaService.getAllTipoIncidencia()
+    this.fileUploadTemplate = new FileUploadWithPreview("template")
 
   }
   getResultadoEstadisticoFindIdActividad(actividad: actividades) {
@@ -179,19 +186,25 @@ export class ActividadComponent implements OnInit {
   }
 
   saveIncidencia(incidencia: incidencias) {
-
     if (this.actividadSeleccionada) {
-      this.incidenciaService.setIncidenciaFindIdActividad(this.actividadSeleccionada, incidencia).then(documento => {
-        if (documento) {
-          documento.get().then(incidencia => {
-            console.log("se Registro la incidencia " + (incidencia.data() as incidencias).detalle)
-            this.incidenciaForm.reset()
-            this.toggleModalIncidencia()
-          })
+      incidencia.urlListOfPhotos = new Array<file>()
+      from(this.fileUploadTemplate.cachedFileArray).pipe(take(this.fileUploadTemplate.cachedFileArray.length), flatMap((file: File) => this.fileService.uploadFile(file, "incidencias"))).subscribe(
+        {
+          next: file => incidencia.urlListOfPhotos.push(file),
+          error: error => console.log(error),
+          complete: () => {
+            this.incidenciaService.setIncidenciaFindIdActividad(this.actividadSeleccionada, incidencia).then(documento => {
+              if (documento) {
+                documento.get().then(incidencia => {
+                  this.incidenciaForm.reset()
+                  this.toggleModalIncidencia()
+                })
+              }
+            })
+          }
         }
-      })
+      )
     }
-
   }
 
 
@@ -215,12 +228,7 @@ export class ActividadComponent implements OnInit {
   }
   toggleModalIncidencia() {
     this.activarFormIncidencia = !this.activarFormIncidencia
-    if (this.activarFormIncidencia) {
-      this.tipoIncidenciaService.getAllTipoIncidencia().subscribe(listaTipoIncidencia => {
-        this.listaTipoIncidencias = listaTipoIncidencia;
-        console.log(this.listaTipoIncidencias)
-      })
-    }
+
   }
   saveActividad(actividad: actividades) {
 

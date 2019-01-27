@@ -1,4 +1,5 @@
 import { tipoIncidencia } from "./TipoIncidencia";
+import { file } from "./File";
 
 export interface incidencias {
     id?: string
@@ -7,5 +8,6 @@ export interface incidencias {
     fecha_registro: Date
     latitud: string
     longitud: string
+    urlListOfPhotos: file[]
     tipoIncidencia: tipoIncidencia
 }

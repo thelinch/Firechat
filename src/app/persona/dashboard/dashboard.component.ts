@@ -32,6 +32,9 @@ export class DashboardComponent implements OnInit, AfterContentInit, AfterConten
   public barChartType: string = 'bar';
   public barChartLegend: boolean = true;
   formFilterDate: FormGroup
+  idArea: string
+  idPerson: string
+  objetoUrl: Observable<any>
   public barChartData: any[] = [
     { data: [65, 59, 80, 81, 56, 55, 40], label: 'Valor' },
   ];
@@ -69,7 +72,10 @@ export class DashboardComponent implements OnInit, AfterContentInit, AfterConten
       startDate: new FormControl(this.getCurrentDate(), Validators.compose([Validators.required])),
       endDate: new FormControl(this.getCurrentDate(), Validators.compose([Validators.required]))
     })
+    this.objetoUrl = this.router.parent.params;
     this.router.parent.params.subscribe(objetoArea => {
+      this.idPerson = objetoArea.id
+      this.idArea = objetoArea.idarea;
       this.getAllIndiceFindIndArea("D8a5UgSogRhTreAED5BG")
 
     })
@@ -78,12 +84,12 @@ export class DashboardComponent implements OnInit, AfterContentInit, AfterConten
   }
   getCurrentDate(): string {
 
-    var fecha = new Date(); 
+    var fecha = new Date();
     let mes: number | string = fecha.getMonth() + 1
     let dia: number | string = fecha.getDate()
     var año = fecha.getFullYear()
     if (dia < 10)
-      dia = '0' + dia; 
+      dia = '0' + dia;
     if (mes < 10)
       mes = '0' + mes
     return año + "-" + mes + "-" + dia
