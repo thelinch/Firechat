@@ -8,6 +8,7 @@ import { LatLngLiteral, GoogleMapsAPIWrapper } from '@agm/core';
 import { area } from 'src/app/modelos/area';
 import { AreaService } from 'src/app/services/area.service';
 import { google } from '@agm/core/services/google-maps-types';
+import { IndiceService } from 'src/app/services/indice.service';
 
 @Component({
   selector: 'app-map',
@@ -629,7 +630,7 @@ export class MapComponent implements OnInit {
     editable: true,
     visible: true
   };
-  constructor(private incidenciaService: IncidenciaService, private areaService: AreaService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private incidenciaService: IncidenciaService, private indiceService: IndiceService, private areaService: AreaService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.listaIncidencia = this.incidenciaService.getAllIncidencia()
@@ -650,8 +651,21 @@ export class MapComponent implements OnInit {
 
   }
   mostrarMensaje(idArea: string, nameArea: string) {
-    console.log(idArea)
-    Swal({
+    this.indiceService.getallIndiceFindIdArea(idArea).subscribe({
+      next: listIndice => {
+        let templateIndice: any = "";
+        console.log(listIndice)
+        for (let index = 0; index < listIndice.length; index++) {
+          console.log("entro al forEcah", listIndice[index])
+
+        }
+
+      },
+      complete: () => {
+        console.log("se termino")
+      }
+    })
+    /*Swal({
       title: nameArea,
       input: 'select',
       html: "",
@@ -666,6 +680,9 @@ export class MapComponent implements OnInit {
 
     }).then(respuesta => {
       console.log(respuesta.value)
-    })
+    })*/
+
+
+
   }
 }

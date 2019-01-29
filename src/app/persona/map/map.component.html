@@ -7,29 +7,28 @@
     <agm-info-window>
       <strong>incidencia:</strong> {{incidencia.detalle}}
       <strong>tipo:</strong>{{incidencia.tipoIncidencia.tipo}}
+      <div class="display_flex">
+        <figure class="image is-96x96" *ngFor="let foto of incidencia.urlListOfPhotos">
+          <img [src]="foto.url" [alt]="foto.name" />
+        </figure>
+      </div>
     </agm-info-window>
   </agm-marker>
-
 </agm-map>
-<div class="row">
-  <div class="col-xs-12">
 
-  </div>
-
-</div>
 <div class="legend">
   <div id="titulo">
     <h3>LEYENDA</h3>
   </div>
   <ul>
 
-    <li (click)="mostrarMensaje()"><i class="material-icons color_marron">fiber_manual_record</i>Perforacion y Voladura</li>
-    <li (click)="mostrarMensaje()"><i class="material-icons color_amarillo">fiber_manual_record</i>Molienda </li>
-    <li (click)="mostrarMensaje()"><i class="material-icons color_rojo">fiber_manual_record</i>Antamina </li>
-    <li (click)="mostrarMensaje()"><i class="material-icons color_celeste">fiber_manual_record</i>Puerto Antamina </li>
-    <li (click)="mostrarMensaje()"><i class="material-icons color_azul">fiber_manual_record</i>Relave </li>
-    <li (click)="mostrarMensaje()"><i class="material-icons color_negro">fiber_manual_record</i>Flotacion </li>
-    <li (click)="mostrarMensaje()"><i class="material-icons color_gray">fiber_manual_record</i>Carretera </li>
+    <li><i class="material-icons color_marron">fiber_manual_record</i>Perforacion y Voladura</li>
+    <li><i class="material-icons color_amarillo">fiber_manual_record</i>Molienda </li>
+    <li><i class="material-icons color_rojo">fiber_manual_record</i>Antamina </li>
+    <li><i class="material-icons color_celeste">fiber_manual_record</i>Puerto Antamina </li>
+    <li><i class="material-icons color_azul">fiber_manual_record</i>Relave </li>
+    <li><i class="material-icons color_negro">fiber_manual_record</i>Flotacion </li>
+    <li><i class="material-icons color_gray">fiber_manual_record</i>Carretera </li>
 
   </ul>
 </div>

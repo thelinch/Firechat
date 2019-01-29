@@ -24,7 +24,6 @@ export class LoginComponent implements OnInit {
     this.authService.getAuth().auth.onAuthStateChanged(userLoged => {
       if (userLoged) {
         this.emailLoged = userLoged.email
-
       }
     })
   }

@@ -19,7 +19,7 @@ export class IndiceService {
     return this.afs.collection("indice").add(indice)
   }
 
-  getallIndiceFindIdArea(idArea: string): Observable<indice[]> {
+  getallIndiceFindIdArea(idArea: string): Observable<Array<indice>> {
 
     let listaIndice = new Array<indice>();
     return Observable.create(observer => {
@@ -28,7 +28,7 @@ export class IndiceService {
         const data = documentoIndiceArea.payload.doc.data() as area_indice
         return { id, ...data }
       }))).subscribe(listaAreaIndice => {
-        listaIndice  = new Array<indice>();
+        listaIndice = new Array<indice>();
         listaAreaIndice.map(areaIndice => {
           areaIndice.indiceRef.get().then(indice => {
             const data = indice.data() as indice;

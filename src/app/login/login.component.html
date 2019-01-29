@@ -1,5 +1,5 @@
 <div class="login-box">
-  <img src="../../assets/img_login/logo.png" class="avatar" alt="Avatar Image">
+  <img src="./src/assets/img_login/fondo.jpg" class="avatar" alt="Avatar Image">
   <h1>Coloque sus credenciales</h1>
   <form [formGroup]="user" (ngSubmit)="logIn()">
     <label for="username">Correo</label>
@@ -10,5 +10,5 @@
     <a href="#">Olvido su contraseña?</a><br>
     <a href="#">No tiene cuenta?</a>
   </form>
-  <strong *ngIf="email">{{email}}</strong>
+  <p>Nuevo</p>
 </div>

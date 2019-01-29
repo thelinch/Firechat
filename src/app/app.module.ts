@@ -20,6 +20,7 @@ import { LoginComponent } from './login/login.component';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { FileService } from './services/file.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ServiceWorkerModule } from '@angular/service-worker';
 registerLocaleData(localePy, 'es');
 registerLocaleData(localePt, 'pt');
 registerLocaleData(localeEn, 'en')
@@ -42,6 +43,7 @@ library.add(fas);
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   exports: [FontAwesomeModule, FormsModule,
     ReactiveFormsModule],

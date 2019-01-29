@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit, AfterContentInit, AfterConten
     this.router.parent.params.subscribe(objetoArea => {
       this.idPerson = objetoArea.id
       this.idArea = objetoArea.idarea;
-      this.getAllIndiceFindIndArea("D8a5UgSogRhTreAED5BG")
+      this.getAllIndiceFindIndArea(this.idArea)
 
     })
     this.actividadService.getAllActividadFindIdIndice
