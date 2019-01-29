@@ -1,16 +1,8 @@
-body {
-  margin: 0;
-  padding: 0;
-  background: url("/src/assets/img_login/fondo.jpg") no-repeat center top;
-  background-size: cover;
-  font-family: sans-serif;
-  height: 100vh;
-}
 
 .login-box {
   width: 320px;
   height: 480px;
-  background:url("/src/assets/img_login/fondo.jpg") no-repeat center top;
+  background:url("../../assets/img_login/fondo.jpg") no-repeat center top;
   color: #fff;
   top: 50%;
   left: 50%;
