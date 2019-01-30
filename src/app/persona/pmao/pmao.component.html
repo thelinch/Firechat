@@ -2,12 +2,14 @@
   <div class="col-xs-12 parentCollapsie margin_25">
     <div *ngFor="let aspectoAmbiental of listaAspectosAmbientales;let i=index ">
       <div class="collapsie" #collapsie>
-        <h3 class="collapsie_header puntero has-background-primary has-background-link text_title margin_bottom_5rem center_text border_top_left_radius border_top_right_radius"
+        <h3 class="collapsie_header puntero has-background-primary  text_title margin_bottom_5rem center_text border_top_left_radius border_top_right_radius"
           (click)="selectionOption(collapsie,aspectoAmbiental.nombre)">{{aspectoAmbiental.nombre}}</h3>
         <div class="body ">
           <ul class="ul">
             <li class="li" *ngFor="let items of aspectoAmbiental.opciones">
-              <a (click)="seleccionarOpcion(items);resetFormActividadPMAO();toggleModalFormularioPMAO()" class="button is-info is-small is-pulled-right">Agregar</a>
+              <ng-template [ngxPermissionsOnly]="['JEFE']">
+                <a (click)="seleccionarOpcion(items);resetFormActividadPMAO();toggleModalFormularioPMAO()" class="button is-info is-small is-pulled-right">Agregar</a>
+              </ng-template>
               <app-sub-activity [idComponent]="items.id" [name]="items.nombre" [idIndice]="this.idIndice"></app-sub-activity>
             </li>
           </ul>
@@ -15,7 +17,6 @@
       </div>
     </div>
   </div>
-
 </div>
 <!--Modal para la creacion de Aspecto Ambiental-->
 <div class="modal" [ngClass]="{'is-active': activarModalFormPMAO}">
@@ -96,17 +97,13 @@
             </div>
           </div>
         </div>
-        <div class="field is-grouped ">
-          <div class="control ">
-            <button type="submit" [disabled]="!this.actividadPMAOForm.valid" class="button is-success ">
-              guardar
-            </button>
-          </div>
-        </div>
+        <footer class="modal-card-foot">
+          <button type="submit" [disabled]="!this.actividadPMAOForm.valid" class="button is-success ">
+            guardar
+          </button>
+          <button class="button" (click)="toggleModalFormularioPMAO()">Cancel</button>
+        </footer>
       </form>
     </section>
-    <footer class="modal-card-foot">
-      <button class="button" (click)="toggleModalFormularioPMAO()">Cancel</button>
-    </footer>
   </div>
 </div>

@@ -1,11 +1,20 @@
 <div *ngIf="name">
-  <p style="text-align:center" (click)="getFilterListFindName();optionSelected(rowCard)"><strong>{{name}}</strong></p>
-  <div class="row around-xs" #rowCard>
+  <p style="text-align:center" (click)="getFilterListFindName();optionSelected(rowCard)">{{name}} <span *ngIf="listActivityFilter| async;let lengthFilter">({{lengthFilter.length}})</span></p>
+
+  <div class=" row around-xs" #rowCard>
+
     <div class="col-xs-12 col-md-6   margin_25 " *ngFor="let actividad of (listActivityFilter | async)">
       <div class="card ">
         <header class="card-header position_relative">
-          <div class="card-header-title" [ngStyle]="{'backgroundColor': getBackgroundColorFindActividad(actividad)}">
-            {{actividad.nombre}}<span *ngIf="actividad.porcentageOfImplementation" class="porcentaje position_absolute has-text-link has-background-white-ter ">{{actividad.porcentageOfImplementation
+          <div class="card-header-title">
+            <div class="width_50_percent ">
+              <div class="display_flex position_absolute">
+                <i class="material-icons " *ngIf="actividad.porcentageOfImplementation" [ngStyle]="{'color': getBackgroundColorFindActividad(actividad)}">assistant_photo</i>
+              </div>
+
+              {{actividad.nombre}}
+            </div>
+            <span *ngIf="actividad.porcentageOfImplementation" class="porcentaje position_absolute has-text-link has-background-white-ter ">{{actividad.porcentageOfImplementation
               | percent}}</span>
           </div>
         </header>
@@ -15,10 +24,10 @@
           </div>
         </div>
         <footer class="card-footer ">
-          <ng-template [ngxPermissionsOnly]="['CONTRATISTA','GERENTE']">
+          <ng-template [ngxPermissionsOnly]="['CONTRATISTA']">
             <a class="card-footer-item has-text-success" (click)="this.resetFormEjecucion();seleccionarActividad(actividad);toogleFormEjecucion()">
               <span class="icon is-large ">
-                <i class="material-icons" style="font-size: 2rem">details</i>
+                <i class="material-icons" style="font-size: 2rem">filter_list</i>
               </span>
             </a>
           </ng-template>

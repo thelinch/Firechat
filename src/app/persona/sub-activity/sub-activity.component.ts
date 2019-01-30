@@ -42,32 +42,6 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
   formEjecucion: FormGroup;
   activateModalHistory: boolean = false;
   listEjecutionsFindIdActivity: Observable<executionActivityPMAO[]>
-  @ViewChild("clasificacion") elementClasificacion: ElementRef
-  constructor(private render: Renderer2, private pmaoService: ActividadPmaoService, private fileService: FileService) {
-
-  }
-  ngOnInit() {
-    this.actividadPMAOForm = new FormGroup({
-      nombre: new FormControl('', Validators.required),
-      condicion: new FormControl('', Validators.required),
-      impacto: new FormControl('', Validators.required),
-      severidad: new FormControl('', Validators.required),
-      frecuencia: new FormControl('', Validators.required),
-      significancia: new FormControl('', Validators.required),
-      clasificacion: new FormControl('', Validators.required),
-      comentario: new FormControl('', Validators.required)
-    })
-    this.formEjecucion = new FormGroup({
-      executionComentary: new FormControl('', Validators.required),
-      denomination: new FormControl('', Validators.required),
-      unity: new FormControl('', Validators.required),
-      files: new FormControl('', Validators.required),
-      current: new FormControl('', Validators.required),
-      total: new FormControl('', Validators.required)
-    })
-
-  }
-
 
   listValoracionesColor = [
     { valor: 0, color: "#d50000" },
@@ -140,6 +114,33 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
     { name: "Medio", inicio: 9, fin: 15, color: "blue" },
     { name: "Bajo", inicio: 16, fin: 25, color: "#c4bfbd" }]
   listaActividades: any[]
+  @ViewChild("clasificacion") elementClasificacion: ElementRef
+  constructor(private render: Renderer2, private pmaoService: ActividadPmaoService, private fileService: FileService) {
+
+  }
+  ngOnInit() {
+    this.actividadPMAOForm = new FormGroup({
+      nombre: new FormControl('', Validators.required),
+      condicion: new FormControl('', Validators.required),
+      impacto: new FormControl('', Validators.required),
+      severidad: new FormControl('', Validators.required),
+      frecuencia: new FormControl('', Validators.required),
+      significancia: new FormControl('', Validators.required),
+      clasificacion: new FormControl('', Validators.required),
+      comentario: new FormControl('', Validators.required)
+    })
+    this.formEjecucion = new FormGroup({
+      executionComentary: new FormControl('', Validators.required),
+      denomination: new FormControl('', Validators.required),
+      unity: new FormControl('', Validators.required),
+      files: new FormControl('', Validators.required),
+      current: new FormControl('', Validators.required),
+      total: new FormControl('', Validators.required)
+    })
+
+  }
+
+
   getBackgroundColorFindActividad(actividad: actividadPMAO): string {
     if (actividad.valoracion) {
       return this.listValoracionesColor.find(exprecion => exprecion.valor == actividad.valoracion.valor).color

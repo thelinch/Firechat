@@ -67,6 +67,9 @@ to{
   
 
 }
+.width_50_percent{
+  width: 50%
+}
 .li{
   text-align: center;
   background: #eee9e9;

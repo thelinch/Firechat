@@ -296,6 +296,7 @@ export class PmaoComponent implements OnInit {
       significanciaValor = this.clasificacion.find(cl => -1 * valor <= cl.inicio && -1 * valor >= cl.fin)
     }
     this.actividadPMAOForm.get("clasificacion").setValue(significanciaValor.name)
+    this.render.setStyle(this.elementClasificacion.nativeElement, "color", "white")
     this.render.setStyle(this.elementClasificacion.nativeElement, "background", significanciaValor.color)
   }
 
