@@ -24,18 +24,10 @@
           map
         </i>
       </a>
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
-          Parametros
-        </a>
+      <a class="navbar-item" routerLinkActive="is-active" [routerLink]="['parametros']">
+        <i class="material-icons">view_agenda</i>
 
-        <div class="navbar-dropdown">
-          <a class="navbar-item" routerLinkActive="is-active" [routerLink]="['parametros']">
-            Mapeo de Parametros
-          </a>
-
-        </div>
-      </div>
+      </a>
       <a [routerLink]="['dashboard']" class="navbar-item" routerLinkActive="is-active">
         <i class="material-icons">
           insert_chart

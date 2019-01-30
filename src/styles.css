@@ -7,7 +7,11 @@
 .puntero{
   cursor: pointer;
 }
+*{
+  font-family:  verdana, Helvetica, sans-serif;
+  font-size: 16px;
 
+}
 html, body {
   height: 100%;
   margin: 0;
