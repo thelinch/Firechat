@@ -1,5 +1,5 @@
 <div *ngIf="name">
-  <p style="text-align:center" (click)="getFilterListFindName();optionSelected(rowCard)">{{name}}</p>
+  <p style="text-align:center" (click)="getFilterListFindName();optionSelected(rowCard)"><strong>{{name}}</strong></p>
   <div class="row around-xs" #rowCard>
     <div class="col-xs-12 col-md-6   margin_25 " *ngFor="let actividad of (listActivityFilter | async)">
       <div class="card ">
