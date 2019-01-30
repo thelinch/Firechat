@@ -31,7 +31,7 @@
             <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
               [chartType]="barChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
           </div>
-          <div class="col-xs-12" *ngxPermissionsOnly="['JEFE','SUPERVISOR']">
+          <div class="col-xs-12">
             <div *ngIf="objetoUrl | async;let url">
               <div *ngIf="indice.nombre=='PMAO' ;else link">
                 <a class="button is-info " routerLink="/persona/{{url.id}}/area/{{url.idarea}}/indice/{{indice.id}}/Pmao/actividades">

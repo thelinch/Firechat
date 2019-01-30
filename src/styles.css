@@ -127,6 +127,10 @@ li:hover{
 .position_relative{
   position: relative;
 }
+.disabled{
+  pointer-events: none;
+  opacity: .5;
+}
 .position_absolute{
   position:absolute;
 }

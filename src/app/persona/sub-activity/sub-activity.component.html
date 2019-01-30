@@ -25,7 +25,8 @@
         </div>
         <footer class="card-footer ">
           <ng-template [ngxPermissionsOnly]="['CONTRATISTA']">
-            <a class="card-footer-item has-text-success" (click)="this.resetFormEjecucion();seleccionarActividad(actividad);toogleFormEjecucion()">
+            <a class="card-footer-item has-text-success" [ngClass]="{'disabled':actividad.porcentageOfImplementation}"
+              (click)="this.resetFormEjecucion();seleccionarActividad(actividad);toogleFormEjecucion()">
               <span class="icon is-large ">
                 <i class="material-icons" style="font-size: 2rem">filter_list</i>
               </span>
