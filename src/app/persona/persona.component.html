@@ -15,14 +15,14 @@
   <div id="navbarBasicExample" class="navbar-menu" [ngClass]="{'is-active': activarNavBar}">
     <div class="navbar-start">
       <a class="navbar-item" [routerLink]="['home']" routerLinkActive="is-active">
-        <span class=" icon">
-          <fa-icon icon="home"></fa-icon>
-        </span>
+          <i class="material-icons">
+              person
+            </i>
       </a>
       <a [routerLink]="['map']" routerLinkActive="is-active" class="navbar-item">
-        <i class="material-icons">
-          map
-        </i>
+          <span class=" icon">
+              <fa-icon icon="home"></fa-icon>
+            </span>
       </a>
       <a class="navbar-item" routerLinkActive="is-active" [routerLink]="['parametros']">
         <i class="material-icons">view_agenda</i>
