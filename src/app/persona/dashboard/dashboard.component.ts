@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ActividadService } from 'src/app/services/actividad.service';
 import { actividades } from 'src/app/modelos/actividades';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -44,10 +45,7 @@ export class DashboardComponent implements OnInit, AfterContentInit, AfterConten
     console.log(e);
   }
   consultarResultados(datosForm) {
-    this.listaIndice.subscribe(function (data) { console.log(data) });
-    this.listaIndice.subscribe(listaIndice => {
-      this.actividadService.getResultadoICA("D8a5UgSogRhTreAED5BG", datosForm.fecha_inicio, datosForm.fecha_final, listaIndice)
-    })
+
 
   }
   public chartHovered(e: any): void {
@@ -69,8 +67,8 @@ export class DashboardComponent implements OnInit, AfterContentInit, AfterConten
 
   ngOnInit() {
     this.formFilterDate = new FormGroup({
-      startDate: new FormControl(this.getCurrentDate(), Validators.compose([Validators.required])),
-      endDate: new FormControl(this.getCurrentDate(), Validators.compose([Validators.required]))
+      startDate: new FormControl(FunctionsBasics.getCurrentDate(), Validators.compose([Validators.required])),
+      endDate: new FormControl(FunctionsBasics.getCurrentDate(), Validators.compose([Validators.required]))
     })
     this.objetoUrl = this.router.parent.params;
     this.router.parent.params.subscribe(objetoArea => {
@@ -79,23 +77,9 @@ export class DashboardComponent implements OnInit, AfterContentInit, AfterConten
       this.getAllIndiceFindIndArea(this.idArea)
 
     })
-    this.actividadService.getAllActividadFindIdIndice
 
   }
-  getCurrentDate(): string {
 
-    var fecha = new Date();
-    let mes: number | string = fecha.getMonth() + 1
-    let dia: number | string = fecha.getDate()
-    var año = fecha.getFullYear()
-    if (dia < 10)
-      dia = '0' + dia;
-    if (mes < 10)
-      mes = '0' + mes
-    return año + "-" + mes + "-" + dia
-
-
-  }
   getAllIndiceFindIndArea(idArea: string) {
     this.listaIndice = this.indiceService.getallIndiceFindIdArea(idArea)
 

@@ -132,22 +132,22 @@
             <th>Fotos</th>
           </thead>
           <tbody>
-            <tr *ngFor="let ejecutions of (listEjecutionsFindIdActivity | async)">
-              <td>{{ejecutions.current}}</td>
-              <td>{{ejecutions.total}}</td>
-              <td>{{ejecutions.executionComentary}}</td>
-              <td>{{ejecutions.denomination}}</td>
-              <td>{{ejecutions.unity}}</td>
-              <td>{{ejecutions.registrationDate.seconds*1000 | date:'medium'}}</td>
-              <td *ngFor="let foto of ejecutions.urlListOfPhotos">
-                <img [src]="foto.url" [alt]="foto.name">
+            <tr *ngFor="let executions of (listEjecutionsFindIdActivity | async)">
+              <td>{{executions.current}}</td>
+              <td>{{executions.total}}</td>
+              <td>{{executions.executionComentary}}</td>
+              <td>{{executions.denomination}}</td>
+              <td>{{executions.unity}}</td>
+              <td>{{executions.registrationDate.seconds*1000 | date:'short'}}</td>
+              <td *ngFor="let photo of executions.urlListOfPhotos">
+                <img [src]="photo.url" [alt]="photo.name">
               </td>
             </tr>
           </tbody>
         </table>
       </section>
       <footer class="modal-card-foot">
-        <button class="button" (click)="closeModal(activateModalHistory)">Cancel</button>
+        <button class="button" (click)="this.activateModalHistory=closeModal(activateModalHistory)">Cancel</button>
       </footer>
     </div>
   </div>

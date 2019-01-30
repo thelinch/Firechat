@@ -18,6 +18,7 @@ import FileUploadWithPreview from 'file-upload-with-preview'
 import { file } from 'src/app/modelos/File';
 import { flatMap, take } from 'rxjs/operators';
 import { FileService } from 'src/app/services/file.service';
+import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
 @Component({
   selector: 'app-actividad',
   templateUrl: './actividad.component.html',
@@ -60,8 +61,8 @@ export class ActividadComponent implements OnInit {
     })
     this.actividadForm = new FormGroup({
       actividad: new FormControl('', Validators.required),
-      fecha_inicio: new FormControl('', Validators.required),
-      fecha_fin: new FormControl(''),
+      fecha_inicio: new FormControl(FunctionsBasics.getCurrentDate(), Validators.required),
+      fecha_fin: new FormControl(FunctionsBasics.getCurrentDate()),
       componente: new FormControl('', Validators.required)
     })
     this.incidenciaForm = new FormGroup({

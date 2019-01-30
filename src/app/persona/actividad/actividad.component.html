@@ -100,19 +100,14 @@
             <option [ngValue]="componente" *ngFor="let componente of listaDeComponentes ">{{componente.nombre}}</option>
           </select>
         </div>
-        <div class="field is-grouped ">
-          <div class="control ">
-            <button type="submit " [disabled]="!this.actividadForm.valid " class="button is-success ">
-              guardar
-            </button>
-          </div>
-        </div>
+        <footer class="modal-card-foot ">
+          <button class="button " (click)="toggleModalActividad() ">Cancel</button>
+          <button type="submit " [disabled]="!this.actividadForm.valid " class="button is-success ">
+            guardar
+          </button>
+        </footer>
       </form>
     </section>
-    <footer class="modal-card-foot ">
-      <button class="button " (click)="toggleModalActividad() ">Cancel</button>
-    </footer>
-
   </div>
 </div>
 
@@ -218,11 +213,10 @@
 
         </tfoot>
       </table>
-      <button class="button is-success" (click)="guardarResultado()">Guardar</button>
 
     </section>
     <footer class="modal-card-foot ">
-
+      <button class="button is-success" (click)="guardarResultado()" [disabled]="this.listaParametros.length==0">Guardar</button>
       <button class="button " (click)="toggleModalResultado() ">Cancel</button>
     </footer>
 
@@ -265,20 +259,14 @@
             <option [ngValue]="tipoIncidenica" *ngFor="let tipoIncidenica of (listaTipoIncidencias | async )">{{tipoIncidenica.tipo}}</option>
           </select>
         </div>
-        <div class="field is-grouped ">
-          <div class="control ">
-            <button type="submit " [disabled]="!this.incidenciaForm.valid " class="button is-success ">
-              guardar
-            </button>
-          </div>
-        </div>
+        <footer class="modal-card-foot ">
+          <button type="submit " [disabled]="!this.incidenciaForm.valid " class="button is-success ">
+            guardar
+          </button>
+          <button class="button " (click)="toggleModalIncidencia() ">Cancel</button>
+        </footer>
       </form>
     </section>
-    <footer class="modal-card-foot ">
-
-      <button class="button " (click)="toggleModalIncidencia() ">Cancel</button>
-    </footer>
-
   </div>
 </div>
 
@@ -312,10 +300,10 @@
       </div>
     </section>
     <footer class="modal-card-foot ">
-
-      <button class="button " (click)="toggleModalParametro() ">Cancel</button>
       <button class="button is-success" (click)="saveParametroFromIdActividadAndIdArea()" [disabled]="this.listParametrosSeleccionados.length==0">Agregar
         parametros</button>
+      <button class="button " (click)="toggleModalParametro() ">Cancel</button>
+
     </footer>
 
   </div>
