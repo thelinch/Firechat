@@ -11,23 +11,25 @@ import { Observable, observable } from 'rxjs';
 })
 export class AreaService {
   private actividadCollection: AngularFirestoreCollection<area>
-
+  private listaIndice = new Array<indice>();
   constructor(private afs: AngularFirestore) { }
 
-  getAllIndiceFindAreaId(idArea: string): Observable<indice[]> {
-    let listaIndice = new Array<indice>();
+  getAllIndiceFindAreaId(idArea: string, listIndice: Array<indice>): Observable<indice[]> {
+
     return Observable.create(observable => {
-      this.afs.collection("area").doc(idArea).collection("indice").snapshotChanges().pipe(map(actions => actions.map(documentoIndice => {
+      this.afs.collection<indice>("area").doc(idArea).collection("indice").snapshotChanges().pipe(map(actions => actions.map(documentoIndice => {
         const data = documentoIndice.payload.doc.data() as area_indice
         const id = documentoIndice.payload.doc.id
         return { id, ...data }
       }))).subscribe(listaIndices => {
         listaIndices.map(indice => {
           indice.indiceRef.get().then(indiceData => {
-            listaIndice.push((indiceData.data() as indice))
+            let indice = (indiceData.data() as indice)
+            indice.id = indiceData.id
+            listIndice.push(indice)
           })
         })
-        observable.next(listaIndice)
+        observable.next(this.listaIndice)
       })
     })
   }

@@ -17,5 +17,13 @@ export class sweetAlertMensaje {
             showConfirmButton: true
         })
     }
-    
+    static getMessageInfo(title: string, html: any) {
+        return Swal({
+            title: title,
+            type: "info",
+            html: html,
+            showCancelButton: true
+        })
+    }
+
 }

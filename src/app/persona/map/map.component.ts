@@ -25,7 +25,7 @@ export class MapComponent implements OnInit {
   longitudCenter: number = -77.0543888
   listaIncidencia: Observable<incidencias[]>
   listArea: Observable<area[]>
-
+  listIndice: Array<indice> = new Array<indice>()
   constructor(private incidenciaService: IncidenciaService, private indiceService: IndiceService, private areaService: AreaService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -42,33 +42,36 @@ export class MapComponent implements OnInit {
   incidencia(evento) {
     console.log(evento)
   }
-  mostrarMensaje(idArea: string, nameArea: string) {
+  async mostrarMensaje(idArea: string, nameArea: string) {
     let optionOutput = {}
-    /* this.indiceService.getallIndiceFindIdArea(idArea).pipe(take(1)).subscribe({
-       next: listIndiceRef => {
-         listIndiceRef.forEach(indice => {
-           indice.then(indiceData => {
-             let indice = indiceData.data() as indice
-             indice.id = indiceData.id
-             console.log(indice)
-             optionOutput[indice.id] = indice.nombre
-           })
+    console.log(idArea)
+    let promise = this.areaService.getAllIndiceFindAreaId(idArea, this.listIndice).pipe(take(1))
+
+  /* this.indiceService.getallIndiceFindIdArea(idArea).pipe(take(1)).subscribe({
+     next: listIndiceRef => {
+       listIndiceRef.forEach(indice => {
+         indice.then(indiceData => {
+           let indice = indiceData.data() as indice
+           indice.id = indiceData.id
+           console.log(indice)
+           optionOutput[indice.id] = indice.nombre
          })
-       },
-       complete: () => {
-         Swal({
-           title: nameArea,
-           input: 'select',
-           inputOptions: optionOutput,
-           inputPlaceholder: 'Selecciona una opcion',
-           showCancelButton: true,
- 
-         }).then(respuesta => {
-           console.log(respuesta.value)
-           optionOutput = {}
-         })
-       }
- 
-     })*/
-  }
+       })
+     },
+     complete: () => {
+       Swal({
+         title: nameArea,
+         input: 'select',
+         inputOptions: optionOutput,
+         inputPlaceholder: 'Selecciona una opcion',
+         showCancelButton: true,
+
+       }).then(respuesta => {
+         console.log(respuesta.value)
+         optionOutput = {}
+       })
+     }
+
+   })*/
+}
 }

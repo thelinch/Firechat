@@ -7,9 +7,10 @@
       <div class="card ">
         <header class="card-header position_relative">
           <div class="card-header-title">
-            <div class="width_50_percent ">
+            <div class="width_100_percent ">
               <div class="display_flex position_absolute">
-                <i class="material-icons " *ngIf="actividad.porcentageOfImplementation" [ngStyle]="{'color': getBackgroundColorFindActividad(actividad)}">assistant_photo</i>
+                <i class="material-icons " (click)="getMessageInfoValidation(actividad)" *ngIf="actividad.porcentageOfImplementation"
+                  [ngStyle]="{'color': getBackgroundColorFindActividad(actividad)}">assistant_photo</i>
               </div>
 
               {{actividad.nombre}}

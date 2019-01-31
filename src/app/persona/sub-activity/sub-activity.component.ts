@@ -201,7 +201,12 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
       })
 
   }
+  getMessageInfoValidation(activity: actividadPMAO) {
+    let html: any = `<div><span>Valoracion :<strong>${activity.valoracion.nombre}</strong></span></div>
+                      <div><span>Clasificacion : <strong>${activity.clasificacion}</strong></span></div>`
+    sweetAlertMensaje.getMessageInfo("Informacion de la actividad", html);
 
+  }
   ocultar() {
     if (this.suscripcion) {
       this.listActivityFilter = null
