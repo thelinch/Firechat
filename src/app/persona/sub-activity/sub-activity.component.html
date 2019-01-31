@@ -39,7 +39,7 @@
             </span>
           </a>
           <ng-template [ngxPermissionsOnly]="['SUPERVISOR']">
-            <a class="card-footer-item has-text-warning" *ngIf="actividad.isEjecuciones" (click)="getMensajeValoracion(actividad)">
+            <a class="card-footer-item has-text-warning" [ngClass]="{'disabled':actividad.porcentageOfImplementation}" *ngIf="actividad.isEjecuciones" (click)="getMensajeValoracion(actividad)">
               <span class="icon is-large ">
                 <i class="material-icons" style="font-size: 2rem">grade</i>
               </span>

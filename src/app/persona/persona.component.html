@@ -15,14 +15,14 @@
   <div id="navbarBasicExample" class="navbar-menu" [ngClass]="{'is-active': activarNavBar}">
     <div class="navbar-start">
       <a class="navbar-item" [routerLink]="['home']" routerLinkActive="is-active">
-          <i class="material-icons">
-              person
-            </i>
+        <i class="material-icons">
+          person
+        </i>
       </a>
       <a [routerLink]="['map']" routerLinkActive="is-active" class="navbar-item">
-          <span class=" icon">
-              <fa-icon icon="home"></fa-icon>
-            </span>
+        <span class=" icon">
+          <fa-icon icon="home"></fa-icon>
+        </span>
       </a>
       <a class="navbar-item" routerLinkActive="is-active" [routerLink]="['parametros']">
         <i class="material-icons">view_agenda</i>
@@ -40,10 +40,8 @@
         <figure class="image is-48x48">
         </figure>
         <p class="usuario">
-          {{persona.nombre }}-{{persona.apellidos }}
+          {{persona.nombre }}-{{persona.apellidos }} (<strong>{{persona.tipoPersona?.nombre}}</strong>)
           <strong>AREA:</strong>{{persona.area?.area }}
-          <strong>CARGO:</strong>{{persona.tipoPersona?.nombre}}
-
         </p>
         <div *ngxPermissionsOnly="['GERENTE']" [ngClass]="{'isClicked':this.listaIncidenciaCritco.lenght>0}">
           <i class="material-icons">{{this.listaIncidenciaCritco? 'notifications':'notifications_active'}}</i>
@@ -52,7 +50,7 @@
       </div>
       <div class="navbar-item">
         <div class="buttons">
-          <a class="button is-primary">
+          <a class="button is-primary" (click)="onlogout()">
             <strong>Salir</strong>
           </a>
         </div>

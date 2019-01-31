@@ -11,14 +11,33 @@ import { User } from 'firebase';
 export class AuthService {
 
   constructor(private afAuth: AngularFireAuth) { }
-  onLogin(email: string, password: string) {
-    return this.afAuth.auth.signInWithEmailAndPassword(email, password)
+  onLogin(email: string, password: string): Observable<boolean> {
+    return Observable.create(observer => {
+      this.afAuth.auth.signInWithEmailAndPassword(email, password).then(respuesta => {
+        sessionStorage.setItem("loget", respuesta.user.uid)
+
+        observer.next(true)
+        observer.complete()
+      }).catch(error => {
+        observer.next(false)
+      })
+    })
+
+
   }
   onCreateUserWithEmailAndPassword(email: string, password: string) {
     this.afAuth.auth.createUserWithEmailAndPassword(email, password);
   }
-  logout() {
-    return this.afAuth.auth.signOut();
+  logout(): Observable<boolean> {
+    return Observable.create(observer => {
+      this.afAuth.auth.signOut().then(() => {
+        sessionStorage.removeItem("loget")
+        observer.next(true)
+      }).catch(error => {
+        observer.next(false)
+      });
+
+    })
   }
   getAuth(): AngularFireAuth {
     return this.afAuth

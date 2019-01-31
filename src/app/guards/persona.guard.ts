@@ -8,7 +8,7 @@ import { PersonaService } from '../services/persona.service';
   providedIn: 'root'
 })
 export class PersonaGuard implements CanActivate {
-  constructor(private authService: AuthService, private personaService: PersonaService, private router: Router) { }
+  constructor(private router: Router) { }
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {

@@ -24,10 +24,7 @@ import { sweetAlertMensaje } from '../HelperClass/SweetAlertMensaje';
   styleUrls: ['./persona.component.css']
 })
 
-export class PersonaComponent implements OnInit, OnDestroy {
-  ngOnDestroy(): void {
-    throw new Error("Method not implemented.");
-  }
+export class PersonaComponent implements OnInit {
   personaLogeada: Observable<persona>
   activarNavBar: boolean = false
   listaIncidenciaCritco = new Array<incidencias>();
@@ -40,7 +37,7 @@ export class PersonaComponent implements OnInit, OnDestroy {
    * @param {IncidenciaService} incidenciaService
    * @memberof PersonaComponent
    */
-  constructor(private personaService: PersonaService, private authService: AuthService, private router: Router, private incidenciaService: IncidenciaService, private activatedRouter: ActivatedRoute, private permissionsService: NgxPermissionsService) { }
+  constructor(private personaService: PersonaService, private route: ActivatedRoute, private authService: AuthService, private router: Router, private incidenciaService: IncidenciaService, private activatedRouter: ActivatedRoute, private permissionsService: NgxPermissionsService) { }
 
   ngOnInit() {
     this.activatedRouter.params.subscribe(params => {
@@ -55,9 +52,15 @@ export class PersonaComponent implements OnInit, OnDestroy {
    * @memberof PersonaComponent
    */
   onlogout() {
-    this.authService.logout().then(loged => {
-      sweetAlertMensaje.getMensajeTransaccionExitosa()
-      sessionStorage.removeItem("loget")
+    this.authService.logout().subscribe(respuesta => {
+      if (respuesta) {
+        this.router.navigateByUrl("/login",{relativeTo:this.route.parent}).then(() => {
+          sweetAlertMensaje.getMensajeTransaccionExitosa()
+
+        }).catch(error => {
+          console.log(error)
+        })
+      }
     })
   }
   toggleNavBar() {

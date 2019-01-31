@@ -44,34 +44,33 @@ export class MapComponent implements OnInit {
   }
   async mostrarMensaje(idArea: string, nameArea: string) {
     let optionOutput = {}
-    console.log(idArea)
     let promise = this.areaService.getAllIndiceFindAreaId(idArea, this.listIndice).pipe(take(1))
 
-  /* this.indiceService.getallIndiceFindIdArea(idArea).pipe(take(1)).subscribe({
-     next: listIndiceRef => {
-       listIndiceRef.forEach(indice => {
-         indice.then(indiceData => {
-           let indice = indiceData.data() as indice
-           indice.id = indiceData.id
-           console.log(indice)
-           optionOutput[indice.id] = indice.nombre
+    /* this.indiceService.getallIndiceFindIdArea(idArea).pipe(take(1)).subscribe({
+       next: listIndiceRef => {
+         listIndiceRef.forEach(indice => {
+           indice.then(indiceData => {
+             let indice = indiceData.data() as indice
+             indice.id = indiceData.id
+             console.log(indice)
+             optionOutput[indice.id] = indice.nombre
+           })
          })
-       })
-     },
-     complete: () => {
-       Swal({
-         title: nameArea,
-         input: 'select',
-         inputOptions: optionOutput,
-         inputPlaceholder: 'Selecciona una opcion',
-         showCancelButton: true,
+       },
+       complete: () => {
+         Swal({
+           title: nameArea,
+           input: 'select',
+           inputOptions: optionOutput,
+           inputPlaceholder: 'Selecciona una opcion',
+           showCancelButton: true,
 
-       }).then(respuesta => {
-         console.log(respuesta.value)
-         optionOutput = {}
-       })
-     }
+         }).then(respuesta => {
+           console.log(respuesta.value)
+           optionOutput = {}
+         })
+       }
 
-   })*/
-}
+     })*/
+  }
 }

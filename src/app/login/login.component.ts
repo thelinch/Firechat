@@ -28,18 +28,19 @@ export class LoginComponent implements OnInit {
     })
   }
   logIn() {
-    this.authService.onLogin(this.user.get("email").value, this.user.get("password").value).then(re => {
-      if (this.emailLoged) {
+    this.authService.onLogin(this.user.get("email").value, this.user.get("password").value).subscribe(respuesta => {
+      if (respuesta) {
         this.personaService.getPersonaFindCorreo(this.authService.getAuth().auth.currentUser.email).subscribe(persona => {
           sweetAlertMensaje.getMensajeTransaccionExitosa();
-          sessionStorage.setItem("loget", re.user.uid)
           this.router.navigateByUrl("/persona/" + persona[0].id + "/area/" + persona[0].area.id + "/map")
         })
+      } else {
+        sweetAlertMensaje.getMensajeTransaccionErronea("La contraseña es invalida o el usuario no se encuentra registrado")
       }
 
-    }).catch((error) => {
-      sweetAlertMensaje.getMensajeTransaccionErronea(error);
     })
+
+
   }
 
 
