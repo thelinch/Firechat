@@ -19,6 +19,7 @@ import { file } from 'src/app/modelos/File';
 import { flatMap, take } from 'rxjs/operators';
 import { FileService } from 'src/app/services/file.service';
 import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 @Component({
   selector: 'app-actividad',
   templateUrl: './actividad.component.html',
@@ -47,6 +48,7 @@ export class ActividadComponent implements OnInit {
   dataEstadistica = new Array<any>();
   public lineChartLabels: Array<any> = ['enero', 'febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'];
   private listaResultado = new Array<resultado>()
+  @BlockUI() blockUI: NgBlockUI;
   constructor(private actividadService: ActividadService, private fileService: FileService, private parametroService: ParametroService, private componenteService: ComponenteService,
     private tipoIncidenciaService: TipoIncidenciaService, private resultadoService: ResultadoService, private render: Renderer2, private incidenciaService: IncidenciaService, private router: ActivatedRoute) { }
 
@@ -188,6 +190,7 @@ export class ActividadComponent implements OnInit {
 
   saveIncidencia(incidencia: incidencias) {
     if (this.actividadSeleccionada) {
+      this.startBlock()
       incidencia.urlListOfPhotos = new Array<file>()
       from(this.fileUploadTemplate.cachedFileArray).pipe(take(this.fileUploadTemplate.cachedFileArray.length), flatMap((file: File) => this.fileService.uploadFile(file, "incidencias"))).subscribe(
         {
@@ -198,6 +201,7 @@ export class ActividadComponent implements OnInit {
               if (documento) {
                 documento.get().then(incidencia => {
                   this.incidenciaForm.reset()
+                  this.stopBlock();
                   this.toggleModalIncidencia()
                 })
               }
@@ -207,7 +211,14 @@ export class ActividadComponent implements OnInit {
       )
     }
   }
+  startBlock() {
+    this.blockUI.start();
 
+  }
+  stopBlock() {
+    this.blockUI.stop()
+
+  }
 
 
   getAllActividadesFinIdIndice(idIndice: string) {

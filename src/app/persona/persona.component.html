@@ -40,7 +40,7 @@
         <figure class="image is-48x48">
         </figure>
         <p class="usuario">
-          {{persona.nombre }}-{{persona.apellidos }} (<strong>{{persona.tipoPersona?.nombre}}</strong>)
+          {{persona.nombre }}-{{persona.apellidos }}(<strong>{{persona.tipoPersona?.nombre}}</strong>)
           <strong>AREA:</strong>{{persona.area?.area }}
         </p>
         <div *ngxPermissionsOnly="['GERENTE']" [ngClass]="{'isClicked':this.listaIncidenciaCritco.lenght>0}">

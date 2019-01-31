@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2, AfterViewInit, AfterContentInit } from '@angular/core';
-import { Observable, Subscription, from, BehaviorSubject } from 'rxjs';
+import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Observable, Subscription, from, } from 'rxjs';
 import { actividadPMAO } from 'src/app/modelos/actividadPMAO';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
@@ -11,17 +11,15 @@ import { executionActivityPMAO } from 'src/app/modelos/executionActivityPMAO';
 import FileUploadWithPreview from 'file-upload-with-preview'
 import { FileService } from 'src/app/services/file.service';
 import { file } from 'src/app/modelos/File';
-import { take, flatMap, map, reduce, mapTo } from 'rxjs/operators';
+import { take, flatMap, map, reduce } from 'rxjs/operators';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 @Component({
   selector: 'app-sub-activity',
   templateUrl: './sub-activity.component.html',
   styleUrls: ['./sub-activity.component.css']
 })
-export class SubActivityComponent implements OnInit, AfterContentInit {
-  ngAfterContentInit(): void {
-    console.log("se ii")
-  }
+export class SubActivityComponent implements OnInit{
+
 
   @Input("name") name: string;
   @Input("idComponent") idComponent;
@@ -168,16 +166,17 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
   }
   /**
    * Seleccionara la actividad para poder usarse en otros metodos
-   * @param {any}  actividad seleccionada por el usuario 
+   * @param {any}  actividad seleccionada por el usuario
    */
   seleccionarActividad(actividad: actividadPMAO) {
     this.actividadSeleccionada = actividad;
   }
-  /** 
+  /**
    * guarda los datos de la ejecucion de la actividad seleccionada
-  *@param {json}  datos que el formulario recopila 
+  *@param {json}  datos que el formulario recopila
    */
   saveEjecucion(form: FormGroup) {
+    this.blockUI.start()
     form.setControl("calculation", new FormControl(this.calcularTotalFromEjecucion(form.get("total").value, form.get("current").value)))
     form.setControl("registrationDate", new FormControl(new Date()))
     let executionActivity: executionActivityPMAO = (form.value as executionActivityPMAO)
@@ -193,7 +192,8 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
           console.log(executionActivity)
           this.pmaoService.saveActividadEjecucionPMAOFindIdActividad(this.actividadSeleccionada, this.idIndice, executionActivity).subscribe(respuesta => {
             if (respuesta) {
-              sweetAlertMensaje.getMensajeTransaccionExitosa()
+              this.blockUI.stop()
+              // sweetAlertMensaje.getMensajeTransaccionExitosa()
               this.toogleFormEjecucion();
             }
           })
@@ -221,15 +221,13 @@ export class SubActivityComponent implements OnInit, AfterContentInit {
    * Calcula el total de  la ejecucion que servira para promediar el PMAO
    * @param{string}
    * @returns{number}
-   * 
+   *
    */
   getFilterListFindName() {
     this.listActivityFilter = this.pmaoService.getAllActividadFromName(this.idIndice, this.name);
     this.suscripcion = this.listActivityFilter.subscribe()
   }
-  UploadFiles() {
 
-  }
   calcularTotalFromEjecucion(total: string, actual: string): number {
     let calculo: number = parseInt(actual) * 5 / parseInt(total)
     return parseFloat(calculo.toFixed(2));
