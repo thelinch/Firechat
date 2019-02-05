@@ -1,0 +1,58 @@
+<block-ui>
+<div class="row">
+  <div class="col-xs-12 col-md-6 ">
+    <div class="field is-grouped">
+      <p class="control">
+        <a (click)="toggleModalIncidencia()" class="button is-info is-outlined is-rounded">Registrar incidencia</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+ <!--Modal para registro de incidencias-->
+ <div class="modal " [ngClass]="{ 'is-active':activarFormIncidencia} ">
+  <div class="modal-background " (click)="toggleModalIncidencia() "></div>
+  <div class="modal-card ">
+    <header class="modal-card-head ">
+      <p class="modal-card-title ">Registro de Incidencia</p>
+      <button class="delete " aria-label="close " (click)="toggleModalIncidencia()"></button>
+    </header>
+    <section class="modal-card-body ">
+      <form [formGroup]="incidenciaForm " (submit)="saveIncidencia(incidenciaForm.value) ">
+        <div class="field ">
+
+          <label class="label ">Detalle de la Incidencia</label>
+          <div class="control ">
+            <textarea class="textarea " formControlName="detalle" placeholder="lo que se va a hacer "></textarea>
+          </div>
+        </div>
+        <div class="field">
+          <div class="control">
+            <div class="custom-file-container" data-upload-id="template">
+              <label>Fotos:<a href="javascript:void(0)" class="custom-file-container__image-clear" title="Clear Image">x</a></label>
+              <label class="custom-file-container__custom-file">
+                <input type="file" formControlName="files" class="custom-file-container__custom-file__custom-file-input"
+                  accept="image/*" multiple>
+                <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                <span class="custom-file-container__custom-file__custom-file-control"></span>
+              </label>
+              <div class="custom-file-container__image-preview"></div>
+            </div>
+          </div>
+        </div>
+        <div class="select ">
+          <select formControlName="tipoIncidencia">
+            <option [ngValue]="tipoIncidenica" *ngFor="let tipoIncidenica of (listaTipoIncidencias | async )">{{tipoIncidenica.tipo}}</option>
+          </select>
+        </div>
+        <footer class="modal-card-foot ">
+          <button type="submit " [disabled]="!this.incidenciaForm.valid " class="button is-success ">
+            guardar
+          </button>
+          <button class="button " (click)="toggleModalIncidencia() ">Cancel</button>
+        </footer>
+      </form>
+    </section>
+  </div>
+</div>
+</block-ui>

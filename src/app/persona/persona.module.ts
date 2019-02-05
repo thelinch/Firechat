@@ -26,10 +26,10 @@ import { PersonaResolver } from '../resolvers/PersonaResolver';
 import { HomeComponent } from './home/home.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { BlockUIModule } from 'ng-block-ui';
-import { AtividadIAComponent } from './atividad-ia/atividad-ia.component';
+import { ActividadIAComponent } from './actividad-ia/actividad-ia.component';
 
 @NgModule({
-  declarations: [PersonaComponent, AtividadIAComponent, HomeComponent, SubActivityComponent, FilterNamePipe, PmaoDirective, DashboardComponent, MapComponent, ActividadComponent, ParametroMapeoComponent, PmaoComponent],
+  declarations: [PersonaComponent, ActividadIAComponent, HomeComponent, SubActivityComponent, FilterNamePipe, PmaoDirective, DashboardComponent, MapComponent, ActividadComponent, ParametroMapeoComponent, PmaoComponent],
   imports: [CommonModule,
     BlockUIModule.forRoot(),
     PersonaRoutingModule,

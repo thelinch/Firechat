@@ -24,6 +24,13 @@ export class IncidenciaService {
     incidencias.longitud = sessionStorage.getItem("longitud");
     return this.afs.collection<incidencias>("actividad").doc(actividad.id).collection("incidencias").add(incidencias);
   }
+  setIncidenciaFindIA(idIa: string, incidencias: incidencias) {
+    incidencias.latitud = sessionStorage.getItem("latitud");
+    incidencias.longitud = sessionStorage.getItem("longitud");
+    incidencias.fecha_realizacion = new Date()
+    incidencias.fecha_registro = new Date();
+    return this.afs.collection("indice").doc(idIa).collection("incidencia").add(incidencias)
+  }
   getAllIncidenciaFinIdArea(idArea: string) {
     console.log(idArea + "area ID")
     this.afs.collection("area").doc(idArea).collection("indice").snapshotChanges().pipe(map(actions => actions.map(documentoIndiceArea => {
