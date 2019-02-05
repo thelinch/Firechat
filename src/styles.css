@@ -64,8 +64,11 @@ to{
 .ul{
   font-family: Times New Roman;
   color: #050505;
-  
 
+
+}
+.font_weigh_none{
+  font-weight: normal;
 }
 .width_50_percent{
   width: 50%
@@ -89,13 +92,13 @@ li:hover{
   text-align: center;
 }
 .border_top_left_radius{
-  
+
   border-top-left-radius: 6px;
 }
 .border_top_right_radius{
   border-top-right-radius: 6px;
 }
-.text_title{ 
+.text_title{
   font-family: Cambria;
   color:white;
   font-size: 18px;
@@ -150,6 +153,16 @@ li:hover{
 border-radius: 10px;
 border-style: solid;
 border-color: transparent
+}
+
+.box_shadow{
+  box-shadow: 5px 5px 5px 2px rgba(0,0,0,0.75)
+}
+.border_radius_50{
+  border-radius: 50%;
+}
+.height_24{
+  height: 24px;
 }
 .top{
   top:0;

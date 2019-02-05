@@ -39,7 +39,9 @@ export class ActividadComponent implements OnInit {
   listaIncidencia: incidencias[]
   activarModalParametro: boolean = false
   activarModalResultado: boolean = false
+  actividadModalHistorialResultado: boolean = false
   listaParametros: parametro[]
+  listResultadoHistorial: any[]
   listParametrosSeleccionados = new Array<parametro>()
   activarModalEstadistica: boolean = false
   fileUploadTemplate: any
@@ -255,5 +257,16 @@ export class ActividadComponent implements OnInit {
     })
 
   }
+  //Funcionalidades de usuarios
+  toggleModalHistorialResultado() {
+    this.actividadModalHistorialResultado = !this.actividadModalHistorialResultado;
+  }
+  getAllResultadoFindIdActividad() {
+    this.resultadoService.getAllResultadoFindIdActividad(this.actividadSeleccionada.id).subscribe(listaResultad => {
+      this.listResultadoHistorial = listaResultad
+      console.log(this.listResultadoHistorial)
+    })
+  }
+
 
 }

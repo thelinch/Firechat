@@ -16,6 +16,7 @@ import * as $ from "jquery"
 import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
 import { resultado } from 'src/app/modelos/resultadoICA';
 import { ResultadoService } from 'src/app/services/resultado.service';
+import { persona } from 'src/app/modelos/persona';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -30,6 +31,8 @@ export class MapComponent implements OnInit {
   listArea: Observable<area[]>
   listIndice: Array<indice> = new Array<indice>()
   listResultIncumplidoICA: Observable<resultado[]>
+  personaSeleccionada: persona
+  activadModalPersona: boolean = false;
   constructor(private incidenciaService: IncidenciaService, private resultadoService: ResultadoService, private indiceService: IndiceService, private areaService: AreaService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -45,6 +48,12 @@ export class MapComponent implements OnInit {
   }
   incidencia(evento) {
     console.log(evento)
+  }
+  toggleModalPersona(){
+    this.activadModalPersona=!this.activadModalPersona;
+  }
+  setPersona(persona: persona) {
+    this.personaSeleccionada = persona;
   }
   async mostrarMensaje(idArea: string, nameArea: string) {
     let arrayIndice = new Array<indice>();

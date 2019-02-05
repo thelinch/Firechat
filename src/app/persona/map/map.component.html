@@ -3,7 +3,7 @@
   <agm-polygon *ngFor="let area of (listArea | async)" [paths]="area.paths" (polyClick)="mostrarMensaje(area.id,area.area)"
     [strokeColor]="area.color" [zIndex]="area.zIndex"></agm-polygon>
 
-  <agm-marker label="Incidencia" [longitude]="incidencia.longitud" [latitude]="incidencia.latitud" *ngFor="let incidencia of (listaIncidencia | async)">
+  <agm-marker [longitude]="incidencia.longitud" [latitude]="incidencia.latitud" *ngFor="let incidencia of (listaIncidencia | async)">
     <agm-info-window>
       <strong>incidencia:</strong> {{incidencia.detalle}}
       <strong>tipo:</strong>{{incidencia.tipoIncidencia.tipo}}
@@ -17,8 +17,15 @@
   <agm-marker iconUrl="./assets/Iconos-ica/{{resultado.riesgo=='Muy Alto'? 'riesgo-alto-ica.png':'incumplimiento-ica.png' }}"
     [longitude]="resultado.lng" [latitude]="resultado.lat" *ngFor="let resultado of listResultIncumplidoICA | async ">
     <agm-info-window>
-      <strong>Parametro:</strong> {{resultado.parametro.nombreCorto}}
-      <strong>Resultado:</strong>{{resultado.parametro.resultado}}
+      <div class="notification is-danger">
+        <div class="position_absolute right top puntero box_shadow border_radius_50 height_24" (click)="setPersona(resultado.persona);toggleModalPersona()">
+          <i class="material-icons">
+            account_circle
+          </i>
+        </div>
+        <strong>Parametro:</strong><span>{{resultado.parametro.nombreCorto}}</span><strong>({{resultado.parametro.resultado}})</strong>
+
+      </div>
     </agm-info-window>
   </agm-marker>
 
@@ -34,3 +41,45 @@
     </li>
   </ul>
 </div>
+
+<!--Modal para visualizar Persona responsable-->
+<div class="modal " [ngClass]="{ 'is-active':activadModalPersona} ">
+  <div class="modal-background " (click)="toggleModalPersona() "></div>
+  <div class="modal-card ">
+    <header class="modal-card-head ">
+      <p class="modal-card-title ">Persona Responsable</p>
+      <button class="delete " aria-label="close " (click)="toggleModalPersona() "></button>
+    </header>
+    <section class="modal-card-body ">
+      <table class="table  is-fullwidth">
+        <thead>
+          <tr>
+            <th>
+              Nombre Completo
+            </th>
+            <th>
+              Area
+            </th>
+            <th>
+              Cargo
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="this.personaSeleccionada">
+
+            <th class="font_weigh_none">{{personaSeleccionada.nombre}} {{personaSeleccionada.apellidos}} </th>
+            <th class="font_weigh_none">{{personaSeleccionada.area.area}}</th>
+            <th class="font_weigh_none">{{personaSeleccionada.tipoPersona.nombre}}</th>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <footer class="modal-card-foot ">
+      <button class="button " (click)="toggleModalPersona() ">Cancel</button>
+    </footer>
+
+  </div>
+</div>
+<!--Fin del Modal para mostrar el Historial de resultado-->
+<!--Fin de modal visualizar Persona responsable-->

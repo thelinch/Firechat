@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore, DocumentData } from 'angularfire2/firestore';
 import { resultado } from '../modelos/resultadoICa';
 import { Observable } from 'rxjs';
 import { actividades } from '../modelos/actividades';
@@ -421,7 +421,9 @@ export class ResultadoService {
     }]
 
   constructor(private afs: AngularFirestore, private actividadService: ActividadService) { }
-
+  getAllResultadoFindIdActividad(idActividad: string): Observable<DocumentData[]> {
+    return this.afs.collection<resultado>("actividad").doc(idActividad).collection("resultado").valueChanges();
+  }
   getAllParametroResultadoIncumplido(): Observable<resultado[]> {
     return this.afs.collection("resultadosIncumplidos").snapshotChanges().pipe(map(listResult => listResult.map(result => {
       const resultado = result.payload.doc.data() as resultado
@@ -430,17 +432,15 @@ export class ResultadoService {
     })))
   }
   guardarResultado(listaParametro: parametro[], actividad: actividades): Observable<boolean> {
-
     return Observable.create(observer => {
       listaParametro.forEach(parametro => {
         let resultado: resultado = { parametro: parametro, resultado: parametro.resultado };
         resultado.lat = sessionStorage.getItem("latitud")
         resultado.lng = sessionStorage.getItem("longitud")
-
         this.getCumplimientoOIncumplimiento(parametro.resultado, parametro, resultado)
+        resultado.actividad = actividad
+        resultado.persona = JSON.parse(sessionStorage.getItem("personaLoged"));
         if (!resultado.cumplio || resultado.riesgo == "Muy Alto") {
-          console.log(resultado)
-          resultado.idActividad = actividad.id
           this.saveResultadoIncumplido(resultado)
         }
         resultado.fecha_registro = new Date()
