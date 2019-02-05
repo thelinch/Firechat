@@ -26,23 +26,24 @@ import { PersonaResolver } from '../resolvers/PersonaResolver';
 import { HomeComponent } from './home/home.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { BlockUIModule } from 'ng-block-ui';
+import { AtividadIAComponent } from './atividad-ia/atividad-ia.component';
 
 @NgModule({
-    declarations: [PersonaComponent, HomeComponent, SubActivityComponent, FilterNamePipe, PmaoDirective, DashboardComponent, MapComponent, ActividadComponent, ParametroMapeoComponent, PmaoComponent],
-    imports: [CommonModule,
-        BlockUIModule.forRoot(),
-        PersonaRoutingModule,
-        FormsModule,
-        ReactiveFormsModule,
-        FontAwesomeModule,
-        NgxPermissionsModule.forChild(),
-        ChartsModule,
-        AgmCoreModule.forRoot({
-            apiKey: 'AIzaSyDjUlVzErtcnc8NA2PY4SyxDOcZf3az6DY'
-        })
-    ],
+  declarations: [PersonaComponent, AtividadIAComponent, HomeComponent, SubActivityComponent, FilterNamePipe, PmaoDirective, DashboardComponent, MapComponent, ActividadComponent, ParametroMapeoComponent, PmaoComponent],
+  imports: [CommonModule,
+    BlockUIModule.forRoot(),
+    PersonaRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FontAwesomeModule,
+    NgxPermissionsModule.forChild(),
+    ChartsModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDjUlVzErtcnc8NA2PY4SyxDOcZf3az6DY'
+    })
+  ],
 
-    exports: [PersonaComponent],
-    providers: [PersonaService, PersonaResolver, PersonaGuard, ResultadoService, IncidenciaService, ActividadService, TipoIncidenciaService, AreaService, ParametroService],
+  exports: [PersonaComponent],
+  providers: [PersonaService, PersonaResolver, PersonaGuard, ResultadoService, IncidenciaService, ActividadService, TipoIncidenciaService, AreaService, ParametroService],
 })
 export class PersonaModule { }

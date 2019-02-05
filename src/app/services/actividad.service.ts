@@ -11,7 +11,7 @@ import * as momento from 'moment'
 import { estadoActividad } from '../modelos/estado_actividad';
 import { estado } from '../modelos/estado';
 import { IndiceService } from './indice.service';
-import { resultado } from '../modelos/resultado';
+import { resultado } from '../modelos/resultadoICA';
 import { ParametroService } from './parametro.service';
 import { parametro } from '../modelos/parametro';
 import { indice } from '../modelos/indice';
@@ -21,8 +21,13 @@ import { indice } from '../modelos/indice';
 export class ActividadService {
   private actividadCollection: AngularFirestoreCollection<actividades>
   private extendedItems = new Array<any>()
+  private longitud: string;
+  private latitud: string
   constructor(private afs: AngularFirestore, private indiceService: IndiceService, private parametroService: ParametroService) {
-
+    navigator.geolocation.getCurrentPosition(position => {
+      this.latitud = position.coords.latitude.toString()
+      this.longitud = position.coords.longitude.toString()
+    })
   }
   stringToDate(_date, _format, _delimiter) {
     var formatLowerCase = _format.toLowerCase();
@@ -51,7 +56,9 @@ export class ActividadService {
     return this.afs.collection<actividades>("actividad")
   }
   saveActividad(idIndice: string, actividad: actividades): Observable<boolean> {
-    actividad.incidencia = false
+    actividad.incidencia = false;
+    actividad.lat = this.latitud;
+    actividad.lng = this.longitud;
     actividad.fecha_inicio = this.stringToDate(actividad.fecha_inicio, "yyyy-mm-dd", "-")
     if (actividad.fecha_fin) {
       actividad.fecha_fin = this.stringToDate(actividad.fecha_fin, "yyyy-mm-dd", "-")

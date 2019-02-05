@@ -37,7 +37,13 @@ export class PersonaComponent implements OnInit {
    * @param {IncidenciaService} incidenciaService
    * @memberof PersonaComponent
    */
-  constructor(private personaService: PersonaService, private route: ActivatedRoute, private authService: AuthService, private router: Router, private incidenciaService: IncidenciaService, private activatedRouter: ActivatedRoute, private permissionsService: NgxPermissionsService) { }
+  constructor(private personaService: PersonaService, private route: ActivatedRoute, private authService: AuthService, private router: Router, private incidenciaService: IncidenciaService, private activatedRouter: ActivatedRoute, private permissionsService: NgxPermissionsService) {
+    navigator.geolocation.getCurrentPosition(position => {
+      sessionStorage.setItem("latitud", position.coords.latitude.toString())
+      sessionStorage.setItem("longitud", position.coords.longitude.toString())
+    })
+
+  }
 
   ngOnInit() {
     this.activatedRouter.params.subscribe(params => {
@@ -54,7 +60,7 @@ export class PersonaComponent implements OnInit {
   onlogout() {
     this.authService.logout().subscribe(respuesta => {
       if (respuesta) {
-        this.router.navigateByUrl("/login",{relativeTo:this.route.parent}).then(() => {
+        this.router.navigateByUrl("/login", { relativeTo: this.route.parent }).then(() => {
           sweetAlertMensaje.getMensajeTransaccionExitosa()
 
         }).catch(error => {
@@ -75,6 +81,7 @@ export class PersonaComponent implements OnInit {
     // tslint:disable-next-line:no-shadowed-variable
     this.personaLogeada = this.personaService.getPersonaFindId(this.idPerson)
     this.personaLogeada.subscribe(personPersmissions => {
+      sessionStorage.setItem("personaLoged", JSON.stringify(personPersmissions))
       this.permissionsService.loadPermissions([personPersmissions.tipoPersona.nombre])
     })
   }

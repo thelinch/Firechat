@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { resultado } from '../modelos/resultado';
+import { resultado } from '../modelos/resultadoICa';
 import { Observable } from 'rxjs';
 import { actividades } from '../modelos/actividades';
 import { ActividadService } from './actividad.service';
@@ -422,23 +422,39 @@ export class ResultadoService {
 
   constructor(private afs: AngularFirestore, private actividadService: ActividadService) { }
 
-
+  getAllParametroResultadoIncumplido(): Observable<resultado[]> {
+    return this.afs.collection("resultadosIncumplidos").snapshotChanges().pipe(map(listResult => listResult.map(result => {
+      const resultado = result.payload.doc.data() as resultado
+      resultado.id = result.payload.doc.id
+      return resultado;
+    })))
+  }
   guardarResultado(listaParametro: parametro[], actividad: actividades): Observable<boolean> {
 
     return Observable.create(observer => {
       listaParametro.forEach(parametro => {
         let resultado: resultado = { parametro: parametro, resultado: parametro.resultado };
+        resultado.lat = sessionStorage.getItem("latitud")
+        resultado.lng = sessionStorage.getItem("longitud")
+
         this.getCumplimientoOIncumplimiento(parametro.resultado, parametro, resultado)
+        if (!resultado.cumplio || resultado.riesgo == "Muy Alto") {
+          console.log(resultado)
+          resultado.idActividad = actividad.id
+          this.saveResultadoIncumplido(resultado)
+        }
         resultado.fecha_registro = new Date()
         this.saveResultado(resultado, actividad.id)
-        console.log(resultado)
       })
-      actividad.isResulto = true
+      actividad.isResultado = true
 
       this.actividadService.updateAtividad(actividad)
 
       observer.next(true)
     })
+  }
+  saveResultadoIncumplido(resultado: resultado) {
+    this.afs.collection("resultadosIncumplidos").add(resultado)
   }
   saveResultado(resultado: resultado, idActividad: string) {
     this.afs.collection("actividad").doc(idActividad).collection("resultado").add(resultado)

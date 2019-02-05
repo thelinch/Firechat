@@ -3,7 +3,7 @@
   <agm-polygon *ngFor="let area of (listArea | async)" [paths]="area.paths" (polyClick)="mostrarMensaje(area.id,area.area)"
     [strokeColor]="area.color" [zIndex]="area.zIndex"></agm-polygon>
 
-  <agm-marker [longitude]="incidencia.longitud" [latitude]="incidencia.latitud" *ngFor="let incidencia of (listaIncidencia | async)">
+  <agm-marker label="Incidencia" [longitude]="incidencia.longitud" [latitude]="incidencia.latitud" *ngFor="let incidencia of (listaIncidencia | async)">
     <agm-info-window>
       <strong>incidencia:</strong> {{incidencia.detalle}}
       <strong>tipo:</strong>{{incidencia.tipoIncidencia.tipo}}
@@ -14,21 +14,23 @@
       </div>
     </agm-info-window>
   </agm-marker>
-</agm-map>
+  <agm-marker iconUrl="./assets/Iconos-ica/{{resultado.riesgo=='Muy Alto'? 'riesgo-alto-ica.png':'incumplimiento-ica.png' }}"
+    [longitude]="resultado.lng" [latitude]="resultado.lat" *ngFor="let resultado of listResultIncumplidoICA | async ">
+    <agm-info-window>
+      <strong>Parametro:</strong> {{resultado.parametro.nombreCorto}}
+      <strong>Resultado:</strong>{{resultado.parametro.resultado}}
+    </agm-info-window>
+  </agm-marker>
 
+</agm-map>
 <div class="legend">
   <div id="titulo">
     <h3>ÁREAS </h3>
   </div>
   <ul>
-
-    <li><i class="material-icons color_marron">fiber_manual_record</i>Perforacion y Voladura</li>
-    <li><i class="material-icons color_amarillo">fiber_manual_record</i>Molienda </li>
-    <li><i class="material-icons color_rojo">fiber_manual_record</i>Antamina </li>
-    <li><i class="material-icons color_celeste">fiber_manual_record</i>Puerto Antamina </li>
-    <li><i class="material-icons color_azul">fiber_manual_record</i>Relave </li>
-    <li><i class="material-icons color_negro">fiber_manual_record</i>Flotacion </li>
-    <li><i class="material-icons color_gray">fiber_manual_record</i>Carretera </li>
-
+    <li *ngFor="let areaLeyenda of (listArea | async)" (click)="mostrarMensaje(areaLeyenda.id,areaLeyenda.area)">
+      <i class="material-icons " [ngStyle]="{'color': areaLeyenda.color}">fiber_manual_record</i>
+      {{areaLeyenda.area}}
+    </li>
   </ul>
 </div>

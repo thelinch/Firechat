@@ -12,7 +12,7 @@ import { incidencias } from '../../modelos/incidencias';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, from } from 'rxjs';
 import { parametro } from 'src/app/modelos/parametro';
-import { resultado } from 'src/app/modelos/resultado';
+import { resultado } from 'src/app/modelos/resultadoICA';
 import { ResultadoService } from 'src/app/services/resultado.service';
 import FileUploadWithPreview from 'file-upload-with-preview'
 import { file } from 'src/app/modelos/File';
@@ -27,7 +27,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 })
 export class ActividadComponent implements OnInit {
   listaActividades: Observable<actividades[]>
-  listaDeComponentes: componente[]
+  listaDeComponentes: Observable<componente[]>
   actividadForm: FormGroup;
   incidenciaForm: FormGroup;
   activarFormActividad: boolean = false
@@ -49,6 +49,7 @@ export class ActividadComponent implements OnInit {
   public lineChartLabels: Array<any> = ['enero', 'febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'];
   private listaResultado = new Array<resultado>()
   @BlockUI() blockUI: NgBlockUI;
+  optionAtivity: string = "MONITOREO Y LABORATORIO"
   constructor(private actividadService: ActividadService, private fileService: FileService, private parametroService: ParametroService, private componenteService: ComponenteService,
     private tipoIncidenciaService: TipoIncidenciaService, private resultadoService: ResultadoService, private render: Renderer2, private incidenciaService: IncidenciaService, private router: ActivatedRoute) { }
 
@@ -56,8 +57,8 @@ export class ActividadComponent implements OnInit {
   ngOnInit() {
     this.router.params.subscribe(dataUrl => {
       this.idIndice = dataUrl.idIndice;
-      this.getAllActividadesFinIdIndice(this.idIndice)
     })
+    this.getAllActividadesFinIdIndice(this.idIndice)
     this.router.parent.parent.params.subscribe(dataUrlPadre => {
       this.idArea = dataUrlPadre.idarea;
     })
@@ -74,6 +75,7 @@ export class ActividadComponent implements OnInit {
     })
     this.listaTipoIncidencias = this.tipoIncidenciaService.getAllTipoIncidencia()
     this.fileUploadTemplate = new FileUploadWithPreview("template")
+    this.listaDeComponentes = this.componenteService.getAllComponente()
 
   }
   getResultadoEstadisticoFindIdActividad(actividad: actividades) {
@@ -115,8 +117,13 @@ export class ActividadComponent implements OnInit {
 
   }
   guardarResultado() {
+    this.actividadSeleccionada.isResultado = true;
     this.resultadoService.guardarResultado(this.listaParametros, this.actividadSeleccionada).subscribe(resultado => {
+      if (this.actividadSeleccionada.componente.nombre == "MONITOREO EN CAMPO") {
+        this.actividadSeleccionada.fecha_fin = new Date();
+      }
       if (resultado) {
+        this.actividadService.updateAtividad(this.actividadSeleccionada)
         this.toggleModalResultado()
       }
     });
@@ -130,8 +137,10 @@ export class ActividadComponent implements OnInit {
   }
   saveParametroFromIdActividadAndIdArea() {
     if (this.actividadSeleccionada) {
-      this.parametroService.saveParametroFromIdActividadAndIdArea("D8a5UgSogRhTreAED5BG", this.actividadSeleccionada, this.listParametrosSeleccionados)
+      this.actividadSeleccionada.isParametro = true
+      this.parametroService.saveParametroFromIdActividadAndIdArea(this.idArea, this.actividadSeleccionada, this.listParametrosSeleccionados)
         .subscribe(respuesta => {
+          this.actividadService.updateAtividad(this.actividadSeleccionada)
           if (respuesta) {
             this.toggleModalParametro()
           }
@@ -167,14 +176,16 @@ export class ActividadComponent implements OnInit {
   }
   toggleModalActividad() {
     this.activarFormActividad = !this.activarFormActividad;
-    if (this.activarFormActividad) {
-      this.componenteService.getAllComponente().subscribe(componentes => {
-        this.listaDeComponentes = componentes;
-      })
-    }
-
   }
+  changeOptionsComponent() {
 
+    this.optionAtivity = this.actividadForm.get("componente").value.nombre
+    if (this.optionAtivity == "MONITOREO EN CAMPO") {
+      this.actividadForm.get("fecha_fin").setValue(FunctionsBasics.getCurrentDate())
+      this.actividadForm.get("fecha_inicio").setValue(FunctionsBasics.getCurrentDate())
+
+    }
+  }
 
   toggleModalListaIncidencia() {
     this.activarListaIncidencia = !this.activarListaIncidencia
@@ -225,16 +236,7 @@ export class ActividadComponent implements OnInit {
 
     this.listaActividades = this.actividadService.getAllActividadFindIdIndice(idIndice)
   }
-  cerraModal() {
-    setTimeout(() => {
-      if (this.activarFormActividad) {
-        this.toggleModalActividad();
-      } else {
-        this.toggleModalIncidencia()
-      }
-    },
-      500)
-  }
+
   toggleModal(elemento: ElementRef) {
     console.log(elemento.nativeElement)
   }
@@ -243,13 +245,15 @@ export class ActividadComponent implements OnInit {
 
   }
   saveActividad(actividad: actividades) {
-
+    actividad.persona = JSON.parse(sessionStorage.getItem("personaLoged"))
+    actividad.isParametro = false;
     this.actividadService.saveActividad(this.idIndice, actividad).subscribe(valor => {
       if (valor) {
         this.actividadForm.reset()
-        this.cerraModal()
+        this.toggleModalActividad();
       }
     })
+
   }
 
 }

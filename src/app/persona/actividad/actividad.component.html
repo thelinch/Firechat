@@ -13,7 +13,9 @@
       <div class="card">
         <header class="card-header position_relative" [ngClass]="{'has-background-primary': actividad.isResulto}">
           <div class="card-header-title ">
-            <div class="position_absolute right padding_2 has-background-warning border_radius_10"> <span class="has-text-white">{{actividad.componente.nombre}}</span></div>
+            <div class="position_absolute right padding_2  border_radius_10"> <i class="material-icons has-text-primary">{{actividad.componente.nombre=='MONITOREO
+                EN CAMPO'?'explore':'event_note'
+                }}</i></div>
             <span class="has-text-dark">
               {{ actividad.fecha_inicio.toDateString() | date:'mediumDate'}}
               <strong> - </strong>
@@ -25,7 +27,7 @@
                 actividad.incidencia? 'alarm_on':''}}
               </i></a>
             <a (click)="getAllIncidenciaFindIdActividad(actividad.id) "><i class="material-icons is-pulled-right has-text-warning ">{{
-                actividad.parametro? ' network_check ':''}}
+                actividad.parametro? ' format_list_bulleted ':''}}
               </i></a>
 
           </div>
@@ -42,20 +44,19 @@
           </div>
         </div>
         <footer class="card-footer ">
-          <a class="card-footer-item has-text-link" (click)="seleccionarActividad(actividad);toggleModalEstadistica();getResultadoEstadisticoFindIdActividad(actividad)">
-            <span class="icon is-large ">
-              <i class="material-icons" style="font-size: 2rem">show_chart</i>
-            </span>
-          </a>
-
-          <a class="card-footer-item has-text-success" (click)="seleccionarActividad(actividad);getAllParametroFindIdActividad(actividad.id);toggleModalResultado()">
+          <a (click)="seleccionarActividad(actividad);getAllParametros()" class="card-footer-item "><i class="material-icons">
+              format_list_bulleted
+            </i></a>
+          <a class="card-footer-item has-text-success" [ngClass]="{'disabled':!actividad.isParametro}" (click)="seleccionarActividad(actividad);getAllParametroFindIdActividad(actividad.id);toggleModalResultado()">
             <span class="icon is-large ">
               <i class="material-icons" style="font-size: 2rem">receipt</i>
             </span>
           </a>
-          <a (click)="seleccionarActividad(actividad);getAllParametros()" class="card-footer-item "><i class="material-icons">
-              format_list_bulleted
-            </i></a>
+          <a class="card-footer-item has-text-link" [ngClass]="{'disabled':!actividad.isResultado}" (click)="seleccionarActividad(actividad);toggleModalEstadistica();getResultadoEstadisticoFindIdActividad(actividad)">
+            <span class="icon is-large ">
+              <i class="material-icons" style="font-size: 2rem">show_chart</i>
+            </span>
+          </a>
           <a class="card-footer-item has-text-warning" (click)="seleccionarActividad(actividad);toggleModalIncidencia(); ">
             <span class="icon is-large ">
               <i class="material-icons" style="font-size: 2rem">assignment</i>
@@ -77,29 +78,33 @@
       </header>
       <section class="modal-card-body ">
         <form [formGroup]="actividadForm " (submit)="saveActividad(actividadForm.value) ">
+          <div class="field">
+            <label for="" class="label">Tipo de Actividad</label>
+            <div class="control">
+              <div class="select ">
+                <select formControlName="componente" (change)="changeOptionsComponent()">
+                  <option [ngValue]="componente" *ngFor="let componente of listaDeComponentes | async ">{{componente.nombre}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
           <div class="field ">
             <label class="label ">Actividad</label>
             <div class="control ">
               <textarea class="textarea " formControlName="actividad" placeholder="lo que se va a hacer "></textarea>
             </div>
           </div>
-
-          <div class="field ">
+          <div class="field " *ngIf="optionAtivity=='MONITOREO Y LABORATORIO'">
             <label class="label ">Fecha de realizacion</label>
             <div class="control ">
               <input class="input" type="date" formControlName="fecha_inicio">
             </div>
           </div>
-          <div class="field ">
+          <div class="field" *ngIf="optionAtivity=='MONITOREO Y LABORATORIO'">
             <label class="label">Fecha de finalizacion</label>
             <div class="control">
               <input class="input " type="date" formControlName="fecha_fin">
             </div>
-          </div>
-          <div class="select ">
-            <select formControlName="componente">
-              <option [ngValue]="componente" *ngFor="let componente of listaDeComponentes ">{{componente.nombre}}</option>
-            </select>
           </div>
           <footer class="modal-card-foot ">
             <button class="button " (click)="toggleModalActividad() ">Cancel</button>
@@ -111,9 +116,6 @@
       </section>
     </div>
   </div>
-
-
-
   <!--Fin de Modal para registro de actividades-->
   <!--Modal Lista de incidencias-->
   <div class="modal " [ngClass]="{ 'is-active':activarListaIncidencia} ">
@@ -135,7 +137,6 @@
               </th>
               <th>Riesgo</th>
             </tr>
-
           </thead>
           <tbody>
             <tr *ngFor="let incidencia of listaIncidencia ;let i=index">

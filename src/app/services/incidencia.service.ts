@@ -12,22 +12,16 @@ import { indice_actividad } from '../modelos/indice_actividad';
   providedIn: 'root'
 })
 export class IncidenciaService {
-  latitud: string;
-  logitud: string
+
 
   constructor(private afs: AngularFirestore) {
-    navigator.geolocation.getCurrentPosition(position => {
-      this.latitud = position.coords.latitude.toString()
-      this.logitud = position.coords.longitude.toString()
-    })
+
   }
   setIncidenciaFindIdActividad(actividad: actividades, incidencias: incidencias): Promise<DocumentReference> {
     actividad.incidencia = true
-
     this.afs.collection("actividad").doc(actividad.id).update(actividad)
-    incidencias.latitud = this.latitud;
-    incidencias.longitud = this.logitud
-    console.log(incidencias)
+    incidencias.latitud = sessionStorage.getItem("latitud");
+    incidencias.longitud = sessionStorage.getItem("longitud");
     return this.afs.collection<incidencias>("actividad").doc(actividad.id).collection("incidencias").add(incidencias);
   }
   getAllIncidenciaFinIdArea(idArea: string) {
@@ -37,7 +31,6 @@ export class IncidenciaService {
       dataAreaIndice.id = documentoIndiceArea.payload.doc.id
       return dataAreaIndice
     }))).pipe(map(listaAreaIndice => listaAreaIndice.map(areaIndice => {
-
     })))
   }
   getAllIncidencia(): Observable<incidencias[]> {

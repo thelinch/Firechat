@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { area_indice } from '../modelos/area_indice';
 import { indice } from '../modelos/indice';
 import { Observable, observable } from 'rxjs';
-
+import { DocumentReference } from '@firebase/firestore-types';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,24 +14,11 @@ export class AreaService {
   private listaIndice = new Array<indice>();
   constructor(private afs: AngularFirestore) { }
 
-  getAllIndiceFindAreaId(idArea: string, listIndice: Array<indice>): Observable<indice[]> {
-
-    return Observable.create(observable => {
-      this.afs.collection<indice>("area").doc(idArea).collection("indice").snapshotChanges().pipe(map(actions => actions.map(documentoIndice => {
-        const data = documentoIndice.payload.doc.data() as area_indice
-        const id = documentoIndice.payload.doc.id
-        return { id, ...data }
-      }))).subscribe(listaIndices => {
-        listaIndices.map(indice => {
-          indice.indiceRef.get().then(indiceData => {
-            let indice = (indiceData.data() as indice)
-            indice.id = indiceData.id
-            listIndice.push(indice)
-          })
-        })
-        observable.next(this.listaIndice)
-      })
-    })
+  getAllIndiceFindAreaId(idArea: string): Observable<DocumentReference[]> {
+    return this.afs.collection<indice>("area").doc(idArea).collection("indice").snapshotChanges().pipe(map(actions => actions.map(documentoIndice => {
+      const ref: DocumentReference = (documentoIndice.payload.doc.data() as area_indice).indiceRef
+      return ref
+    })));
   }
   getAllarea(): Observable<area[]> {
     return this.afs.collection("area").snapshotChanges().pipe(map(actions => actions.map(documentArea => {
