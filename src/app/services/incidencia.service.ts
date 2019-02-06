@@ -57,7 +57,7 @@ export class IncidenciaService {
   update(idActividad: string, incidencia: incidencias) {
     this.afs.collection("actividades").doc(idActividad).collection("incidencias").doc(incidencia.id).update(incidencia)
   }
-  getAllIncidenciafindIdIndice(idIndice: string): Observable<incidencias[]> {
+  getAllIncidenciafindIdtipoReferencia(idIndice: string): Observable<incidencias[]> {
     return this.afs.collection(Colecciones.incidencias, ref => ref.where("idTipoReferencia", "==", idIndice)).snapshotChanges().pipe(map(actions => actions.map(a => {
       const incidencia = a.payload.doc.data() as incidencias;
       incidencia.id = a.payload.doc.id
