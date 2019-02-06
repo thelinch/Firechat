@@ -12,6 +12,12 @@
   font-size: 16px;
 
 }
+.icon_mediano{
+  font-size: 4rem;
+}
+.icon_small{
+  font-size: 2rem;
+}
 html, body {
   height: 100%;
   margin: 0;
@@ -148,6 +154,9 @@ li:hover{
 }
 .padding_2{
   padding: 2px;
+}
+.padding_05rem{
+  padding: .5rem;
 }
 .border_radius_10{
 border-radius: 10px;

@@ -29,65 +29,86 @@
     <section class="modal-card-body">
       <form [formGroup]="actividadPMAOForm" (ngSubmit)="saveActividadPMAO(actividadPMAOForm.value)">
         <input class="input" formControlName="nombre" readonly>
-        <div class="field ">
-          <label class="label">Condicion</label>
-          <div class="control ">
-            <div class="select">
-              <select formControlName="condicion">
-                <option value="Normal">Normal</option>
-                <option value="Anormal">Anormal</option>
-                <option value="Emergencia">Emergencia</option>
-              </select>
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="field ">
+              <label class="label">Condicion</label>
+              <div class="control ">
+                <div class="select">
+                  <select formControlName="condicion">
+                    <option value="Normal">Normal</option>
+                    <option value="Anormal">Anormal</option>
+                    <option value="Emergencia">Emergencia</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="field ">
+              <label class="label ">Impacto</label>
+              <div class="control ">
+                <div class="select">
+                  <select formControlName="impacto" #impacto>
+                    <option value="Si">Si</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="field ">
-          <label class="label ">Impacto</label>
-          <div class="control ">
-            <div class="select">
-              <select formControlName="impacto" #impacto>
-                <option value="Si">Si</option>
-                <option value="No">No</option>
-              </select>
-            </div>
-          </div>
-        </div>
+
+
         <div *ngIf="impacto.value=='Si'">
-          <div class="field">
-            <label class="label ">Severidad</label>
-            <div class="control ">
-              <div class="select">
-                <select formControlName="severidad" (change)="calcularClasificacion(this.actividadPMAOForm.value)">
-                  <option [ngValue]="severidad" *ngFor="let severidad of serveridadLista">{{severidad.item}}</option>
-                </select>
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="field">
+                <label class="label ">Severidad</label>
+                <div class="control ">
+                  <div class="select">
+                    <select formControlName="severidad" (change)="calcularClasificacion(this.actividadPMAOForm.value)">
+                      <option [ngValue]="severidad" *ngFor="let severidad of serveridadLista">{{severidad.item}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="field ">
+                <label class="label ">Frecuencia</label>
+                <div class="control ">
+                  <div class="select">
+                    <select formControlName="frecuencia" (change)="calcularClasificacion(this.actividadPMAOForm.value)">
+                      <option [ngValue]="frecuencia" *ngFor="let frecuencia of frecuenciaLista">
+                        {{frecuencia.item}}</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="field ">
-            <label class="label ">Frecuencia</label>
-            <div class="control ">
-              <div class="select">
-                <select formControlName="frecuencia" (change)="calcularClasificacion(this.actividadPMAOForm.value)">
-                  <option [ngValue]="frecuencia" *ngFor="let frecuencia of frecuenciaLista">
-                    {{frecuencia.item}}</option>
-                </select>
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="field ">
+                <label class="label ">Significancia</label>
+                <div class="control ">
+                  <div class="select">
+                    <select formControlName="significancia" (change)="calcularClasificacion(this.actividadPMAOForm.value)">
+                      <option [ngValue]="significancia" *ngFor="let significancia of significanciLista">{{significancia.icon}}</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="field ">
-            <label class="label ">Significancia</label>
-            <div class="control ">
-              <div class="select">
-                <select formControlName="significancia" (change)="calcularClasificacion(this.actividadPMAOForm.value)">
-                  <option [ngValue]="significancia" *ngFor="let significancia of significanciLista">{{significancia.icon}}</option>
-                </select>
+            <div class="col-xs-6">
+              <div class="field ">
+                <label class="label ">Clasificacion</label>
+                <div class="control ">
+                  <input type="text" class="input" formControlName="clasificacion" readonly #clasificacion>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="field ">
-            <label class="label ">Clasificacion</label>
-            <div class="control ">
-              <input type="text" class="input" formControlName="clasificacion" readonly #clasificacion>
+
             </div>
           </div>
           <div class="field ">
@@ -95,6 +116,10 @@
             <div class="control ">
               <textarea formControlName="comentario" class="textarea"></textarea>
             </div>
+          </div>
+          <h2 class="center_text has-text-info">Actividades Propuestas</h2>
+          <div #vc class="vc">
+            <a class="button is-primary is-pulled-right" (click)="click()"><i class="material-icons">add</i></a>
           </div>
         </div>
         <footer class="modal-card-foot">
@@ -107,3 +132,55 @@
     </section>
   </div>
 </div>
+
+<ng-template #templateSubActividades>
+
+  <div class="actividades has-background-white-bis position_relative">
+    <div class="puntero position_absolute right top padding_05rem"  (click)="remove(this.idActividadRemove)" >
+      <i class="material-icons has-text-danger "style="border-radius: 50%;box-shadow: 2px 3px 3px">
+        cancel
+      </i>
+    </div>
+    <div class="field">
+      <label for="" class="label">Actividad</label>
+      <textarea id="" class="textarea" placeholder="Actividad a realizar"></textarea>
+    </div>
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="field">
+          <label for="" class="label">
+            <i class="material-icons has-text-primary icon_small">
+              today
+            </i>
+          </label>
+          <input type="date" id="" class="input">
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class=" field">
+          <label for="" class="label">
+            <i class="material-icons has-text-primary icon_small">
+              insert_invitation
+            </i></label>
+          <input type="date" id="" class="input">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="field">
+          <label for="" class="label">Unidad:</label>
+          <input type="text" class="input" id="" >
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="field">
+          <label for="" class="label">Total</label>
+          <input type="text" id="" class="input">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</ng-template>

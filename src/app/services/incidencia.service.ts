@@ -7,6 +7,7 @@ import { actividades } from '../modelos/actividades';
 import { area_indice } from '../modelos/area_indice';
 import { indice } from '../modelos/indice';
 import { indice_actividad } from '../modelos/indice_actividad';
+import { Colecciones } from '../HelperClass/Colecciones';
 
 @Injectable({
   providedIn: 'root'
@@ -20,17 +21,22 @@ export class IncidenciaService {
   setIncidenciaFindIdActividad(actividad: actividades, incidencias: incidencias): Promise<DocumentReference> {
     actividad.incidencia = true
     this.afs.collection("actividad").doc(actividad.id).update(actividad)
+    incidencias.idTipoReferencia = actividad.id
+    incidencias.tipoReferencia = "actividad"
     incidencias.latitud = sessionStorage.getItem("latitud");
     incidencias.longitud = sessionStorage.getItem("longitud");
-    return this.afs.collection<incidencias>("actividad").doc(actividad.id).collection("incidencias").add(incidencias);
+    return this.afs.collection(Colecciones.incidencias).add(incidencias);
   }
   setIncidenciaFindIA(idIa: string, incidencias: incidencias) {
     incidencias.latitud = sessionStorage.getItem("latitud");
+    incidencias.idTipoReferencia = idIa;
+    incidencias.tipoReferencia = "indice";;
     incidencias.longitud = sessionStorage.getItem("longitud");
     incidencias.fecha_realizacion = new Date()
     incidencias.fecha_registro = new Date();
-    return this.afs.collection("indice").doc(idIa).collection("incidencia").add(incidencias)
+    return this.afs.collection(Colecciones.incidencias).add(incidencias);
   }
+
   getAllIncidenciaFinIdArea(idArea: string) {
     console.log(idArea + "area ID")
     this.afs.collection("area").doc(idArea).collection("indice").snapshotChanges().pipe(map(actions => actions.map(documentoIndiceArea => {
@@ -40,32 +46,24 @@ export class IncidenciaService {
     }))).pipe(map(listaAreaIndice => listaAreaIndice.map(areaIndice => {
     })))
   }
-  getAllIncidencia(): Observable<incidencias[]> {
-    let listaIncidencia = new Array<incidencias>()
-    return Observable.create(observer => {
-      this.afs.collection("actividad").snapshotChanges().pipe(map(actions => actions.map(c => {
-        const dataActividad = c.payload.doc.data() as actividades
-        dataActividad.id = c.payload.doc.id
-        return dataActividad;
-      }))).subscribe(listaActividades => listaActividades.map(actividad => {
-        this.afs.collection("actividad").doc(actividad.id).collection("incidencias").valueChanges().subscribe(listaIncidencias => {
-          if (listaIncidencias.length > 0) {
-            listaIncidencias.forEach(e => {
-              listaIncidencia.push(e as incidencias)
 
-            })
-          }
-        })
-      }))
-      observer.next(listaIncidencia)
-    })
-
-
+  getAllIncidencias(): Observable<incidencias[]> {
+    return this.afs.collection(Colecciones.incidencias).snapshotChanges().pipe(map(listIncidenciasDoc => listIncidenciasDoc.map(incidenciaDoc => {
+      const incidencia = incidenciaDoc.payload.doc.data() as incidencias;
+      incidencia.id = incidenciaDoc.payload.doc.id
+      return incidencia;
+    })))
   }
   update(idActividad: string, incidencia: incidencias) {
     this.afs.collection("actividades").doc(idActividad).collection("incidencias").doc(incidencia.id).update(incidencia)
   }
-
+  getAllIncidenciafindIdIndice(idIndice: string): Observable<incidencias[]> {
+    return this.afs.collection(Colecciones.incidencias, ref => ref.where("idTipoReferencia", "==", idIndice)).snapshotChanges().pipe(map(actions => actions.map(a => {
+      const incidencia = a.payload.doc.data() as incidencias;
+      incidencia.id = a.payload.doc.id
+      return incidencia
+    })));
+  }
   getIncidenciaFindIdActividad(idActividad: string): Observable<incidencias[]> {
     return this.afs.collection<incidencias>("actividad").doc(idActividad).collection("incidencias")
       .snapshotChanges().pipe(map(actions => actions.map(a => {

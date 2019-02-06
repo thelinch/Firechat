@@ -1,13 +1,13 @@
 /**
-@fileoverview funcionalidades para calcular,registrar las actividades de PMAO 
+@fileoverview funcionalidades para calcular,registrar las actividades de PMAO
 *@author Antony Inga Atunga <Antony.inga@unas.edu.pe>
 *@version 2.0
 *@History
 *V2.0-se agrego las funcionalidades de registro de ejecucion de las actividades.
-*V1.0-se realizaron todas las funcionalidades basicas (crud) 
+*V1.0-se realizaron todas las funcionalidades basicas (crud)
 */
 
-import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Renderer2, TemplateRef, ContentChild, ViewChildren, QueryList, ViewContainerRef } from '@angular/core';
 import { ActividadPmaoService } from 'src/app/services/actividad-pmao.service';
 import { ActivatedRoute } from '@angular/router';
 import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
@@ -17,12 +17,14 @@ import { Validators } from '@angular/forms';
 import { actividadPMAO } from 'src/app/modelos/actividadPMAO';
 import * as $ from "jquery"
 import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
+import { PruebaDirective } from 'src/app/directivas/prueba.directive';
 @Component({
   selector: 'app-pmao',
   templateUrl: './pmao.component.html',
   styleUrls: ['./pmao.component.css']
 })
-export class PmaoComponent implements OnInit {
+export class PmaoComponent implements OnInit, AfterViewInit {
+
 
 
   actividadPMAOForm: FormGroup;
@@ -31,6 +33,14 @@ export class PmaoComponent implements OnInit {
   aspectoAmbientalSelected: any;
   actividadSeleccionada: actividadPMAO;
   @ViewChild("clasificacion") elementClasificacion: ElementRef
+
+  idIndice: string
+  @ViewChild("templateSubActividades") templateRef: TemplateRef<any>
+  // @ViewChild("vc", { read: ViewContainerRef }) divTemplate;
+  //@ViewChildren("vc") divTemplate: QueryList<ViewContainerRef>
+  idActividadRemove: number = -1;
+  @ViewChildren("vc", { read: ViewContainerRef }) divTemplate: QueryList<ViewContainerRef>;
+  constructor(private render: Renderer2, private pmaoService: ActividadPmaoService, private router: ActivatedRoute) { }
   listValoracionesColor = [
     { valor: 0, color: "#d50000" },
     { valor: 1, color: "#ff1744" },
@@ -198,9 +208,6 @@ export class PmaoComponent implements OnInit {
     { name: "ALTO", inicio: 1, fin: 8, color: "teal" },
     { name: "Medio", inicio: 9, fin: 15, color: "blue" },
     { name: "Bajo", inicio: 16, fin: 25, color: "#c4bfbd" }]
-  idIndice: string
-  constructor(private render: Renderer2, private pmaoService: ActividadPmaoService, private router: ActivatedRoute) { }
-
   ngOnInit() {
     this.router.params.subscribe(dataUrl => {
       this.idIndice = dataUrl.idIndice;
@@ -217,9 +224,12 @@ export class PmaoComponent implements OnInit {
       clasificacion: new FormControl('', Validators.required),
       comentario: new FormControl('', Validators.required)
     })
-
+  }
+  ngAfterViewInit(): void {
 
   }
+
+
   getBackgroundColorFindActividad(actividad: actividadPMAO): string {
     if (actividad.valoracion) {
       return this.listValoracionesColor.find(exprecion => exprecion.valor == actividad.valoracion.valor).color
@@ -236,7 +246,7 @@ export class PmaoComponent implements OnInit {
    * Calcula el total de  la ejecucion que servira para promediar el PMAO
    * @param{string}
    * @returns{number}
-   * 
+   *
    */
   calcularTotalFromEjecucion(total: string, actual: string): number {
     let calculo: number = Math.floor(parseInt(actual) * 5 / parseInt(total))
@@ -245,9 +255,9 @@ export class PmaoComponent implements OnInit {
   seleccionarActividad(actividad: actividadPMAO) {
     this.actividadSeleccionada = actividad;
   }
-  /** 
+  /**
    * guarda los datos de la ejecucion de la actividad seleccionada
-  *@param {json}  datos que el formulario recopila 
+  *@param {json}  datos que el formulario recopila
    */
   saveEjecucion(form: FormGroup) {
     form.setControl("calculo", new FormControl(this.calcularTotalFromEjecucion(form.get("total").value, form.get("actual").value)))
@@ -311,7 +321,15 @@ export class PmaoComponent implements OnInit {
       }
     })
   }
+  click() {
+    this.divTemplate.first.insert(this.divTemplate.first.createEmbeddedView(this.templateRef))
+    this.idActividadRemove++
+  }
+  remove(idIndex: number) {
+    if (confirm("¿Esta seguro de eliminar la actividad?")) {
+      this.divTemplate.first.remove(idIndex)
+    }
 
-
+  }
 
 }

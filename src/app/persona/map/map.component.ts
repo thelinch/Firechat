@@ -36,7 +36,7 @@ export class MapComponent implements OnInit {
   constructor(private incidenciaService: IncidenciaService, private resultadoService: ResultadoService, private indiceService: IndiceService, private areaService: AreaService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.listaIncidencia = this.incidenciaService.getAllIncidencia()
+    this.listaIncidencia = this.incidenciaService.getAllIncidencias()
     this.listArea = this.areaService.getAllarea()
     this.listResultIncumplidoICA = this.resultadoService.getAllParametroResultadoIncumplido()
   }
@@ -49,8 +49,8 @@ export class MapComponent implements OnInit {
   incidencia(evento) {
     console.log(evento)
   }
-  toggleModalPersona(){
-    this.activadModalPersona=!this.activadModalPersona;
+  toggleModalPersona() {
+    this.activadModalPersona = !this.activadModalPersona;
   }
   setPersona(persona: persona) {
     this.personaSeleccionada = persona;
