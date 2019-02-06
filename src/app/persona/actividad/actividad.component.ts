@@ -36,7 +36,7 @@ export class ActividadComponent implements OnInit {
   idIndice: string;
   actividadSeleccionada: actividades
   activarListaIncidencia: boolean = false
-  listaIncidencia: incidencias[]
+  listaIncidencia: Observable<incidencias[]>
   activarModalParametro: boolean = false
   activarModalResultado: boolean = false
   actividadModalHistorialResultado: boolean = false
@@ -194,11 +194,7 @@ export class ActividadComponent implements OnInit {
 
   }
   getAllIncidenciaFindIdActividad(idActividad: string) {
-    this.actividadService.getAllIncidenciaFindIdActividad(idActividad).subscribe(lista => {
-      this.listaIncidencia = lista
-      console.log(this.listaIncidencia)
-      this.toggleModalListaIncidencia()
-    })
+    this.listaIncidencia = this.incidenciaService.getAllIncidenciafindIdtipoReferencia(idActividad)
   }
 
   saveIncidencia(incidencia: incidencias) {
