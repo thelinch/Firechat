@@ -1,4 +1,5 @@
 import { subActividadPMAO } from "./subActividadPMAO";
+import { persona } from "./persona";
 
 export interface actividadPMAO {
   id?: string
@@ -8,11 +9,15 @@ export interface actividadPMAO {
   severidad: any
   frecuencia: any
   significancia: any
+  comentario:string,
   clasificacion: string
-  comentario: string
   valoracion?: { nombre: string, valor: number }
   isEjecuciones: boolean
-  estadoActividad: false;
+  estadoActividad: boolean;
+  personaRegistro: persona
+  comentarioInconformidad?: Array<{ comentario: string, persona: persona, activo: boolean,fecha_registro:Date,fecha_lectura?:Date }>
+  estadoLectura:boolean;
+  personaRegistroMensaje:persona;
   subActividades: subActividadPMAO[]
   porcentageOfImplementation: number
 

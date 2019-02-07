@@ -11,13 +11,13 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Renderer2, Tem
 import { ActividadPmaoService } from 'src/app/services/actividad-pmao.service';
 import { ActivatedRoute } from '@angular/router';
 import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { actividadPMAO } from 'src/app/modelos/actividadPMAO';
 import * as $ from "jquery"
+import * as moment from "moment";
 import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
-import { PruebaDirective } from 'src/app/directivas/prueba.directive';
 @Component({
   selector: 'app-pmao',
   templateUrl: './pmao.component.html',
@@ -35,12 +35,10 @@ export class PmaoComponent implements OnInit, AfterViewInit {
   @ViewChild("clasificacion") elementClasificacion: ElementRef
 
   idIndice: string
-  @ViewChild("templateSubActividades") templateRef: TemplateRef<any>
   // @ViewChild("vc", { read: ViewContainerRef }) divTemplate;
   //@ViewChildren("vc") divTemplate: QueryList<ViewContainerRef>
   idActividadRemove: number = -1;
-  @ViewChildren("vc", { read: ViewContainerRef }) divTemplate: QueryList<ViewContainerRef>;
-  constructor(private render: Renderer2, private pmaoService: ActividadPmaoService, private router: ActivatedRoute) { }
+  constructor(private render: Renderer2, private pmaoService: ActividadPmaoService, private router: ActivatedRoute, private formBuilder: FormBuilder) { }
   listValoracionesColor = [
     { valor: 0, color: "#d50000" },
     { valor: 1, color: "#ff1744" },
@@ -214,7 +212,7 @@ export class PmaoComponent implements OnInit, AfterViewInit {
 
     })
 
-    this.actividadPMAOForm = new FormGroup({
+    this.actividadPMAOForm = this.formBuilder.group({
       nombre: new FormControl('', Validators.required),
       condicion: new FormControl('', Validators.required),
       impacto: new FormControl('', Validators.required),
@@ -222,14 +220,29 @@ export class PmaoComponent implements OnInit, AfterViewInit {
       frecuencia: new FormControl('', Validators.required),
       significancia: new FormControl('', Validators.required),
       clasificacion: new FormControl('', Validators.required),
-      comentario: new FormControl('', Validators.required)
+      comentario: new FormControl('', Validators.required),
+      subActividades: this.formBuilder.array([this.createItem()])
     })
   }
   ngAfterViewInit(): void {
 
   }
+  createItem(): FormGroup {
+    return this.formBuilder.group({
+      actividad: ["", Validators.required],
+      fecha_fin: [FunctionsBasics.getCurrentDate(), Validators.required],
+      fecha_inicio: [FunctionsBasics.getCurrentDate(), Validators.required],
+      unidad: ["", Validators.required],
+      total: ["", Validators.required]
 
-
+    })
+  }
+  addItemTemplate(): void {
+    (this.actividadPMAOForm.get("subActividades") as FormArray).push(this.createItem())
+  }
+  removeTemplate(index: number) {
+    (this.actividadPMAOForm.get("subActividades") as FormArray).removeAt(index)
+  }
   getBackgroundColorFindActividad(actividad: actividadPMAO): string {
     if (actividad.valoracion) {
       return this.listValoracionesColor.find(exprecion => exprecion.valor == actividad.valoracion.valor).color
@@ -296,12 +309,9 @@ export class PmaoComponent implements OnInit, AfterViewInit {
     this.actividadPMAOForm.reset({ nombre: this.opcionSeleccionado.nombre })
   }
   getClasificacion(valor: number, significancia: number) {
-
     let significanciaValor: { name: any; inicio?: number; fin?: number; color: any; };
-
     if (significancia > 0) {
       significanciaValor = this.clasificacion.find(cl => valor >= cl.inicio && valor <= cl.fin)
-
     } else {
       significanciaValor = this.clasificacion.find(cl => -1 * valor <= cl.inicio && -1 * valor >= cl.fin)
     }
@@ -313,23 +323,25 @@ export class PmaoComponent implements OnInit, AfterViewInit {
   getRiesgoMatrizIper(frecuencia: number, severidad: number): any {
     return this.matrizIper.find(i => i.frecuencia == frecuencia && i.severidad == severidad)
   }
-  saveActividadPMAO(form: actividadPMAO) {
-    this.pmaoService.saveActividadPMAO(this.idIndice, form).subscribe(respuesta => {
+  saveActividadPMAO(actividadPMAO: actividadPMAO) {
+    actividadPMAO.subActividades.forEach(subAc => {
+      let fecha_fin = moment(new Date(subAc.fecha_fin));
+      let fecha_incio = moment(new Date(subAc.fecha_inicio));
+      let periodo = fecha_fin.diff(fecha_incio, "days");
+      let tipoPeriodo = "Dias"
+      if (fecha_fin.diff(fecha_incio, "M") > 0) {
+        tipoPeriodo = "Meses"
+        periodo = fecha_fin.diff(fecha_incio, "M");
+      }
+      subAc.tipoPeriodo = tipoPeriodo
+      subAc.periodo = periodo
+    })
+    actividadPMAO.estadoActividad = false;
+    this.pmaoService.saveActividadPMAO(this.idIndice, actividadPMAO).subscribe(respuesta => {
       if (respuesta) {
         sweetAlertMensaje.getMensajeTransaccionExitosa()
         this.toggleModalFormularioPMAO()
       }
     })
   }
-  click() {
-    this.divTemplate.first.insert(this.divTemplate.first.createEmbeddedView(this.templateRef))
-    this.idActividadRemove++
-  }
-  remove(idIndex: number) {
-    if (confirm("¿Esta seguro de eliminar la actividad?")) {
-      this.divTemplate.first.remove(idIndex)
-    }
-
-  }
-
 }

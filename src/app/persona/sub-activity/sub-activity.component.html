@@ -1,22 +1,39 @@
 <block-ui>
   <div *ngIf="name">
-    <p style="text-align:center" (click)="getFilterListFindName();optionSelected(rowCard)">{{name}} <span *ngIf="listActivityFilter| async;let lengthFilter">({{lengthFilter.length}})</span></p>
-
+    <p style="text-align:center" (click)="getFilterListFindName();optionSelected(rowCard)">{{name}} <span
+        *ngIf="listActivityFilter| async;let lengthFilter">({{lengthFilter.length}})</span></p>
     <div class=" row around-xs" #rowCard>
-
       <div class="col-xs-12 col-md-6   margin_25 " *ngFor="let actividad of (listActivityFilter | async)">
         <div class="card ">
           <header class="card-header position_relative">
             <div class="card-header-title">
               <div class="width_100_percent ">
                 <div class="display_flex position_absolute">
-                  <i class="material-icons " (click)="getMessageInfoValidation(actividad)" *ngIf="actividad.porcentageOfImplementation"
+                  <i class="material-icons " (click)="getMessageInfoValidation(actividad)"
+                    *ngIf="actividad.porcentageOfImplementation"
                     [ngStyle]="{'color': getBackgroundColorFindActividad(actividad)}">assistant_photo</i>
+                  <div class="formulario">
+                    <div class="checkbox">
+                      <input type="checkbox" name="" [id]="actividad.id" [disabled]="actividad.estadoActividad"
+                        #checkbox (change)="seleccionarActividad(actividad);setChangeCheckbox(checkbox)"
+                        [checked]="actividad.estadoActividad">
+                      <label [for]="actividad.id"><i class="material-icons"
+                          [ngClass]="{'checked':actividad.estadoActividad}">
+                          done
+                        </i></label>
+                    </div>
+                  </div>
+                  <a *ngIf="actividad.estadoLectura && actividad.personaRegistroMensaje.id!==this.personaLoged.id">
+                    <i class="material-icons"
+                      (click)="seleccionarActividad(actividad);getMensajeFindIdPersona();toogleModalComentarioActividad()">
+                      email
+                    </i>
+                  </a>
                 </div>
-
                 {{actividad.nombre}}
               </div>
-              <span *ngIf="actividad.porcentageOfImplementation" class="porcentaje position_absolute has-text-link has-background-white-ter ">{{actividad.porcentageOfImplementation
+              <span *ngIf="actividad.porcentageOfImplementation"
+                class="porcentaje position_absolute has-text-link has-background-white-ter ">{{actividad.porcentageOfImplementation
                 | percent}}</span>
             </div>
           </header>
@@ -26,15 +43,22 @@
             </div>
           </div>
           <footer class="card-footer ">
+
             <ng-template [ngxPermissionsOnly]="['CONTRATISTA']">
-              <a class="card-footer-item has-text-success" [ngClass]="{'disabled':actividad.porcentageOfImplementation}"
+              <a class="card-footer-item has-text-success"
+                [ngClass]="{'disabled':actividad.porcentageOfImplementation || !actividad.estadoActividad}"
                 (click)="this.resetFormEjecucion();seleccionarActividad(actividad);toogleFormEjecucion()">
                 <span class="icon is-large ">
                   <i class="material-icons" style="font-size: 2rem">filter_list</i>
                 </span>
               </a>
             </ng-template>
-            <a class="card-footer-item has-text-link" *ngIf="actividad.isEjecuciones" (click)="getAllEjecutionsFindIdActividad(actividad.id);this.activateModalHistory=openModal(activateModalHistory)">
+            <!--Boton para dar un comentario de la actividad-->
+            <a class="card-footer-item has-text-info" (click)="seleccionarActividad(actividad);setMensajeActividad()"
+              [ngClass]="{'disabled':actividad.estadoActividad}"><i class="material-icons">comment</i></a>
+            <!--Fin de Boton para dar un comentario de la actividad-->
+            <a class="card-footer-item has-text-link" *ngIf="actividad.isEjecuciones"
+              (click)="getAllEjecutionsFindIdActividad(actividad.id);this.activateModalHistory=openModal(activateModalHistory)">
               <span class="icon is-large ">
                 <i class="material-icons" style="font-size: 2rem">view_list</i>
               </span>
@@ -51,13 +75,11 @@
         </div>
       </div>
     </div>
-
     <!--Modal para la ejecucion -->
     <div class="modal" [ngClass]="{'is-active': activarModalFormEjecucion}">
       <div class="modal-background" (click)="toogleFormEjecucion()"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-
           <p class="modal-card-title">{{opcionSeleccionado?.nombre}}</p>
           <button class="delete" aria-label="close" (click)="toogleFormEjecucion()"></button>
         </header>
@@ -73,10 +95,11 @@
             <div class="field">
               <div class="control">
                 <div class="custom-file-container" [attr.data-upload-id]="idComponent">
-                  <label>Fotos:<a href="javascript:void(0)" class="custom-file-container__image-clear" title="Clear Image">x</a></label>
+                  <label>Fotos:<a href="javascript:void(0)" class="custom-file-container__image-clear"
+                      title="Clear Image">x</a></label>
                   <label class="custom-file-container__custom-file">
-                    <input type="file" formControlName="files" class="custom-file-container__custom-file__custom-file-input"
-                      accept="image/*" multiple>
+                    <input type="file" formControlName="files"
+                      class="custom-file-container__custom-file__custom-file-input" accept="image/*" multiple>
                     <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
                     <span class="custom-file-container__custom-file__custom-file-control"></span>
                   </label>
@@ -131,7 +154,8 @@
       <div class="modal-card">
         <header class="modal-card-head">
           <p class="modal-card-title">Historial de Ejecuciones</p>
-          <button class="delete" aria-label="close" (click)="this.activateModalHistory=closeModal(activateModalHistory)"></button>
+          <button class="delete" aria-label="close"
+            (click)="this.activateModalHistory=closeModal(activateModalHistory)"></button>
         </header>
         <section class="modal-card-body">
           <table class="table is-fullwidth is-hoverable is-striped">
@@ -165,6 +189,33 @@
       </div>
     </div>
     <!--Fin de Modal de Historial de Ejecuciones-->
+    <!--Modal para Mostrar todos los mensajes de la activida-->
+    <div class="modal" [ngClass]="{'is-active': activarModalComentarioActividad}">
+      <div class="modal-background" (click)="toogleModalComentarioActividad()"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Lista de Mensajes sin leer</p>
+          <button class="delete" aria-label="close" (click)="toogleModalComentarioActividad()"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="box" *ngFor="let comentario of comentarioActividad | async ">
+            <article class="media">
+              <div class="media-content">
+                <p>
+                  {{comentario["persona"]["nombre"]}}
+                  <strong>{{comentario["fecha_registro"].seconds*1000 | date:'medium'}}</strong>
+                </p>
+                {{comentario["comentario"]}}
+              </div>
+            </article>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button" (click)="toogleModalComentarioActividad()">Cancel</button>
+        </footer>
+      </div>
+    </div>
+    <!--Modal para Mostrar todos los mensajes de la activida-->
   </div>
 
 

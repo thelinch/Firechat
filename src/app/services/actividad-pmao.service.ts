@@ -16,6 +16,7 @@ export class ActividadPmaoService {
 
   saveActividadPMAO(idIndice: string, actividad: actividadPMAO): Observable<boolean> {
     return Observable.create(obsever => {
+      actividad.personaRegistro=JSON.parse(sessionStorage.getItem("personaLoged"))
       this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").add(actividad)
       obsever.next(true)
     })

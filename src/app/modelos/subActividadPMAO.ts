@@ -1,10 +1,11 @@
 export class subActividadPMAO {
   id?: string
-  nombre: string
+  actividad: string
   fecha_inicio: Date;
   fecha_fin: Date;
   periodo: number;
-  comentarioInconformidad?: string;
+  tipoPeriodo: string
+
   estadoActividad: false;
 
 }

@@ -13,12 +13,14 @@ import { FileService } from 'src/app/services/file.service';
 import { file } from 'src/app/modelos/File';
 import { take, flatMap, map, reduce } from 'rxjs/operators';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { subActividadPMAO } from 'src/app/modelos/subActividadPMAO';
+import { persona } from 'src/app/modelos/persona';
 @Component({
   selector: 'app-sub-activity',
   templateUrl: './sub-activity.component.html',
   styleUrls: ['./sub-activity.component.css']
 })
-export class SubActivityComponent implements OnInit{
+export class SubActivityComponent implements OnInit {
 
 
   @Input("name") name: string;
@@ -40,7 +42,7 @@ export class SubActivityComponent implements OnInit{
   formEjecucion: FormGroup;
   activateModalHistory: boolean = false;
   listEjecutionsFindIdActivity: Observable<executionActivityPMAO[]>
-
+  comentarioActividad: Observable<any>
   listValoracionesColor = [
     { valor: 0, color: "#d50000" },
     { valor: 1, color: "#ff1744" },
@@ -113,6 +115,8 @@ export class SubActivityComponent implements OnInit{
     { name: "Bajo", inicio: 16, fin: 25, color: "#c4bfbd" }]
   listaActividades: any[]
   @ViewChild("clasificacion") elementClasificacion: ElementRef
+  activarModalComentarioActividad: boolean = false;
+  personaLoged: persona;
   constructor(private render: Renderer2, private pmaoService: ActividadPmaoService, private fileService: FileService) {
 
   }
@@ -135,10 +139,12 @@ export class SubActivityComponent implements OnInit{
       current: new FormControl('', Validators.required),
       total: new FormControl('', Validators.required)
     })
-
+    this.personaLoged = JSON.parse(sessionStorage.getItem("personaLoged"))
   }
 
-
+  toogleModalComentarioActividad() {
+    this.activarModalComentarioActividad = !this.activarModalComentarioActividad
+  }
   getBackgroundColorFindActividad(actividad: actividadPMAO): string {
     if (actividad.valoracion) {
       return this.listValoracionesColor.find(exprecion => exprecion.valor == actividad.valoracion.valor).color
@@ -316,5 +322,42 @@ export class SubActivityComponent implements OnInit{
   }
   openModal(): boolean {
     return true
+  }
+  setChangeCheckbox(elemento: ElementRef) {
+    if ($(elemento).is(":checked")) {
+      Swal({
+        type: "info",
+        text: "¿Esta seguro?",
+        showCancelButton: true,
+        confirmButtonText: "OK"
+      }).then(respuesta => {
+        if (respuesta.value) {
+          this.actividadSeleccionada.estadoActividad = true;
+          this.pmaoService.updateActividadPMAO(this.actividadSeleccionada, this.idIndice)
+        }
+      })
+    }
+  }
+  setMensajeActividad() {
+    Swal({
+      input: "textarea",
+      inputPlaceholder: "Ingrese su observacion",
+      showCancelButton: true
+    }).then(respuesta => {
+      if (respuesta.value.length != 0) {
+        if (!this.actividadSeleccionada.comentarioInconformidad) {
+          this.actividadSeleccionada.comentarioInconformidad = new Array<any>()
+        }
+        this.actividadSeleccionada.estadoLectura = true;
+        this.actividadSeleccionada.comentarioInconformidad.push({ comentario: respuesta.value, persona: this.personaLoged, activo: true, fecha_registro: new Date() });
+        this.actividadSeleccionada.personaRegistroMensaje = this.personaLoged
+        this.pmaoService.updateActividadPMAO(this.actividadSeleccionada, this.idIndice)
+      }
+    })
+  }
+  getMensajeFindIdPersona() {
+    this.comentarioActividad = Observable.create(observer => {
+      observer.next(this.actividadSeleccionada.comentarioInconformidad.filter(comentario => comentario.activo))
+    })
   }
 }
