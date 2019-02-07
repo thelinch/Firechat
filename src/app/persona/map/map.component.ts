@@ -17,6 +17,7 @@ import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
 import { resultado } from 'src/app/modelos/resultadoICA';
 import { ResultadoService } from 'src/app/services/resultado.service';
 import { persona } from 'src/app/modelos/persona';
+import { element } from '@angular/core/src/render3';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -117,23 +118,19 @@ export class MapComponent implements OnInit {
 
   }
   ocultarLeyendaTogle(elemento: ElementRef) {
-    $(elemento).parent().parent().slideToggle("slow")
-    var p
+    $(elemento).parent()
     $(elemento).detach().appendTo("#prueba")
-    $("#prueba").css("display","block")
-    if( $("#prueba").css("display","block")=="display","block"){
-   console.log("hello")
+      $("#prueba").css("display","block")
+    if($("#prueba2").is(":hidden")){
+      $("#prueba2").show("slow");
+      $("#boton").slideUp()
+      $(elemento).detach().appendTo("#prueba2")
+      $("#prueba").css("display","none")
+      
     }else{
-      console.log("nada")
+      $("#prueba2").slideUp()
+      
     }
-  }
- capturarElemento(elemento: ElementRef) {
-    $(elemento).parent().parent(function(){
-      $(this).toggleClass("off")
-    })
-    var p
-    $(elemento).parent().parent
-
 
   }
 }

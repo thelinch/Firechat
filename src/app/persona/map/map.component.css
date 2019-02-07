@@ -14,6 +14,12 @@ agm-map{
      left: 0px;
      
 }
+.legendTest{
+     margin-left: 2%;
+     position: absolute;
+     bottom: 30px;
+     left: 0px;
+}
 .legend button{
      line-height: 12px; 
      width: 18px; 
@@ -61,3 +67,11 @@ agm-map{
      font-weight: bold;
      color: black;
 }
+
+.boton{
+     text-align: center;
+     border-radius: 25px 25px 25px 25px;
+     background: #39f739;
+     font-family: Verdana, Geneva, Tahoma, sans-serif
+}
+

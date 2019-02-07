@@ -34,12 +34,15 @@
 <!--leyenda-->
 
 
-<div class="legend" style="display:none" id="prueba">
+<div class="legendTest" style="display:none" id="prueba">
 
 </div>
-<div class="legend">
-    <div  class="position_relative right top"> 
-        <button #boton  (click)="ocultarLeyendaTogle(boton)">X</button>
+<div class="legend" id="prueba2">
+    <div  class="position_absolute right top">
+        <button class="boton" #boton  (click)="ocultarLeyendaTogle(boton)">X</button> 
+        
+       <!--     --> 
+     <!-- <a class="button is-success is-focused" style=" right: top;"  #boton  (click)="ocultarLeyendaTogle(boton)">X</a> --> 
     </div>
     <div id="titulo">
       <h3>ÁREAS </h3>
