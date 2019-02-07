@@ -1,6 +1,6 @@
 
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { PersonaService } from '../services/persona.service';
 import { persona } from '../modelos/persona';
 import { incidencias } from '../modelos/incidencias';
@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { AuthService } from '../services/auth.service';
 import { sweetAlertMensaje } from '../HelperClass/SweetAlertMensaje';
-
+import * as $ from 'jquery'
 /**
  *
  *
@@ -31,12 +31,14 @@ export class PersonaComponent implements OnInit {
   colorMolienda = "#7b1fa2";
   Subscription: Subscription
   idPerson: string;
+  listIncidenciaNotificacion: Observable<incidencias[]>
   /**
    *Creates an instance of PersonaComponent.
    * @param {PersonaService} personaService
    * @param {IncidenciaService} incidenciaService
    * @memberof PersonaComponent
    */
+
   constructor(private personaService: PersonaService, private route: ActivatedRoute, private authService: AuthService, private router: Router, private incidenciaService: IncidenciaService, private activatedRouter: ActivatedRoute, private permissionsService: NgxPermissionsService) {
     navigator.geolocation.getCurrentPosition(position => {
       sessionStorage.setItem("latitud", position.coords.latitude.toString())
@@ -50,6 +52,10 @@ export class PersonaComponent implements OnInit {
       this.idPerson = params["id"]
     })
     this.getPersonFindId();
+    if (this.permissionsService.hasPermission("JEFE")) {
+      this.listIncidenciaNotificacion = this.incidenciaService.getAllIncidencias()
+    }
+
   }
 
   /**
@@ -76,7 +82,9 @@ export class PersonaComponent implements OnInit {
     this.incidenciaService.getAllIncidenciaFinIdArea(idArea);
   }
 
-
+  getItemsNotificacion(elemento: ElementRef) {
+    $(elemento).slideToggle("slow")
+  }
   getPersonFindId() {
     // tslint:disable-next-line:no-shadowed-variable
     this.personaLogeada = this.personaService.getPersonaFindId(this.idPerson)

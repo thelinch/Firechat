@@ -1,11 +1,12 @@
-<nav *ngIf="personaLogeada | async;let persona" class="navbar is-transparent" role="navigation" aria-label="main navigation">
+<nav *ngIf="personaLogeada | async;let persona" class="navbar is-transparent" role="navigation"
+  aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="https://bulma.io">
       APPEQC
     </a>
 
-    <a role="button" class="navbar-burger burger" aria-label="menu" [ngClass]="{'is-active': activarNavBar}" (click)="toggleNavBar()"
-      aria-expanded="false" data-target="navbarBasicExample">
+    <a role="button" class="navbar-burger burger" aria-label="menu" [ngClass]="{'is-active': activarNavBar}"
+      (click)="toggleNavBar()" aria-expanded="false" data-target="navbarBasicExample">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
@@ -32,6 +33,13 @@
         <i class="material-icons">
           insert_chart
         </i>
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-primary" (click)="onlogout()">
+              <strong>Salir</strong>
+            </a>
+          </div>
+        </div>
       </a>
     </div>
 
@@ -43,18 +51,32 @@
           {{persona.nombre }}-{{persona.apellidos }}(<strong>{{persona.tipoPersona?.nombre}}</strong>)
           <strong>AREA:</strong>{{persona.area?.area }}
         </p>
-        <div *ngxPermissionsOnly="['GERENTE']" [ngClass]="{'isClicked':this.listaIncidenciaCritco.lenght>0}">
-          <i class="material-icons">{{this.listaIncidenciaCritco? 'notifications':'notifications_active'}}</i>
-        </div>
+        <ng-template [ngxPermissionsOnly]="['JEFE']">
+          <div class="notificacion puntero" (click)="getItemsNotificacion(notificacionBody)"
+            *ngIf="this.listIncidenciaNotificacion | async;let incidencias">
+            <div class="notificacion_header">
+              <i class="material-icons">{{incidencias.length==0?'notifications':'notifications_active'}}</i>
+              <span class="notificacion_active">{{incidencias.length==0? '0':incidencias.length}}</span>
+            </div>
+            <div class="notificacion_body has-background-white-ter"
+              style="border-radius: 5px;padding: 5px;display: none;" #notificacionBody>
+              <div class="item_notificacion margin_bottom_5rem" *ngFor="let incidencia of incidencias">
+                <div class="box">
+                  <article class="media">
+                    <div class="media-content">
+                      <h4 class="center_text">Incidencia</h4>
+                      <p><strong>{{incidencia.fecha_registro.seconds*1000 | date :'medium'}}</strong></p>
+                      {{incidencia.detalle}}
+                      <p><strong>Tipo:</strong> <span>{{incidencia.tipoIncidencia.tipo}}</span></p>
+                    </div>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </div>
 
-      </div>
-      <div class="navbar-item">
-        <div class="buttons">
-          <a class="button is-primary" (click)="onlogout()">
-            <strong>Salir</strong>
-          </a>
-        </div>
-      </div>
     </div>
   </div>
 </nav>
