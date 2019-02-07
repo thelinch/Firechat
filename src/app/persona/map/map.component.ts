@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { IncidenciaService } from 'src/app/services/incidencia.service';
 import { Observable } from 'rxjs';
 import { incidencias } from 'src/app/modelos/incidencias';
@@ -116,5 +116,24 @@ export class MapComponent implements OnInit {
     })
 
   }
+  ocultarLeyendaTogle(elemento: ElementRef) {
+    $(elemento).parent().parent().slideToggle("slow")
+    var p
+    $(elemento).detach().appendTo("#prueba")
+    $("#prueba").css("display","block")
+    if( $("#prueba").css("display","block")=="display","block"){
+   console.log("hello")
+    }else{
+      console.log("nada")
+    }
+  }
+ capturarElemento(elemento: ElementRef) {
+    $(elemento).parent().parent(function(){
+      $(this).toggleClass("off")
+    })
+    var p
+    $(elemento).parent().parent
 
+
+  }
 }

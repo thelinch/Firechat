@@ -23,12 +23,14 @@ export class IncidenciaService {
     this.afs.collection("actividad").doc(actividad.id).update(actividad)
     incidencias.idTipoReferencia = actividad.id
     incidencias.tipoReferencia = "actividad"
+    incidencias.persona=JSON.parse(sessionStorage.getItem("personaLoged"))
     incidencias.latitud = sessionStorage.getItem("latitud");
     incidencias.longitud = sessionStorage.getItem("longitud");
     return this.afs.collection(Colecciones.incidencias).add(incidencias);
   }
   setIncidenciaFindIA(idIa: string, incidencias: incidencias) {
     incidencias.latitud = sessionStorage.getItem("latitud");
+    incidencias.persona=JSON.parse(sessionStorage.getItem("personaLoged"))
     incidencias.idTipoReferencia = idIa;
     incidencias.tipoReferencia = "indice";;
     incidencias.longitud = sessionStorage.getItem("longitud");

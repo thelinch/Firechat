@@ -3,7 +3,8 @@
   <agm-polygon *ngFor="let area of (listArea | async)" [paths]="area.paths" (polyClick)="mostrarMensaje(area.id,area.area)"
     [strokeColor]="area.color" [zIndex]="area.zIndex"></agm-polygon>
 
-  <agm-marker [longitude]="incidencia.longitud" [latitude]="incidencia.latitud" *ngFor="let incidencia of (listaIncidencia | async)">
+  <agm-marker iconUrl="./assets/iconos-IA/{{incidencia.tipoIncidencia.tipo+'.png'}}" [longitude]="incidencia.longitud"
+    [latitude]="incidencia.latitud" *ngFor="let incidencia of (listaIncidencia | async)">
     <agm-info-window>
       <strong>incidencia:</strong> {{incidencia.detalle}}
       <strong>tipo:</strong>{{incidencia.tipoIncidencia.tipo}}
@@ -30,17 +31,26 @@
   </agm-marker>
 
 </agm-map>
-<div class="legend">
-  <div id="titulo">
-    <h3>ÁREAS </h3>
-  </div>
-  <ul>
-    <li *ngFor="let areaLeyenda of (listArea | async)" (click)="mostrarMensaje(areaLeyenda.id,areaLeyenda.area)">
-      <i class="material-icons " [ngStyle]="{'color': areaLeyenda.color}">fiber_manual_record</i>
-      {{areaLeyenda.area}}
-    </li>
-  </ul>
+<!--leyenda-->
+
+
+<div class="legend" style="display:none" id="prueba">
+
 </div>
+<div class="legend">
+    <div  class="position_relative right top"> 
+        <button #boton  (click)="ocultarLeyendaTogle(boton)">X</button>
+    </div>
+    <div id="titulo">
+      <h3>ÁREAS </h3>
+    </div>
+    <ul>
+      <li *ngFor="let areaLeyenda of (listArea | async)" (click)="mostrarMensaje(areaLeyenda.id,areaLeyenda.area)">
+        <i class="material-icons " [ngStyle]="{'color': areaLeyenda.color}">fiber_manual_record</i>
+        {{areaLeyenda.area}}
+      </li>
+    </ul>
+  </div>
 
 <!--Modal para visualizar Persona responsable-->
 <div class="modal " [ngClass]="{ 'is-active':activadModalPersona} ">

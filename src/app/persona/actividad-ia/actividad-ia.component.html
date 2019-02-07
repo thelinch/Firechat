@@ -3,7 +3,7 @@
   <div class="col-xs-12 col-md-6 ">
     <div class="field is-grouped">
       <p class="control">
-        <a (click)="toggleModalIncidencia()" class="button is-info is-outlined is-rounded">Registrar incidencia</a>
+        <a (click)="toggleFormIncidencia()" class="button is-info is-outlined is-rounded">Registrar incidencia</a>
       </p>
     </div>
   </div>
@@ -11,11 +11,11 @@
 
  <!--Modal para registro de incidencias-->
  <div class="modal " [ngClass]="{ 'is-active':activarFormIncidencia} ">
-  <div class="modal-background " (click)="toggleModalIncidencia() "></div>
+  <div class="modal-background " (click)="toggleFormIncidencia() "></div>
   <div class="modal-card ">
     <header class="modal-card-head ">
       <p class="modal-card-title ">Registro de Incidencia</p>
-      <button class="delete " aria-label="close " (click)="toggleModalIncidencia()"></button>
+      <button class="delete " aria-label="close " (click)="toggleFormIncidencia()"></button>
     </header>
     <section class="modal-card-body ">
       <form [formGroup]="incidenciaForm " (submit)="saveIncidencia(incidenciaForm.value) ">
@@ -49,10 +49,83 @@
           <button type="submit " [disabled]="!this.incidenciaForm.valid " class="button is-success ">
             guardar
           </button>
-          <button class="button " (click)="toggleModalIncidencia() ">Cancel</button>
+          <button class="button " (click)="toggleFormIncidencia() ">Cancel</button>
         </footer>
       </form>
     </section>
   </div>
 </div>
+
+<!--mostrar lista de incidencias sucedidas-->
+ <div class="row around-xs">
+    <div class="col-xs-12 col-md-4 margin_25" *ngFor="let incidencia of (listaIncidencia | async)">
+      <div class="card">
+        <header class="card-header posit  ion_relative" >
+          <div class="card-header-title ">
+              <div>    <span class="has-text-dark">
+                {{ incidencia.fecha_registro["seconds"]*1000 | date:'medium' }}
+              </span>
+             </div>
+             <a class="card-footer-item has-text-link"  (click)="seleccionarActividad(actividad);toggleModalEstadistica();getResultadoEstadisticoFindIdActividad(actividad)">
+                <span class="icon is-large ">
+                  <i class="material-icons" style="font-size: 2rem " [ngStyle]="{'color':colorIncidencia(incidencia)}">report</i>
+                </span>
+              </a>
+           
+          </div>
+        
+        </header>
+        <div class="card-content ">
+            <div>    <span class="has-text-dark">
+                {{ incidencia.detalle }}
+              </span>
+             </div>
+        </div>
+        <footer class="card-footer ">
+          <a (click)="setIncidencia(incidencia);toggleModalIncidencia()" class="card-footer-item "><i class="material-icons">
+              account_circle
+            </i></a>         
+        </footer>
+      </div>
+    </div>
+  </div>
+
+
+
 </block-ui>
+
+<!--modalVistaPersonalReporteIncidencias-->
+
+<div class="modal " [ngClass]="{ 'is-active':activarModalIncidencia} ">
+    <div class="modal-background " (click)="toggleModalIncidencia() "></div>
+    <div class="modal-card ">
+      <header class="modal-card-head ">
+        <p class="modal-card-title ">Persona Responsable</p>
+        <button class="delete " aria-label="close " (click)="toggleModalIncidencia() "></button>
+      </header>
+      <section class="modal-card-body " *ngIf="incidenciaSeleccionada">
+          <table class="table">
+              <thead>
+                <tr>
+                  <th>Nombres</th>
+                  <th>Apellidos</th>
+                  <th>Cargo</th>
+                  <th>Área</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{incidenciaSeleccionada.persona.nombre}}</td>
+                  <td>{{incidenciaSeleccionada.persona.apellidos}}</td>
+                  <td>{{incidenciaSeleccionada.persona.gerencia.nombre}}</td>
+                  <td>{{incidenciaSeleccionada.persona.area.area}}</td>
+                 </tr>
+              </tbody>
+            </table>
+     
+      </section>
+      <footer class="modal-card-foot ">
+        <button class="button " (click)="toggleModalIncidencia() ">Cancel</button>
+      </footer>
+    </div>
+  </div>
