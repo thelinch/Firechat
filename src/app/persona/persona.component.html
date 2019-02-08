@@ -51,7 +51,7 @@
           {{persona.nombre }}-{{persona.apellidos }}(<strong>{{persona.tipoPersona?.nombre}}</strong>)
           <strong>AREA:</strong>{{persona.area?.area }}
         </p>
-        <!--<ng-template [ngxPermissionsOnly]="['JEFE']">-->
+      <ng-template [ngxPermissionsOnly]="['JEFE']">
           <div class="notificacion puntero" (click)="getItemsNotificacion(notificacionBody)"
             *ngIf="this.listIncidenciaNotificacion | async;let incidencias">
             <div class="notificacion_header">
@@ -74,7 +74,7 @@
               </div>
             </div>
           </div>
-      <!--</ng-template>-->
+      </ng-template>
       </div>
 
     </div>
