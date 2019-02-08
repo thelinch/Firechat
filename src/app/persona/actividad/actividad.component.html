@@ -112,7 +112,7 @@
             </div>
           </div>
           <footer class="modal-card-foot ">
-            <button class="button " (click)="toggleModalActividad() ">Cancel</button>
+            <a class="button " (click)="toggleModalActividad() ">Cancel</a>
             <button type="submit " [disabled]="!this.actividadForm.valid " class="button is-success ">
               guardar
             </button>
@@ -224,7 +224,7 @@
       </section>
       <footer class="modal-card-foot ">
         <button class="button is-success" (click)="guardarResultado()">Guardar</button>
-        <button class="button " (click)="toggleModalResultado() ">Cancel</button>
+        <a class="button " (click)="toggleModalResultado() ">Cancel</a>
       </footer>
 
     </div>
@@ -270,7 +270,7 @@
             <button type="submit " [disabled]="!this.incidenciaForm.valid " class="button is-success ">
               guardar
             </button>
-            <button class="button " (click)="toggleModalIncidencia() ">Cancel</button>
+            <a class="button " (click)="toggleModalIncidencia() ">Cancel</a>
           </footer>
         </form>
       </section>
@@ -333,7 +333,6 @@
         </div>
       </section>
       <footer class="modal-card-foot ">
-
         <button class="button " (click)="toggleModalEstadistica() ">Cancel</button>
       </footer>
 
