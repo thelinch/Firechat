@@ -8,10 +8,10 @@
         <div class="body ">
           <ul class="ul">
             <li class="li" *ngFor="let items of aspectoAmbiental.opciones">
-              <ng-template [ngxPermissionsOnly]="['JEFE']">
-                <a (click)="seleccionarOpcion(items);resetFormActividadPMAO();toggleModalFormularioPMAO()"
-                  class="button is-info is-small is-pulled-right">Agregar</a>
-              </ng-template>
+              <!--<ng-template [ngxPermissionsOnly]="['JEFE']">-->
+              <a (click)="seleccionarOpcion(items);resetFormActividadPMAO();toggleModalFormularioPMAO()"
+                class="button is-info is-small is-pulled-right">Agregar</a>
+              <!--</ng-template>-->
               <app-sub-activity [idComponent]="items.id" [name]="items.nombre" [idIndice]="this.idIndice">
               </app-sub-activity>
             </li>

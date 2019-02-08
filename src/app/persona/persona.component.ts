@@ -52,9 +52,9 @@ export class PersonaComponent implements OnInit {
       this.idPerson = params["id"]
     })
     this.getPersonFindId();
-    if (this.permissionsService.hasPermission("JEFE")) {
+    //if (this.permissionsService.hasPermission("JEFE")) {
       this.listIncidenciaNotificacion = this.incidenciaService.getAllIncidencias()
-    }
+    //}
 
   }
 

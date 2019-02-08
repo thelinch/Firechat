@@ -44,15 +44,15 @@
           </div>
           <footer class="card-footer ">
 
-            <ng-template [ngxPermissionsOnly]="['CONTRATISTA']">
-              <a class="card-footer-item has-text-success"
-                [ngClass]="{'disabled':actividad.porcentageOfImplementation || !actividad.estadoActividad}"
-                (click)="this.resetFormEjecucion();seleccionarActividad(actividad);toogleFormEjecucion()">
-                <span class="icon is-large ">
-                  <i class="material-icons" style="font-size: 2rem">filter_list</i>
-                </span>
-              </a>
-            </ng-template>
+            <!--<ng-template [ngxPermissionsOnly]="['CONTRATISTA']">-->
+            <a class="card-footer-item has-text-success"
+              [ngClass]="{'disabled':actividad.porcentageOfImplementation || !actividad.estadoActividad}"
+              (click)="this.resetFormEjecucion();seleccionarActividad(actividad);toogleFormEjecucion()">
+              <span class="icon is-large ">
+                <i class="material-icons" style="font-size: 2rem">filter_list</i>
+              </span>
+            </a>
+            <!--</ng-template>-->
             <!--Boton para dar un comentario de la actividad-->
             <a class="card-footer-item has-text-info" (click)="seleccionarActividad(actividad);setMensajeActividad()"
               [ngClass]="{'disabled':actividad.estadoActividad}"><i class="material-icons">comment</i></a>
@@ -63,14 +63,14 @@
                 <i class="material-icons" style="font-size: 2rem">view_list</i>
               </span>
             </a>
-            <ng-template [ngxPermissionsOnly]="['SUPERVISOR']">
-              <a class="card-footer-item has-text-warning" [ngClass]="{'disabled':actividad.porcentageOfImplementation}"
-                *ngIf="actividad.isEjecuciones" (click)="getMensajeValoracion(actividad)">
-                <span class="icon is-large ">
-                  <i class="material-icons" style="font-size: 2rem">grade</i>
-                </span>
-              </a>
-            </ng-template>
+            <!--<ng-template [ngxPermissionsOnly]="['SUPERVISOR']">-->
+            <a class="card-footer-item has-text-warning" [ngClass]="{'disabled':actividad.porcentageOfImplementation}"
+              *ngIf="actividad.isEjecuciones" (click)="getMensajeValoracion(actividad)">
+              <span class="icon is-large ">
+                <i class="material-icons" style="font-size: 2rem">grade</i>
+              </span>
+            </a>
+            <!--</ng-template>-->
           </footer>
         </div>
       </div>
