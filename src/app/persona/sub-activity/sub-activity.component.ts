@@ -230,8 +230,11 @@ export class SubActivityComponent implements OnInit {
    *
    */
   getFilterListFindName() {
+    this.blockUI.start();
     this.listActivityFilter = this.pmaoService.getAllActividadFromName(this.idIndice, this.name);
-    this.suscripcion = this.listActivityFilter.subscribe()
+    this.suscripcion = this.listActivityFilter.subscribe(res => {
+      this.blockUI.stop()
+    })
   }
 
   calcularTotalFromEjecucion(total: string, actual: string): number {

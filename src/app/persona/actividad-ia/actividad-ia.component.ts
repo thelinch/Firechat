@@ -18,22 +18,23 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ActividadIAComponent implements OnInit {
   activarModalIncidencia: boolean = false;
-  activarFormIncidencia:boolean =false;
+  activarFormIncidencia: boolean = false;
   incidenciaForm: FormGroup;
   listaIncidencia: Observable<incidencias[]>;
   listaTipoIncidencias: Observable<tipoIncidencia[]>
   fileUploadTemplate: any
-  incidenciaSeleccionada:incidencias;
+  incidenciaSeleccionada: incidencias;
   idIA: string
-  colorTipo =[
-  {tipo:'BAJO',color:'green'},
-  {tipo:'MEDIO',color:'yellow'},
-  {tipo:'ALTO',color:'red'}
+  colorTipo = [
+    { tipo: 'BAJO', color: 'green' },
+    { tipo: 'MEDIO', color: 'yellow' },
+    { tipo: 'ALTO', color: 'red' }
   ]
   @BlockUI() blockUI: NgBlockUI;
   constructor(private fileService: FileService, private router: ActivatedRoute, private tipoIncidenciaService: TipoIncidenciaService, private incidenciaService: IncidenciaService) { }
 
   ngOnInit() {
+    this.blockUI.start()
     this.incidenciaForm = new FormGroup({
       detalle: new FormControl("", Validators.required),
       tipoIncidencia: new FormControl("", Validators.required),
@@ -43,7 +44,10 @@ export class ActividadIAComponent implements OnInit {
     this.listaTipoIncidencias = this.tipoIncidenciaService.getAllTipoIncidencia()
     this.fileUploadTemplate = new FileUploadWithPreview("template")
     this.router.params.subscribe(parametro => this.idIA = parametro.idIndice)
-    this.listaIncidencia=this.incidenciaService.getAllIncidenciafindIdtipoReferencia(this.idIA)
+    this.listaIncidencia = this.incidenciaService.getAllIncidenciafindIdtipoReferencia(this.idIA)
+    this.listaIncidencia.subscribe(resues => {
+      this.blockUI.stop()
+    })
   }
 
   toggleModalIncidencia() {
@@ -54,8 +58,8 @@ export class ActividadIAComponent implements OnInit {
     this.activarFormIncidencia = !this.activarFormIncidencia
 
   }
-  setIncidencia(incidencia:incidencias){
-    this.incidenciaSeleccionada=incidencia;
+  setIncidencia(incidencia: incidencias) {
+    this.incidenciaSeleccionada = incidencia;
   }
   saveIncidencia(incidencia: incidencias) {
     this.startBlock()
@@ -86,9 +90,9 @@ export class ActividadIAComponent implements OnInit {
 
   }
 
-  colorIncidencia(incidencia:incidencias){
+  colorIncidencia(incidencia: incidencias) {
     console.log(incidencia)
-        return this.colorTipo.find(objeto=>objeto.tipo==incidencia.tipoIncidencia.tipo).color
+    return this.colorTipo.find(objeto => objeto.tipo == incidencia.tipoIncidencia.tipo).color
   }
 }
 

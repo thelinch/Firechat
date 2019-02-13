@@ -57,10 +57,10 @@ export class ActividadComponent implements OnInit {
 
 
   ngOnInit() {
+    this.blockUI.start()
     this.router.params.subscribe(dataUrl => {
       this.idIndice = dataUrl.idIndice;
     })
-    this.getAllActividadesFinIdIndice(this.idIndice)
     this.router.parent.parent.params.subscribe(dataUrlPadre => {
       this.idArea = dataUrlPadre.idarea;
     })
@@ -78,6 +78,10 @@ export class ActividadComponent implements OnInit {
     this.listaTipoIncidencias = this.tipoIncidenciaService.getAllTipoIncidencia()
     this.fileUploadTemplate = new FileUploadWithPreview("template")
     this.listaDeComponentes = this.componenteService.getAllComponente()
+    this.listaActividades = this.actividadService.getAllActividadFindIdIndice(this.idIndice)
+    this.listaActividades.subscribe(respuesta => {
+      this.blockUI.stop()
+    })
 
   }
   getResultadoEstadisticoFindIdActividad(actividad: actividades) {
@@ -232,7 +236,7 @@ export class ActividadComponent implements OnInit {
 
   getAllActividadesFinIdIndice(idIndice: string) {
 
-    this.listaActividades = this.actividadService.getAllActividadFindIdIndice(idIndice)
+
   }
 
   toggleModal(elemento: ElementRef) {

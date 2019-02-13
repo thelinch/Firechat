@@ -365,7 +365,6 @@
           </thead>
           <tbody>
             <tr *ngFor="let resultado of  listResultadoHistorial ;let i=index">
-              <th class="font_weigh_none">{{resultado["fecha_registro"].seconds*1000 | date:'mediumDate'}} </th>
               <th class="font_weigh_none">{{resultado["parametro"]["nombreCorto"] }}</th>
               <th class="font_weigh_none">{{resultado["resultado"] }}</th>
               <th class="font_weigh_none">{{resultado["cumplio"]? resultado["riesgo"]:'INCUMPLIO' }}</th>
