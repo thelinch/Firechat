@@ -25,6 +25,7 @@ export class ActividadIAComponent implements OnInit {
   fileUploadTemplate: any
   incidenciaSeleccionada: incidencias;
   idIA: string
+  actualPagina: number = 1;
   colorTipo = [
     { tipo: 'BAJO', color: 'green' },
     { tipo: 'MEDIO', color: 'yellow' },

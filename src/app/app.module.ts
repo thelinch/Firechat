@@ -21,6 +21,7 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 import { FileService } from './services/file.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ServiceWorkerModule } from '@angular/service-worker';
+
 registerLocaleData(localePy, 'es');
 registerLocaleData(localePt, 'pt');
 registerLocaleData(localeEn, 'en')
@@ -33,7 +34,6 @@ library.add(fas);
   ],
   imports: [
     BrowserModule,
-
     NgxPermissionsModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,

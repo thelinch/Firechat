@@ -51,6 +51,7 @@ export class ActividadComponent implements OnInit {
   public lineChartLabels: Array<any> = ['enero', 'febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'];
   private listaResultado = new Array<resultado>()
   @BlockUI() blockUI: NgBlockUI;
+  actualPagina: number = 1;
   optionAtivity: string = "MONITOREO Y LABORATORIO"
   constructor(private actividadService: ActividadService, private fileService: FileService, private parametroService: ParametroService, private componenteService: ComponenteService,
     private tipoIncidenciaService: TipoIncidenciaService, private resultadoService: ResultadoService, private render: Renderer2, private incidenciaService: IncidenciaService, private router: ActivatedRoute) { }

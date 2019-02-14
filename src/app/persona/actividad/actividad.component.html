@@ -9,7 +9,8 @@
     </div>
   </div>
   <div class="row around-xs">
-    <div class="col-xs-12 col-md-4 margin_25" *ngFor="let actividad of (listaActividades | async)">
+    <div class="col-xs-12 col-md-4 margin_25"
+      *ngFor="let actividad of (listaActividades | async) | paginate:{itemsPerPage:5,currentPage:actualPagina}">
       <div class="card">
         <header class="card-header position_relative" [ngClass]="{'has-background-primary': actividad.isResulto}">
           <div class="card-header-title ">
@@ -18,7 +19,7 @@
                 [ngClass]="{'disabled':!actividad.isResultado}">
                 <i class="material-icons has-text-primary">receipt</i>
               </a>
-              <i class="material-icons has-text-primary">{{actividad.componente.nombre=='MONITOREO
+              <i class="material-icons has-text-primary" [title]="actividad.componente.nombre">{{actividad.componente.nombre=='MONITOREO
                 EN CAMPO'?'explore':'event_note'
                 }}</i></div>
             <span class="has-text-dark">
@@ -28,19 +29,17 @@
             <span *ngIf="actividad.fecha_fin">
               {{actividad.fecha_fin.toDateString() | date :'mediumDate' }}
             </span>
-            <a (click)="getAllIncidenciaFindIdActividad(actividad.id) ;toggleModalListaIncidencia()"><i class="material-icons is-pulled-right has-text-warning ">{{
+            <a (click)="getAllIncidenciaFindIdActividad(actividad.id) ;toggleModalListaIncidencia()"><i
+                class="material-icons is-pulled-right has-text-warning ">{{
                 actividad.incidencia? 'alarm_on':''}}
               </i></a>
-            <a (click)="getAllIncidenciaFindIdActividad(actividad.id) "><i class="material-icons is-pulled-right has-text-warning ">{{
+            <a (click)="getAllIncidenciaFindIdActividad(actividad.id) "><i
+                class="material-icons is-pulled-right has-text-warning ">{{
                 actividad.parametro? ' format_list_bulleted ':''}}
               </i></a>
 
           </div>
-          <a href="# " class="card-header-icon " aria-label="more options ">
-            <span class="icon ">
-              <i class="fas fa-angle-down " aria-hidden="true "></i>
-            </span>
-          </a>
+
         </header>
         <div class="card-content ">
           <div class="content ">
@@ -49,20 +48,24 @@
           </div>
         </div>
         <footer class="card-footer ">
-          <a (click)="seleccionarActividad(actividad);getAllParametros()" class="card-footer-item "><i class="material-icons">
+          <a (click)="seleccionarActividad(actividad);getAllParametros()" class="card-footer-item "><i
+              class="material-icons">
               format_list_bulleted
             </i></a>
-          <a class="card-footer-item has-text-success" [ngClass]="{'disabled':!actividad.isParametro}" (click)="seleccionarActividad(actividad);getAllParametroFindIdActividad(actividad.id);toggleModalResultado()">
+          <a class="card-footer-item has-text-success" [ngClass]="{'disabled':!actividad.isParametro}"
+            (click)="seleccionarActividad(actividad);getAllParametroFindIdActividad(actividad.id);toggleModalResultado()">
             <span class="icon is-large ">
               <i class="material-icons" style="font-size: 2rem">receipt</i>
             </span>
           </a>
-          <a class="card-footer-item has-text-link" [ngClass]="{'disabled':!actividad.isResultado}" (click)="seleccionarActividad(actividad);toggleModalEstadistica();getResultadoEstadisticoFindIdActividad(actividad)">
+          <a class="card-footer-item has-text-link" [ngClass]="{'disabled':!actividad.isResultado}"
+            (click)="seleccionarActividad(actividad);toggleModalEstadistica();getResultadoEstadisticoFindIdActividad(actividad)">
             <span class="icon is-large ">
-              <i class="material-icons" style="font-size: 2rem">show_chart</i>
+              <i class="fas fa-chart-line " style="font-size: 2rem"></i>
             </span>
           </a>
-          <a class="card-footer-item has-text-warning" (click)="seleccionarActividad(actividad);toggleModalIncidencia(); ">
+          <a class="card-footer-item has-text-warning"
+            (click)="seleccionarActividad(actividad);toggleModalIncidencia(); ">
             <span class="icon is-large ">
               <i class="material-icons" style="font-size: 2rem">assignment</i>
             </span>
@@ -70,25 +73,33 @@
         </footer>
       </div>
     </div>
+
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-md-4  col-md-offset-8">
+      <pagination-controls class="pgination" (pageChange)="actualPagina = $event" responsibe="true"
+        screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
+      </pagination-controls>
+    </div>
   </div>
 
-
   <!--Modal para el registro de actividades-->
-  <div class="modal " [ngClass]="{ 'is-active':activarFormActividad} ">
-    <div class="modal-background " (click)="toggleModalActividad() "></div>
-    <div class="modal-card ">
-      <header class="modal-card-head ">
-        <p class="modal-card-title ">Registro de Actividad</p>
-        <button class="delete " aria-label="close " (click)="toggleModalActividad() "></button>
+  <div class=" modal " [ngClass]=" { 'is-active' :activarFormActividad} ">
+    <div class=" modal-background " (click)=" toggleModalActividad() "></div>
+    <div class=" modal-card ">
+      <header class=" modal-card-head ">
+        <p class=" modal-card-title ">Registro de Actividad</p>
+        <button class=" delete " aria-label=" close " (click)=" toggleModalActividad() "></button>
       </header>
-      <section class="modal-card-body ">
-        <form [formGroup]="actividadForm " (submit)="saveActividad(actividadForm.value) ">
-          <div class="field">
+      <section class=" modal-card-body ">
+        <form [formGroup]=" actividadForm " (submit)=" saveActividad(actividadForm.value) ">
+          <div class=" field">
             <label for="" class="label">Tipo de Actividad</label>
             <div class="control">
               <div class="select ">
                 <select formControlName="componente" (change)="changeOptionsComponent()">
-                  <option [ngValue]="componente" *ngFor="let componente of listaDeComponentes | async ">{{componente.nombre}}</option>
+                  <option [ngValue]="componente" *ngFor="let componente of listaDeComponentes | async ">
+                    {{componente.nombre}}</option>
                 </select>
               </div>
             </div>
@@ -250,10 +261,11 @@
           <div class="field">
             <div class="control">
               <div class="custom-file-container" data-upload-id="template">
-                <label>Fotos:<a href="javascript:void(0)" class="custom-file-container__image-clear" title="Clear Image">x</a></label>
+                <label>Fotos:<a href="javascript:void(0)" class="custom-file-container__image-clear"
+                    title="Clear Image">x</a></label>
                 <label class="custom-file-container__custom-file">
-                  <input type="file" formControlName="files" class="custom-file-container__custom-file__custom-file-input"
-                    accept="image/*" multiple>
+                  <input type="file" formControlName="files"
+                    class="custom-file-container__custom-file__custom-file-input" accept="image/*" multiple>
                   <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
                   <span class="custom-file-container__custom-file__custom-file-control"></span>
                 </label>
@@ -263,7 +275,8 @@
           </div>
           <div class="select ">
             <select formControlName="tipoIncidencia">
-              <option [ngValue]="tipoIncidenica" *ngFor="let tipoIncidenica of (listaTipoIncidencias | async )">{{tipoIncidenica.tipo}}</option>
+              <option [ngValue]="tipoIncidenica" *ngFor="let tipoIncidenica of (listaTipoIncidencias | async )">
+                {{tipoIncidenica.tipo}}</option>
             </select>
           </div>
           <footer class="modal-card-foot ">
@@ -307,7 +320,8 @@
         </div>
       </section>
       <footer class="modal-card-foot ">
-        <button class="button is-success" (click)="saveParametroFromIdActividadAndIdArea()" [disabled]="this.listParametrosSeleccionados.length==0">Agregar
+        <button class="button is-success" (click)="saveParametroFromIdActividadAndIdArea()"
+          [disabled]="this.listParametrosSeleccionados.length==0">Agregar
           parametros</button>
         <button class="button " (click)="toggleModalParametro() ">Cancel</button>
 

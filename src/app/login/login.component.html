@@ -9,6 +9,12 @@
           <i class="fas fa-envelope"></i>
         </span>
       </p>
+      <article class="message is-danger" *ngIf="(user.dirty|| user.touched ) && user.invalid ">
+        <div class="message-body">
+          <span *ngIf="user.get('email').hasError('required')">Ingrese su correo</span>
+          <span *ngIf="user.get('email').hasError('email')">Ingrese un correo Valido</span>
+        </div>
+      </article>
     </div>
     <div class="field">
       <p class="control has-icons-left has-icons-right">
@@ -16,7 +22,13 @@
         <span class="icon is-small is-left">
           <i class="fas fa-lock"></i>
         </span>
+
       </p>
+      <article class="message is-danger" *ngIf="(user.dirty|| user.touched ) && user.invalid ">
+        <div class="message-body">
+          <span *ngIf="user.get('password').hasError('required')">Ingrese su contraseña</span>
+        </div>
+      </article>
     </div>
     <button type="submit" [disabled]="!user.valid">Ingresar</button>
   </form>

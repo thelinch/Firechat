@@ -53,9 +53,8 @@ export class PersonaComponent implements OnInit {
     })
     this.getPersonFindId();
     //if (this.permissionsService.hasPermission("JEFE")) {
-      this.listIncidenciaNotificacion = this.incidenciaService.getAllIncidencias()
+    this.listIncidenciaNotificacion = this.incidenciaService.getAllIncidencias()
     //}
-
   }
 
   /**
