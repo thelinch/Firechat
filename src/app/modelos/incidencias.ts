@@ -11,6 +11,7 @@ export interface incidencias {
   fecha_registro: Date
   latitud: string
   longitud: string
+  estado: boolean;
   persona?: persona
   urlListOfPhotos: file[]
   tipoIncidencia: tipoIncidencia

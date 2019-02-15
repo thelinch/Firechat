@@ -16,24 +16,31 @@ export class sweetAlertMensaje {
       text: error,
       showConfirmButton: true
     })
-}
+  }
   static getMensajeLogin() {
-  return Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 2000,
+    return Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 2000,
 
-  })
-}
+    })
+  }
+  static getMensajeEdit(title: string) {
+    return Swal({
+      title: title,
+      type: "warning",
+      showCancelButton: true
+    })
+  }
   static getMessageInfo(title: string, html: any) {
-  return Swal({
-    title: title,
-    type: "info",
-    html: html,
-    showCancelButton: true
-  })
-}
+    return Swal({
+      title: title,
+      type: "info",
+      html: html,
+      showCancelButton: true
+    })
+  }
 
 
 }

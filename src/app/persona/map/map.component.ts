@@ -43,13 +43,7 @@ export class MapComponent implements OnInit {
   }
 
 
-  clickPoligono(idArea: string) {
-    console.log("click")
-    this.router.navigate(["../dashboard"], { relativeTo: this.route })
-  }
-  incidencia(evento) {
-    console.log(evento)
-  }
+
   toggleModalPersona() {
     this.activadModalPersona = !this.activadModalPersona;
   }
@@ -126,10 +120,10 @@ export class MapComponent implements OnInit {
       $("#boton").slideUp()
       $(elemento).detach().appendTo("#prueba2")
       $("#prueba").css("display","none")
-      
+
     }else{
       $("#prueba2").slideUp()
-      
+
     }
 
   }

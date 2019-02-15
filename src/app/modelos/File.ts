@@ -1,6 +1,6 @@
 export interface file {
-    id?: string
-    name: string
-    url?: string
-
+  id?: string
+  name: string
+  url?: string
+  estado: boolean
 }

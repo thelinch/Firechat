@@ -77,9 +77,6 @@ export class PersonaComponent implements OnInit {
   toggleNavBar() {
     this.activarNavBar = !this.activarNavBar;
   }
-  getIncidenciaCriticas(idArea: string) {
-    this.incidenciaService.getAllIncidenciaFinIdArea(idArea);
-  }
 
   getItemsNotificacion(elemento: ElementRef) {
     $(elemento).slideToggle("slow")
