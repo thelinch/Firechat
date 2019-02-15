@@ -41,7 +41,9 @@
               </div>
             </div>
           </div>
+          <h2>Impacto</h2>
           <div class="select ">
+            
             <select formControlName="tipoIncidencia">
               <option [ngValue]="tipoIncidenica" *ngFor="let tipoIncidenica of (listaTipoIncidencias | async )">
                 {{tipoIncidenica.tipo}}</option>
@@ -49,7 +51,7 @@
           </div>
           <footer class="modal-card-foot ">
             <button type="submit " [disabled]="!this.incidenciaForm.valid " class="button is-success ">
-              guardar
+              Guardar
             </button>
             <button class="button " (click)="toggleFormIncidencia() ">Cancel</button>
           </footer>
@@ -137,7 +139,7 @@
 
     </section>
     <footer class="modal-card-foot ">
-      <button class="button " (click)="toggleModalIncidencia() ">Cancel</button>
+      <button class="button " (click)="toggleModalIncidencia() ">Cancelar</button>
     </footer>
   </div>
 </div>
