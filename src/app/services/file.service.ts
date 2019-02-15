@@ -18,8 +18,7 @@ export class FileService {
       const fileRef = this.storage.ref(path);
       const task = fileRef.put(file).then((result) => {
         fileRef.getDownloadURL().subscribe(url => {
-          let fileReturn: file = { name: file.name, url: url, id: path }
-
+          let fileReturn: file = { name: file.name, url: url, id: path, estado: true }
           Observer.next(fileReturn)
           Observer.complete()
         })

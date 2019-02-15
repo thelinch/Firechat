@@ -23,14 +23,14 @@ export class IncidenciaService {
     this.afs.collection("actividad").doc(actividad.id).update(actividad)
     incidencias.idTipoReferencia = actividad.id
     incidencias.tipoReferencia = "actividad"
-    incidencias.persona=JSON.parse(sessionStorage.getItem("personaLoged"))
+    incidencias.persona = JSON.parse(sessionStorage.getItem("personaLoged"))
     incidencias.latitud = sessionStorage.getItem("latitud");
     incidencias.longitud = sessionStorage.getItem("longitud");
     return this.afs.collection(Colecciones.incidencias).add(incidencias);
   }
   setIncidenciaFindIA(idIa: string, incidencias: incidencias) {
     incidencias.latitud = sessionStorage.getItem("latitud");
-    incidencias.persona=JSON.parse(sessionStorage.getItem("personaLoged"))
+    incidencias.persona = JSON.parse(sessionStorage.getItem("personaLoged"))
     incidencias.idTipoReferencia = idIa;
     incidencias.tipoReferencia = "indice";;
     incidencias.longitud = sessionStorage.getItem("longitud");
@@ -39,28 +39,30 @@ export class IncidenciaService {
     return this.afs.collection(Colecciones.incidencias).add(incidencias);
   }
 
-  getAllIncidenciaFinIdArea(idArea: string) {
-    console.log(idArea + "area ID")
-    this.afs.collection("area").doc(idArea).collection("indice").snapshotChanges().pipe(map(actions => actions.map(documentoIndiceArea => {
-      const dataAreaIndice = documentoIndiceArea.payload.doc.data() as area_indice
-      dataAreaIndice.id = documentoIndiceArea.payload.doc.id
-      return dataAreaIndice
-    }))).pipe(map(listaAreaIndice => listaAreaIndice.map(areaIndice => {
-    })))
-  }
 
   getAllIncidencias(): Observable<incidencias[]> {
-    return this.afs.collection(Colecciones.incidencias).snapshotChanges().pipe(map(listIncidenciasDoc => listIncidenciasDoc.map(incidenciaDoc => {
+    return this.afs.collection(Colecciones.incidencias, ref => ref.where("estado", "==", true)).snapshotChanges().pipe(map(listIncidenciasDoc => listIncidenciasDoc.map(incidenciaDoc => {
       const incidencia = incidenciaDoc.payload.doc.data() as incidencias;
       incidencia.id = incidenciaDoc.payload.doc.id
       return incidencia;
     })))
   }
-  update(idActividad: string, incidencia: incidencias) {
-    this.afs.collection("actividades").doc(idActividad).collection("incidencias").doc(incidencia.id).update(incidencia)
+  updateEstadoIncidencia(incidencia: incidencias) {
+    this.afs.collection(Colecciones.incidencias).doc(incidencia.id).update({ estado: incidencia.estado })
+  }
+  updateIncidencia(incidencia: incidencias): Observable<boolean> {
+    return Observable.create(observer => {
+      this.afs.collection(Colecciones.incidencias).doc(incidencia.id).update(incidencia).then(() => {
+        delete incidencia.id
+        observer.next(true)
+      })
+    })
+  }
+  updateFotoIncidencia(incidencia: incidencias,index:number) {
+    this.afs.collection(Colecciones.incidencias).doc(incidencia.id).update({ urlListOfPhotos: incidencia.urlListOfPhotos})
   }
   getAllIncidenciafindIdtipoReferencia(idIndice: string): Observable<incidencias[]> {
-    return this.afs.collection(Colecciones.incidencias, ref => ref.where("idTipoReferencia", "==", idIndice)).snapshotChanges().pipe(map(actions => actions.map(a => {
+    return this.afs.collection(Colecciones.incidencias, ref => ref.where("idTipoReferencia", "==", idIndice).where("estado", "==", true)).snapshotChanges().pipe(map(actions => actions.map(a => {
       const incidencia = a.payload.doc.data() as incidencias;
       incidencia.id = a.payload.doc.id
       return incidencia
