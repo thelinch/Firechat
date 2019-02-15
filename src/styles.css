@@ -34,6 +34,7 @@ html, body {
 .displax_block{
 display: block;
 }
+
 .animation_slideShow{
   display: block !important;
   animation-name: slideShow;
@@ -43,6 +44,12 @@ display: block;
 }
 .display_flex{
   display: flex !important;
+flex-wrap: wrap;
+justify-content: space-around;
+
+}
+.items_flex_50{
+  flex-basis: 50%;
 }
 .app-mensajes{
   overflow-y:scroll;

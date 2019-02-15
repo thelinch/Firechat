@@ -58,8 +58,8 @@ export class IncidenciaService {
       })
     })
   }
-  updateFotoIncidencia(incidencia: incidencias,index:number) {
-    this.afs.collection(Colecciones.incidencias).doc(incidencia.id).update({ urlListOfPhotos: incidencia.urlListOfPhotos})
+  updateFotoIncidencia(incidencia: incidencias) {
+    this.afs.collection(Colecciones.incidencias).doc(incidencia.id).update({ urlListOfPhotos: incidencia.urlListOfPhotos })
   }
   getAllIncidenciafindIdtipoReferencia(idIndice: string): Observable<incidencias[]> {
     return this.afs.collection(Colecciones.incidencias, ref => ref.where("idTipoReferencia", "==", idIndice).where("estado", "==", true)).snapshotChanges().pipe(map(actions => actions.map(a => {

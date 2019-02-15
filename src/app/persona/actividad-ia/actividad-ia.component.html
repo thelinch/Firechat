@@ -3,7 +3,7 @@
     <div class="col-xs-12 col-md-6 ">
       <div class="field is-grouped">
         <p class="control">
-          <a (click)="accion=true;nuevaIncidencia();resetFormIncidencia();toggleFormIncidencia()"
+          <a (click)="nuevaIncidencia();resetFormIncidencia();clearPreventView();toggleFormIncidencia()"
             class="button is-info is-outlined is-rounded">Registrar incidencia</a>
         </p>
       </div>
@@ -40,7 +40,7 @@
               class="material-icons">
               account_circle
             </i></a>
-          <a (click)="accion=false;setIncidencia(incidencia);editIncidencia();toggleFormIncidencia()"
+          <a (click)="setIncidencia(incidencia);editIncidencia();clearPreventView();toggleFormIncidencia()"
             class="card-footer-item "><i class="fas fa-edit">
             </i></a>
           <a (click)="setIncidencia(incidencia);eliminarIncidencia()" class="card-footer-item "><i
@@ -128,7 +128,8 @@
               <div class="custom-file-container__image-preview"></div>
             </div>
           </div>
-          <div *ngIf="this.incidenciaSeleccionada && incidenciaSeleccionada.urlListOfPhotos">
+          <div
+            *ngIf="this.incidenciaSeleccionada && incidenciaSeleccionada.urlListOfPhotos && (incidenciaSeleccionada.urlListOfPhotos | filterName | async).length>0">
             <article class="message is-info">
               <div class="message-header">
                 <p>Lista de Fotos</p>
@@ -136,10 +137,10 @@
               <div class="message-body">
                 <div class="display_flex">
 
-                  <figure class="image is-128x128"
-                    *ngFor="let foto of incidenciaSeleccionada.urlListOfPhotos| filterName;let i=index">
+                  <figure class="image is-128x128 "
+                    *ngFor="let foto of (incidenciaSeleccionada.urlListOfPhotos | filterName) | async;let i=index">
                     <div class="display_flex position_absolute right padding_2">
-                      <a class="delete" (click)="deleteImagenIncidencia(i)" aria-label="delete"></a>
+                      <a class="delete" (click)="deleteImagenIncidencia(foto)" aria-label="delete"></a>
                       <a>
                         <i class="fas fa-download"></i>
                       </a>

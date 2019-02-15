@@ -45,6 +45,7 @@ export class ActividadIAComponent implements OnInit {
     this.router.params.subscribe(parametro => this.idIA = parametro.idIndice)
     this.listaIncidencia = this.incidenciaService.getAllIncidenciafindIdtipoReferencia(this.idIA)
     this.listaIncidencia.subscribe(resues => {
+      console.log(resues)
       this.blockUI.stop()
     })
   }
@@ -65,28 +66,54 @@ export class ActividadIAComponent implements OnInit {
   }
   nuevaIncidencia() {
     this.incidenciaSeleccionada = null;
+    this.accion = true
+    this.incidenciaForm.get("files").setValidators([Validators.required]);
+    this.incidenciaForm.get("files").updateValueAndValidity();
+
   }
-  deleteImagenIncidencia(index: number) {
-    this.incidenciaSeleccionada.urlListOfPhotos[index].estado = false;
-    console.log(this.incidenciaSeleccionada.urlListOfPhotos[index].estado)
-    this.incidenciaService.updateFotoIncidencia(this.incidenciaSeleccionada,index)
+  deleteImagenIncidencia(fotoParametro: file) {
+    sweetAlertMensaje.getMensajeDelete("¿Esta seguro de eliminar la foto?").then(respuesta => {
+      if (respuesta.value) {
+        this.incidenciaSeleccionada.urlListOfPhotos.find(foto => fotoParametro.id == foto.id).estado = false;
+        this.incidenciaService.updateFotoIncidencia(this.incidenciaSeleccionada)
+        this.toggleFormIncidencia();
+      }
+    })
+
+  }
+  clearPreventView() {
+    if (this.fileUploadTemplate.cachedFileArray.length > 0) {
+      this.fileUploadTemplate.cachedFileArray = []
+      this.fileUploadTemplate.clearImagePreviewPanel();
+    }
   }
   saveAndEditIncidencia(incidencia: incidencias) {
-    if (incidencia.id != null) {
-      this.incidenciaService.updateIncidencia(incidencia).subscribe(respuesta => {
-        this.toggleFormIncidencia();
+    if (incidencia.id != null && this.incidenciaSeleccionada) {
+      this.incidenciaSeleccionada.detalle = incidencia.detalle;
+      this.incidenciaSeleccionada.tipoIncidencia = incidencia.tipoIncidencia;
+      this.startBlock()
+      this.uploadImagen().subscribe({
+        next: file => {
+          this.incidenciaSeleccionada.urlListOfPhotos.push(file)
+        },
+        error: error => console.log(error),
+        complete: () => {
+          this.incidenciaService.updateIncidencia(this.incidenciaSeleccionada).subscribe(respuesta => {
+            this.toggleFormIncidencia();
+            this.stopBlock();
+          });
+        }
       })
     } else {
       this.startBlock()
       incidencia.estado = true;
       incidencia.urlListOfPhotos = new Array<file>()
-      from(this.fileUploadTemplate.cachedFileArray).pipe(take(this.fileUploadTemplate.cachedFileArray.length), flatMap((file: File) => this.fileService.uploadFile(file, "incidencias"))).subscribe({
+      this.uploadImagen().subscribe({
         next: file => incidencia.urlListOfPhotos.push(file),
         error: error => console.log(error),
         complete: () => {
           this.incidenciaService.setIncidenciaFindIA(this.idIA, incidencia).then(documento => {
             if (documento) {
-              this.incidenciaForm.reset()
               this.toggleFormIncidencia()
               this.stopBlock();
             }
@@ -95,7 +122,12 @@ export class ActividadIAComponent implements OnInit {
       })
     }
   }
+  uploadImagen(): Observable<any> {
+    return from((this.fileUploadTemplate.cachedFileArray && this.fileUploadTemplate.cachedFileArray.length > 0) ? this.fileUploadTemplate.cachedFileArray : [])
+      .pipe(take(this.fileUploadTemplate.cachedFileArray.length),
+        flatMap((file: File) => this.fileService.uploadFile(file, "incidencias")))
 
+  }
 
   startBlock() {
     this.blockUI.start();
@@ -106,11 +138,15 @@ export class ActividadIAComponent implements OnInit {
 
   }
   editIncidencia() {
+    this.accion = false;
+    console.log("entro a edit")
+    this.incidenciaForm.get("files").clearValidators();
+    this.incidenciaForm.get("files").updateValueAndValidity();
     this.incidenciaForm.patchValue({
       detalle: this.incidenciaSeleccionada.detalle,
       id: this.incidenciaSeleccionada.id
     })
-    this.incidenciaForm.controls["tipoIncidencia"].patchValue(
+    this.incidenciaForm.get("tipoIncidencia").patchValue(
       {
         id: this.incidenciaSeleccionada.tipoIncidencia.id,
         color: this.incidenciaSeleccionada.tipoIncidencia.color,
@@ -119,10 +155,11 @@ export class ActividadIAComponent implements OnInit {
       })
   }
   compareTipoIncidencia(incidencia1: any, incidencia2: any) {
-    return incidencia1 && incidencia2 ? incidencia1.id = incidencia2.id : incidencia1 === incidencia2;
+
+    return incidencia1 && incidencia2 ? incidencia1.id === incidencia2.id : incidencia1 === incidencia2;
   }
   eliminarIncidencia() {
-    sweetAlertMensaje.getMensajeEdit("Desea eliminar la incidencia").then(respuesta => {
+    sweetAlertMensaje.getMensajeDelete("Desea eliminar la incidencia").then(respuesta => {
       if (respuesta.value) {
         this.incidenciaSeleccionada.estado = false;
         this.incidenciaService.updateEstadoIncidencia(this.incidenciaSeleccionada);
