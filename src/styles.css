@@ -126,10 +126,10 @@ li:hover{
 .pgination /deep/.ngx-pagination .current{
   background: red;
 }
-.ng-valid:not(form), .ng-valid.required  {
+.ng-valid:not(form):not(div), .ng-valid.required  {
   border-left: 5px solid #42A948; /* green */
 }
-.ng-invalid:not(form)  {
+.ng-invalid:not(form):not(div)  {
   border-left: 5px solid #a94442; /* red */
 }
 /* Animaciones */

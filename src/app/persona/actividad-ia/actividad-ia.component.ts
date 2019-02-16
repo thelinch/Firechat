@@ -32,7 +32,8 @@ export class ActividadIAComponent implements OnInit {
   constructor(private fileService: FileService, private router: ActivatedRoute, private tipoIncidenciaService: TipoIncidenciaService, private incidenciaService: IncidenciaService) { }
 
   ngOnInit() {
-    this.blockUI.start()
+    this.startBlock()
+
     this.incidenciaForm = new FormGroup({
       detalle: new FormControl("", Validators.required),
       tipoIncidencia: new FormControl("", Validators.required),
@@ -46,7 +47,7 @@ export class ActividadIAComponent implements OnInit {
     this.listaIncidencia = this.incidenciaService.getAllIncidenciafindIdtipoReferencia(this.idIA)
     this.listaIncidencia.subscribe(resues => {
       console.log(resues)
-      this.blockUI.stop()
+      this.stopBlock();
     })
   }
 
@@ -88,35 +89,32 @@ export class ActividadIAComponent implements OnInit {
     }
   }
   saveAndEditIncidencia(incidencia: incidencias) {
+    this.startBlock()
     if (incidencia.id != null && this.incidenciaSeleccionada) {
       this.incidenciaSeleccionada.detalle = incidencia.detalle;
       this.incidenciaSeleccionada.tipoIncidencia = incidencia.tipoIncidencia;
-      this.startBlock()
       this.uploadImagen().subscribe({
         next: file => {
           this.incidenciaSeleccionada.urlListOfPhotos.push(file)
         },
         error: error => console.log(error),
         complete: () => {
-          this.incidenciaService.updateIncidencia(this.incidenciaSeleccionada).subscribe(respuesta => {
+          this.incidenciaService.updateIncidencia(this.incidenciaSeleccionada).subscribe(async respuesta => {
+            await this.stopBlock();
             this.toggleFormIncidencia();
-            this.stopBlock();
           });
         }
       })
     } else {
-      this.startBlock()
       incidencia.estado = true;
       incidencia.urlListOfPhotos = new Array<file>()
       this.uploadImagen().subscribe({
         next: file => incidencia.urlListOfPhotos.push(file),
         error: error => console.log(error),
         complete: () => {
-          this.incidenciaService.setIncidenciaFindIA(this.idIA, incidencia).then(documento => {
-            if (documento) {
-              this.toggleFormIncidencia()
-              this.stopBlock();
-            }
+          this.incidenciaService.setIncidenciaFindIA(this.idIA, incidencia).then(async documento => {
+            this.toggleFormIncidencia()
+            await this.stopBlock();
           })
         }
       })
@@ -139,7 +137,6 @@ export class ActividadIAComponent implements OnInit {
   }
   editIncidencia() {
     this.accion = false;
-    console.log("entro a edit")
     this.incidenciaForm.get("files").clearValidators();
     this.incidenciaForm.get("files").updateValueAndValidity();
     this.incidenciaForm.patchValue({
@@ -149,13 +146,10 @@ export class ActividadIAComponent implements OnInit {
     this.incidenciaForm.get("tipoIncidencia").patchValue(
       {
         id: this.incidenciaSeleccionada.tipoIncidencia.id,
-        color: this.incidenciaSeleccionada.tipoIncidencia.color,
-        estado: this.incidenciaSeleccionada.tipoIncidencia.estado,
-        tipo: this.incidenciaSeleccionada.tipoIncidencia.tipo
+
       })
   }
   compareTipoIncidencia(incidencia1: any, incidencia2: any) {
-
     return incidencia1 && incidencia2 ? incidencia1.id === incidencia2.id : incidencia1 === incidencia2;
   }
   eliminarIncidencia() {

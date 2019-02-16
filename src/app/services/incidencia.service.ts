@@ -53,7 +53,6 @@ export class IncidenciaService {
   updateIncidencia(incidencia: incidencias): Observable<boolean> {
     return Observable.create(observer => {
       this.afs.collection(Colecciones.incidencias).doc(incidencia.id).update(incidencia).then(() => {
-        delete incidencia.id
         observer.next(true)
       })
     })

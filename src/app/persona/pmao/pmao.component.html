@@ -9,10 +9,11 @@
           <ul class="ul">
             <li class="li" *ngFor="let items of aspectoAmbiental.opciones">
               <!--<ng-template [ngxPermissionsOnly]="['JEFE']">-->
-              <a (click)="seleccionarOpcion(items);resetFormActividadPMAO();toggleModalFormularioPMAO()"
+              <a (click)="seleccionarOpcion(items);resetFormActividadPMAO();toggleModalFormularioPMAO();nuevaActividad()"
                 class="button is-info is-small is-pulled-right">Agregar</a>
               <!--</ng-template>-->
-              <app-sub-activity [idComponent]="items.id" [name]="items.nombre" [idIndice]="this.idIndice">
+              <app-sub-activity [idComponent]="items.id" [name]="items.nombre" [idIndice]="this.idIndice"
+                (seleccionActividadVisualizacionAndEdit)="captacionObjeto($event)">
               </app-sub-activity>
             </li>
           </ul>
@@ -68,7 +69,8 @@
                 <label class="label ">Severidad</label>
                 <div class="control ">
                   <div class="select">
-                    <select formControlName="severidad" (change)="calcularClasificacion(this.actividadPMAOForm.value)">
+                    <select formControlName="severidad" (change)="calcularClasificacion(this.actividadPMAOForm.value)"
+                      [compareWith]="compararObjetos">
                       <option [ngValue]="severidad" *ngFor="let severidad of serveridadLista">{{severidad.item}}
                       </option>
                     </select>
@@ -81,7 +83,8 @@
                 <label class="label ">Frecuencia</label>
                 <div class="control ">
                   <div class="select">
-                    <select formControlName="frecuencia" (change)="calcularClasificacion(this.actividadPMAOForm.value)">
+                    <select formControlName="frecuencia" (change)="calcularClasificacion(this.actividadPMAOForm.value)"
+                      [compareWith]="compararObjetos">
                       <option [ngValue]="frecuencia" *ngFor="let frecuencia of frecuenciaLista">
                         {{frecuencia.item}}</option>
                     </select>
@@ -97,7 +100,7 @@
                 <div class="control ">
                   <div class="select">
                     <select formControlName="significancia"
-                      (change)="calcularClasificacion(this.actividadPMAOForm.value)">
+                      (change)="calcularClasificacion(this.actividadPMAOForm.value)" [compareWith]="compararObjetos">
                       <option [ngValue]="significancia" *ngFor="let significancia of significanciLista">
                         {{significancia.icon}}</option>
                     </select>
@@ -123,10 +126,12 @@
           </div>
           <h2 class="center_text has-text-info">Actividades Propuestas</h2>
           <div #vc class="vc">
-            <a class="button is-primary" (click)="addItemTemplate()"><i class="material-icons">add</i></a>
+            <a class="button is-primary" [ngClass]="{disabled:!this.actividadPMAOForm.enabled}"
+              (click)="addItemTemplate()"><i class="material-icons">add</i></a>
             <div class="actividades has-background-white-bis position_relative" formArrayName="subActividades"
               *ngFor="let item of actividadPMAOForm.get('subActividades').controls; let i = index;">
-              <div class="puntero position_absolute right top padding_05rem" (click)="removeTemplate(i)">
+              <div class="puntero position_absolute right top padding_05rem"
+                [ngClass]="{disabled:!this.actividadPMAOForm.enabled}" (click)="removeTemplate(i)">
                 <i class="material-icons has-text-danger " style="border-radius: 50%;box-shadow: 2px 3px 3px">
                   cancel
                 </i>
@@ -178,9 +183,9 @@
         </div>
         <footer class="modal-card-foot">
           <button type="submit" [disabled]="!this.actividadPMAOForm.valid" class="button is-success ">
-            guardar
+            Guardar
           </button>
-          <a class="button" (click)="toggleModalFormularioPMAO()">Cancel</a>
+          <a class="button" (click)="toggleModalFormularioPMAO()">Cancelar</a>
         </footer>
       </form>
     </section>
