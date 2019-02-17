@@ -75,7 +75,7 @@ export class ActividadService {
       listaParametros.forEach(p => listaParametrosNew.push(p))
     })
     listaIndice.forEach(indice => {
-      this.getAllActividadFindIdIndice(indice.id, fecha_inicio).subscribe(listaActividades => {
+      this.getAllActividadFindIdIndice(indice.id, fecha_inicio, fecha_fin).subscribe(listaActividades => {
         console.log(listaActividades)
       })
     })
@@ -106,10 +106,10 @@ export class ActividadService {
   updateAtividad(activida: actividades) {
     this.afs.collection(Colecciones.actividades).doc(activida.id).update(activida)
   }
-  getAllActividadFindIdIndice(idIndice: string, fecha_inicio): Observable<actividades[]> {
+  getAllActividadFindIdIndice(idIndice: string, fecha_inicio, fecha_fin): Observable<actividades[]> {
 
     console.log(firebase.firestore.Timestamp.fromDate(new Date()))
-    return this.afs.collection<actividades>(Colecciones.actividades, ref => ref.where("estado", "==", true).where("idIndice", "==", idIndice).where("fecha_inicio", ">=", firebase.firestore.Timestamp.now())).snapshotChanges().pipe(map(actions => actions.map(documentoActividad => {
+    return this.afs.collection<actividades>(Colecciones.actividades, ref => ref.orderBy("fecha_inicio").startAt(firebase.firestore.Timestamp.fromDate(new Date(fecha_inicio))).endAt(firebase.firestore.Timestamp.fromDate(new Date(fecha_fin))).where("estado", "==", true).where("idIndice", "==", idIndice)).snapshotChanges().pipe(map(actions => actions.map(documentoActividad => {
       const actividad = documentoActividad.payload.doc.data() as actividades
       /* if (actividad.fecha_fin) {
          actividad.fecha_fin = new Date(actividad.fecha_fin["seconds"] * 1000)

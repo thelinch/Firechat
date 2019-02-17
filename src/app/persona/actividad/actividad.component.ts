@@ -85,7 +85,7 @@ export class ActividadComponent implements OnInit {
     this.listaTipoIncidencias = this.tipoIncidenciaService.getAllTipoIncidencia()
     this.fileUploadTemplate = new FileUploadWithPreview("template")
     this.listaDeComponentes = this.componenteService.getAllComponente()
-    this.listaActividades = this.actividadService.getAllActividadFindIdIndice(this.idIndice, Date.now())
+    this.listaActividades = this.actividadService.getAllActividadFindIdIndice(this.idIndice, Date.now(), Date.now())
     this.listaActividades.subscribe(respuesta => {
       this.blockUI.stop()
     })
@@ -131,7 +131,11 @@ export class ActividadComponent implements OnInit {
 
   }
   consultarDatoFiltradoFechas(form: any) {
-    this.actividadService.getAllActividadFindIdIndice(this.idIndice, Date.now())
+    this.startBlock()
+    this.listaActividades = this.actividadService.getAllActividadFindIdIndice(this.idIndice, form.fecha_inicio, form.fecha_fin)
+    this.listaActividades.subscribe(respuesta => {
+      this.stopBlock()
+    })
   }
   guardarResultado() {
     this.actividadSeleccionada.isResultado = true;
@@ -252,10 +256,6 @@ export class ActividadComponent implements OnInit {
   }
 
 
-  getAllActividadesFinIdIndice(idIndice: string) {
-
-
-  }
 
   toggleModal(elemento: ElementRef) {
     console.log(elemento.nativeElement)

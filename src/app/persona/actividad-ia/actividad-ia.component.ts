@@ -12,6 +12,9 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { take, flatMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
+import { FunctionsBasics } from './../../HelperClass/FunctionBasics';
+import * as firebase from "firebase/app";
+
 @Component({
   selector: 'app-actividad-ia',
   templateUrl: './actividad-ia.component.html',
@@ -20,6 +23,7 @@ import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
 export class ActividadIAComponent implements OnInit {
   activarModalIncidencia: boolean = false;
   activarFormIncidencia: boolean = false;
+  filtroIncidenciaForm: FormGroup;
   incidenciaForm: FormGroup;
   listaIncidencia: Observable<incidencias[]>;
   listaTipoIncidencias: Observable<tipoIncidencia[]>
@@ -40,7 +44,10 @@ export class ActividadIAComponent implements OnInit {
       files: new FormControl("", Validators.required),
       id: new FormControl()
     })
-
+    this.filtroIncidenciaForm = new FormGroup({
+      fecha_registro: new FormControl(FunctionsBasics.getCurrentDate(), Validators.required),
+      categoria: new FormControl()
+    })
     this.listaTipoIncidencias = this.tipoIncidenciaService.getAllTipoIncidencia()
     this.fileUploadTemplate = new FileUploadWithPreview("template")
     this.router.params.subscribe(parametro => this.idIA = parametro.idIndice)
@@ -63,6 +70,14 @@ export class ActividadIAComponent implements OnInit {
   }
   setIncidencia(incidencia: incidencias) {
     this.incidenciaSeleccionada = incidencia;
+  }
+  consultarFiltroIncidenciaDate(form) {
+    this.startBlock();
+    this.listaIncidencia = this.incidenciaService.getAllIncidenciasFindDate(form.fecha_registro)
+    this.listaIncidencia.subscribe(() => {
+      this.stopBlock()
+    })
+
   }
   nuevaIncidencia() {
     this.incidenciaSeleccionada = null;
@@ -105,6 +120,13 @@ export class ActividadIAComponent implements OnInit {
         }
       })
     } else {
+      incidencia.latitud = sessionStorage.getItem(FunctionsBasics.nombreLatitud);
+      incidencia.persona = JSON.parse(sessionStorage.getItem("personaLoged"))
+      incidencia.idTipoReferencia = this.idIA;
+      incidencia.tipoReferencia = "indice";;
+      incidencia.longitud = sessionStorage.getItem(FunctionsBasics.nombreLongitud);
+      incidencia.fecha_realizacion = firebase.firestore.Timestamp.now()
+      incidencia.fecha_registro = firebase.firestore.Timestamp.now()
       incidencia.estado = true;
       incidencia.urlListOfPhotos = new Array<file>()
       this.uploadImagen().subscribe({

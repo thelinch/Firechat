@@ -9,6 +9,40 @@
       </div>
     </div>
   </div>
+  <form class="row around-xs middle-xs margin_formulario_filtrado" [formGroup]="filtroIncidenciaForm"
+    (submit)="consultarFiltroIncidenciaDate(filtroIncidenciaForm.value)">
+    <div class="field is-horizontal  col-xs-12 col-md-4">
+      <div class="field-label is-normal">
+        <label for="fecha_registro" class="label">Fecha:</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <div class="control">
+            <input type="date" id="fecha_registro" formControlName="fecha_registro" class="input">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field is-horizontal col-xs-12 col-md-4">
+      <div class="field-label is-normal">
+        <label for="" class="label">Categoria:</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <div class="control">
+            <div class="select">
+              <select name="" id="categoria" formControlName="categoria">
+                <option value="todos">Todos</option>
+                <option [ngValue]="tipoIncidenica" *ngFor="let tipoIncidenica of (listaTipoIncidencias | async )">
+                  {{tipoIncidenica.tipo}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class=" button is-primary" [disabled]="!filtroIncidenciaForm.valid">Consultar</button>
+  </form>
   <!--mostrar lista de incidencias sucedidas-->
   <div class="row around-xs">
     <div class="col-xs-12 col-md-4 margin_25"
@@ -17,7 +51,7 @@
         <header class="card-header">
           <div class="card-header-title ">
             <span class="has-text-dark">
-              {{ incidencia.fecha_registro["seconds"]*1000 | date:'medium' }}
+              {{ incidencia.fecha_registro.toDate() | date:'mediumDate' }}
             </span>
             <div class="position_absolute right padding_2  border_radius_10">
               <a class="">

@@ -4,10 +4,8 @@ import { incidencias } from '../modelos/incidencias';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { actividades } from '../modelos/actividades';
-import { area_indice } from '../modelos/area_indice';
-import { indice } from '../modelos/indice';
-import { indice_actividad } from '../modelos/indice_actividad';
 import { Colecciones } from '../HelperClass/Colecciones';
+import * as firebase from "firebase/app";
 
 @Injectable({
   providedIn: 'root'
@@ -23,13 +21,7 @@ export class IncidenciaService {
     return this.afs.collection(Colecciones.incidencias).add(incidencias);
   }
   setIncidenciaFindIA(idIa: string, incidencias: incidencias) {
-    incidencias.latitud = sessionStorage.getItem("latitud");
-    incidencias.persona = JSON.parse(sessionStorage.getItem("personaLoged"))
-    incidencias.idTipoReferencia = idIa;
-    incidencias.tipoReferencia = "indice";;
-    incidencias.longitud = sessionStorage.getItem("longitud");
-    incidencias.fecha_realizacion = new Date()
-    incidencias.fecha_registro = new Date();
+
     return this.afs.collection(Colecciones.incidencias).add(incidencias);
   }
 
@@ -43,6 +35,13 @@ export class IncidenciaService {
   }
   updateEstadoIncidencia(incidencia: incidencias) {
     this.afs.collection(Colecciones.incidencias).doc(incidencia.id).update({ estado: incidencia.estado })
+  }
+  getAllIncidenciasFindDate(fecha) {
+    return this.afs.collection(Colecciones.incidencias, ref => ref.orderBy("fecha_registro").startAt(firebase.firestore.Timestamp.fromDate(new Date(fecha))).where("estado", "==", true)).snapshotChanges().pipe(map(listIncidenciasDoc => listIncidenciasDoc.map(incidenciaDoc => {
+      const incidencia = incidenciaDoc.payload.doc.data() as incidencias;
+      incidencia.id = incidenciaDoc.payload.doc.id
+      return incidencia;
+    })))
   }
   updateIncidencia(incidencia: incidencias): Observable<boolean> {
     return Observable.create(observer => {
