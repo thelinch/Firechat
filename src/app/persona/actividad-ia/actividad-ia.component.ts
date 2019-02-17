@@ -46,7 +46,6 @@ export class ActividadIAComponent implements OnInit {
     this.router.params.subscribe(parametro => this.idIA = parametro.idIndice)
     this.listaIncidencia = this.incidenciaService.getAllIncidenciafindIdtipoReferencia(this.idIA)
     this.listaIncidencia.subscribe(resues => {
-      console.log(resues)
       this.stopBlock();
     })
   }

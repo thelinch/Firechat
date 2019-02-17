@@ -231,7 +231,12 @@ export class SubActivityComponent implements OnInit {
       accion: "visualizacion"
     })
   }
-
+  edicionSubActividad(actividad: actividadPMAO) {
+    this.seleccionActividadVisualizacionAndEdit.emit({
+      actividad: actividad,
+      accion: "edicion"
+    })
+  }
   calcularTotalFromEjecucion(total: string, actual: string): number {
     let calculo: number = parseInt(actual) * 5 / parseInt(total)
     return parseFloat(calculo.toFixed(2));
@@ -324,7 +329,7 @@ export class SubActivityComponent implements OnInit {
       inputPlaceholder: "Ingrese su observacion",
       showCancelButton: true
     }).then(respuesta => {
-      if (respuesta.value.length != 0) {
+      if (respuesta.value && respuesta.value.length != 0) {
         if (!this.actividadSeleccionada.comentarioInconformidad) {
           this.actividadSeleccionada.comentarioInconformidad = new Array<any>()
         }

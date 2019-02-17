@@ -6,6 +6,7 @@ import { actividades } from '../modelos/actividades';
 import { ActividadService } from './actividad.service';
 import { parametro } from '../modelos/parametro';
 import { map } from 'rxjs/operators';
+import { Colecciones } from './../HelperClass/Colecciones';
 
 @Injectable({
   providedIn: 'root'
@@ -422,7 +423,7 @@ export class ResultadoService {
 
   constructor(private afs: AngularFirestore, private actividadService: ActividadService) { }
   getAllResultadoFindIdActividad(idActividad: string): Observable<DocumentData[]> {
-    return this.afs.collection<resultado>("actividad").doc(idActividad).collection("resultado").valueChanges();
+    return this.afs.collection<resultado>(Colecciones.actividades).doc(idActividad).collection("resultado").valueChanges();
   }
   getAllParametroResultadoIncumplido(): Observable<resultado[]> {
     return this.afs.collection("resultadosIncumplidos").snapshotChanges().pipe(map(listResult => listResult.map(result => {
@@ -457,13 +458,13 @@ export class ResultadoService {
     this.afs.collection("resultadosIncumplidos").add(resultado)
   }
   saveResultado(resultado: resultado, idActividad: string) {
-    this.afs.collection("actividad").doc(idActividad).collection("resultado").add(resultado)
+    this.afs.collection(Colecciones.actividades).doc(idActividad).collection("resultado").add(resultado)
   }
   getEstadisticaParametroFinIdActividad(idActividad: string): Observable<any[]> {
     return Observable.create(observer => {
       let data = new Array<any>()
       let dataResultado = new Array<number>()
-      this.afs.collection("actividad").doc(idActividad).collection("resultado").snapshotChanges().pipe(map(actions => actions.map(documentoResultado => {
+      this.afs.collection(Colecciones.actividades).doc(idActividad).collection("resultado").snapshotChanges().pipe(map(actions => actions.map(documentoResultado => {
         const dataResultado = documentoResultado.payload.doc.data() as resultado
         dataResultado.id = documentoResultado.payload.doc.id
         return dataResultado

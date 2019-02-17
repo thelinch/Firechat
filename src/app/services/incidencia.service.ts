@@ -19,13 +19,7 @@ export class IncidenciaService {
 
   }
   setIncidenciaFindIdActividad(actividad: actividades, incidencias: incidencias): Promise<DocumentReference> {
-    actividad.incidencia = true
-    this.afs.collection("actividad").doc(actividad.id).update(actividad)
-    incidencias.idTipoReferencia = actividad.id
-    incidencias.tipoReferencia = "actividad"
-    incidencias.persona = JSON.parse(sessionStorage.getItem("personaLoged"))
-    incidencias.latitud = sessionStorage.getItem("latitud");
-    incidencias.longitud = sessionStorage.getItem("longitud");
+    this.afs.collection(Colecciones.actividades).doc(actividad.id).update(actividad)
     return this.afs.collection(Colecciones.incidencias).add(incidencias);
   }
   setIncidenciaFindIA(idIa: string, incidencias: incidencias) {
@@ -60,19 +54,12 @@ export class IncidenciaService {
   updateFotoIncidencia(incidencia: incidencias) {
     this.afs.collection(Colecciones.incidencias).doc(incidencia.id).update({ urlListOfPhotos: incidencia.urlListOfPhotos })
   }
-  getAllIncidenciafindIdtipoReferencia(idIndice: string): Observable<incidencias[]> {
-    return this.afs.collection(Colecciones.incidencias, ref => ref.where("idTipoReferencia", "==", idIndice).where("estado", "==", true)).snapshotChanges().pipe(map(actions => actions.map(a => {
+  getAllIncidenciafindIdtipoReferencia(idObjeto: string): Observable<incidencias[]> {
+    return this.afs.collection(Colecciones.incidencias, ref => ref.where("idTipoReferencia", "==", idObjeto).where("estado", "==", true)).snapshotChanges().pipe(map(actions => actions.map(a => {
       const incidencia = a.payload.doc.data() as incidencias;
       incidencia.id = a.payload.doc.id
       return incidencia
     })));
   }
-  getIncidenciaFindIdActividad(idActividad: string): Observable<incidencias[]> {
-    return this.afs.collection<incidencias>("actividad").doc(idActividad).collection("incidencias")
-      .snapshotChanges().pipe(map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as incidencias;
-        const id = a.payload.doc.id;
-        return { id, ...data }
-      })))
-  }
+
 }

@@ -20,6 +20,7 @@ import { flatMap, take } from 'rxjs/operators';
 import { FileService } from 'src/app/services/file.service';
 import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import * as firebase from "firebase/app";
 @Component({
   selector: 'app-actividad',
   templateUrl: './actividad.component.html',
@@ -30,6 +31,7 @@ export class ActividadComponent implements OnInit {
   listaDeComponentes: Observable<componente[]>
   actividadForm: FormGroup;
   incidenciaForm: FormGroup;
+  filtradoForm: FormGroup
   activarFormActividad: boolean = false
   activarFormIncidencia: boolean = false;
   listaTipoIncidencias: Observable<tipoIncidencia[]>
@@ -71,6 +73,10 @@ export class ActividadComponent implements OnInit {
       fecha_fin: new FormControl(FunctionsBasics.getCurrentDate()),
       componente: new FormControl('', Validators.required)
     })
+    this.filtradoForm = new FormGroup({
+      fecha_inicio: new FormControl(FunctionsBasics.getCurrentDate(), Validators.required),
+      fecha_fin: new FormControl(FunctionsBasics.getCurrentDate(), Validators.required),
+    })
     this.incidenciaForm = new FormGroup({
       detalle: new FormControl("", Validators.required),
       tipoIncidencia: new FormControl("", Validators.required),
@@ -79,7 +85,7 @@ export class ActividadComponent implements OnInit {
     this.listaTipoIncidencias = this.tipoIncidenciaService.getAllTipoIncidencia()
     this.fileUploadTemplate = new FileUploadWithPreview("template")
     this.listaDeComponentes = this.componenteService.getAllComponente()
-    this.listaActividades = this.actividadService.getAllActividadFindIdIndice(this.idIndice)
+    this.listaActividades = this.actividadService.getAllActividadFindIdIndice(this.idIndice, Date.now())
     this.listaActividades.subscribe(respuesta => {
       this.blockUI.stop()
     })
@@ -108,6 +114,7 @@ export class ActividadComponent implements OnInit {
     if (input.checked) {
       this.agrearParametro(parametro)
     } else {
+      console.log("deschecked")
       this.quitarParametro(index)
     }
   }
@@ -123,11 +130,14 @@ export class ActividadComponent implements OnInit {
     }
 
   }
+  consultarDatoFiltradoFechas(form: any) {
+    this.actividadService.getAllActividadFindIdIndice(this.idIndice, Date.now())
+  }
   guardarResultado() {
     this.actividadSeleccionada.isResultado = true;
     this.resultadoService.guardarResultado(this.listaParametros, this.actividadSeleccionada).subscribe(resultado => {
       if (this.actividadSeleccionada.componente.nombre == "MONITOREO EN CAMPO") {
-        this.actividadSeleccionada.fecha_fin = new Date();
+        this.actividadSeleccionada.fecha_fin = firebase.firestore.Timestamp.now();
       }
       if (resultado) {
         this.actividadService.updateAtividad(this.actividadSeleccionada)
@@ -206,6 +216,13 @@ export class ActividadComponent implements OnInit {
     if (this.actividadSeleccionada) {
       this.startBlock()
       incidencia.urlListOfPhotos = new Array<file>()
+      this.actividadSeleccionada.incidencia = true
+      incidencia.idTipoReferencia = this.actividadSeleccionada.id
+      incidencia.tipoReferencia = "actividad"
+      incidencia.estado = true;
+      incidencia.persona = JSON.parse(sessionStorage.getItem("personaLoged"))
+      incidencia.latitud = sessionStorage.getItem(FunctionsBasics.nombreLatitud);
+      incidencia.longitud = sessionStorage.getItem(FunctionsBasics.nombreLongitud);
       from(this.fileUploadTemplate.cachedFileArray).pipe(take(this.fileUploadTemplate.cachedFileArray.length), flatMap((file: File) => this.fileService.uploadFile(file, "incidencias"))).subscribe(
         {
           next: file => incidencia.urlListOfPhotos.push(file),
@@ -247,10 +264,22 @@ export class ActividadComponent implements OnInit {
     this.activarFormIncidencia = !this.activarFormIncidencia
 
   }
-  saveActividad(actividad: actividades) {
-    actividad.persona = JSON.parse(sessionStorage.getItem("personaLoged"))
-    actividad.isParametro = false;
-    this.actividadService.saveActividad(this.idIndice, actividad).subscribe(valor => {
+  saveActividad(actividad) {
+    let actividadNew: actividades = actividad as actividades;
+    actividadNew.persona = JSON.parse(sessionStorage.getItem("personaLoged"))
+    actividadNew.fecha_inicio = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_inicio));
+    actividadNew.isParametro = false;
+    actividadNew.incidencia = false;
+    actividadNew.lat = sessionStorage.getItem(FunctionsBasics.nombreLatitud)
+    actividadNew.lng = sessionStorage.getItem(FunctionsBasics.nombreLongitud)
+    actividadNew.idIndice = this.idIndice;
+    actividadNew.estadoObjeto = { estado: "Guardado" }
+    actividadNew.estado = true
+    //actividad.fecha_inicio = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_inicio))
+    if (actividad.fecha_fin) {
+      actividadNew.fecha_fin = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_fin));
+    }
+    this.actividadService.saveActividad(actividadNew).subscribe(valor => {
       if (valor) {
         this.actividadForm.reset()
         this.toggleModalActividad();
@@ -265,7 +294,6 @@ export class ActividadComponent implements OnInit {
   getAllResultadoFindIdActividad() {
     this.resultadoService.getAllResultadoFindIdActividad(this.actividadSeleccionada.id).subscribe(listaResultad => {
       this.listResultadoHistorial = listaResultad
-      console.log(this.listResultadoHistorial)
     })
   }
 
