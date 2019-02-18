@@ -18,6 +18,7 @@ import { actividadPMAO } from 'src/app/modelos/actividadPMAO';
 import * as $ from "jquery"
 import * as moment from "moment";
 import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
+import { NgBlockUI, BlockUI } from 'ng-block-ui';
 @Component({
   selector: 'app-pmao',
   templateUrl: './pmao.component.html',
@@ -26,14 +27,14 @@ import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
 export class PmaoComponent implements OnInit, AfterViewInit {
 
 
-
+  actividadPMAOSeleccionado: actividadPMAO
   actividadPMAOForm: FormGroup;
   activarModalFormPMAO: boolean = false;
   opcionSeleccionado: any;
   aspectoAmbientalSelected: any;
   actividadSeleccionada: actividadPMAO;
   @ViewChild("clasificacion") elementClasificacion: ElementRef
-
+  @BlockUI() blockUI: NgBlockUI;
   idIndice: string
   // @ViewChild("vc", { read: ViewContainerRef }) divTemplate;
   //@ViewChildren("vc") divTemplate: QueryList<ViewContainerRef>
@@ -153,23 +154,23 @@ export class PmaoComponent implements OnInit, AfterViewInit {
     }
   ]
   serveridadLista = [
-    { item: "CATASTROFICO", valor: 1 },
-    { item: "FATALIDAD", valor: 2 },
-    { item: "PERMANENTE", valor: 3 },
-    { item: "TEMPORAL", valor: 4 },
-    { item: "MENOR", valor: 5 }
+    { item: "CATASTROFICO", valor: 1, id: 1 },
+    { item: "FATALIDAD", valor: 2, id: 2 },
+    { item: "PERMANENTE", valor: 3, id: 3 },
+    { item: "TEMPORAL", valor: 4, id: 4 },
+    { item: "MENOR", valor: 5, id: 5 }
   ]
   frecuenciaLista = [
-    { item: "COMUN", valor: 1 },
-    { item: "HA SUCEDIDO", valor: 2 },
-    { item: "PODRIA SUCEDER", valor: 3 },
-    { item: "RARO QUE SUCEDA", valor: 4 },
-    { item: "IMPOSIBLE QUE SUCEDA", valor: 5 }
+    { item: "COMUN", valor: 1, id: 1 },
+    { item: "HA SUCEDIDO", valor: 2, id: 2 },
+    { item: "PODRIA SUCEDER", valor: 3, id: 3 },
+    { item: "RARO QUE SUCEDA", valor: 4, id: 4 },
+    { item: "IMPOSIBLE QUE SUCEDA", valor: 5, id: 5 }
   ]
   significanciLista = [
 
-    { item: "Positivo", valor: 1, icon: "(+)" },
-    { item: "Negativo", valor: -1, icon: "(-)" },
+    { item: "Positivo", valor: 1, icon: "(+)", id: 1 },
+    { item: "Negativo", valor: -1, icon: "(-)", id: 2 },
 
   ]
   matrizIper = [
@@ -213,6 +214,7 @@ export class PmaoComponent implements OnInit, AfterViewInit {
     })
 
     this.actividadPMAOForm = this.formBuilder.group({
+      id: new FormControl(),
       nombre: new FormControl('', Validators.required),
       condicion: new FormControl('', Validators.required),
       impacto: new FormControl('', Validators.required),
@@ -227,6 +229,7 @@ export class PmaoComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
 
   }
+
   createItem(): FormGroup {
     return this.formBuilder.group({
       actividad: ["", Validators.required],
@@ -237,6 +240,7 @@ export class PmaoComponent implements OnInit, AfterViewInit {
 
     })
   }
+
   addItemTemplate(): void {
     (this.actividadPMAOForm.get("subActividades") as FormArray).push(this.createItem())
   }
@@ -250,7 +254,70 @@ export class PmaoComponent implements OnInit, AfterViewInit {
     }
   }
 
+  //Edicion y visualzion de las actividades PMAO
+  compararObjetos(objeto1: any, objeto2: any) {
+    return objeto1 && objeto2 ? objeto1.id === objeto2.id : objeto1 === objeto2;
+  }
+  captacionObjeto(objeto: any) {
+    this.actividadPMAOSeleccionado = objeto.actividad as actividadPMAO;
+    this.actividadPMAOForm.enable();
+    this.visualizacionFormularionPMAO();
+    if (objeto.accion == "visualizacion") {
+      this.disabledActividadPMAOForm()
+    }
 
+  }
+  nuevaActividad() {
+    this.clearFormArray()
+    this.actividadPMAOForm.enable();
+  }
+  visualizacionFormularionPMAO() {
+    this.actividadPMAOForm.get("id").setValue(this.actividadPMAOSeleccionado.id)
+    this.actividadPMAOForm.get("nombre").setValue(this.actividadPMAOSeleccionado.nombre);
+    this.actividadPMAOForm.get("condicion").patchValue(this.actividadPMAOSeleccionado.condicion);
+    this.actividadPMAOForm.get("impacto").patchValue(this.actividadPMAOSeleccionado.impacto);
+    this.actividadPMAOForm.get("severidad").patchValue({
+      id: this.actividadPMAOSeleccionado.severidad.id
+    });
+    this.actividadPMAOForm.get("impacto").patchValue(this.actividadPMAOSeleccionado.impacto);
+    this.actividadPMAOForm.get("frecuencia").patchValue({
+      id: this.actividadPMAOSeleccionado.frecuencia.id
+    });
+    this.actividadPMAOForm.get("significancia").patchValue({
+      id: this.actividadPMAOSeleccionado.significancia.id
+    });
+    this.actividadPMAOForm.get("clasificacion").patchValue(this.actividadPMAOSeleccionado.clasificacion)
+    this.actividadPMAOForm.get("comentario").patchValue(this.actividadPMAOSeleccionado.comentario);
+    let controlSubActividad = <FormArray>this.actividadPMAOForm.controls.subActividades;
+    this.clearFormArray();
+    this.actividadPMAOSeleccionado.subActividades.forEach(actividad => {
+      controlSubActividad.push(this.formBuilder.group({
+        actividad: actividad.actividad,
+        fecha_fin: actividad.fecha_fin,
+        fecha_inicio: actividad.fecha_inicio,
+        unidad: actividad.unidad,
+        total: actividad.total
+      }))
+    })
+    this.actividadPMAOForm.updateValueAndValidity();
+    this.toggleModalFormularioPMAO();
+
+  }
+  clearFormArray() {
+    let array = (this.actividadPMAOForm.get("subActividades") as FormArray)
+    if (array.length !== 0) {
+      array.controls.splice(0)
+    }
+  }
+  disabledActividadPMAOForm() {
+    this.actividadPMAOForm.disable()
+  }
+
+
+
+
+
+  //Fin de Edicion y visualizacion de las actividades PMAO
 
 
 
@@ -324,6 +391,7 @@ export class PmaoComponent implements OnInit, AfterViewInit {
     return this.matrizIper.find(i => i.frecuencia == frecuencia && i.severidad == severidad)
   }
   saveActividadPMAO(actividadPMAO: actividadPMAO) {
+    this.blockUI.start()
     actividadPMAO.subActividades.forEach(subAc => {
       let fecha_fin = moment(new Date(subAc.fecha_fin));
       let fecha_incio = moment(new Date(subAc.fecha_inicio));
@@ -336,12 +404,27 @@ export class PmaoComponent implements OnInit, AfterViewInit {
       subAc.tipoPeriodo = tipoPeriodo
       subAc.periodo = periodo
     })
-    actividadPMAO.estadoActividad = false;
-    this.pmaoService.saveActividadPMAO(this.idIndice, actividadPMAO).subscribe(respuesta => {
-      if (respuesta) {
-        sweetAlertMensaje.getMensajeTransaccionExitosa()
-        this.toggleModalFormularioPMAO()
-      }
-    })
+    if (actividadPMAO.id != null) {
+      this.pmaoService.updateActividadPMAO(actividadPMAO, this.idIndice).subscribe(async respuesta => {
+        if (respuesta) {
+          sweetAlertMensaje.getMensajeTransaccionExitosa()
+
+          await this.blockUI.stop()
+          this.toggleModalFormularioPMAO()
+        }
+      })
+    } else {
+      actividadPMAO.estadoActividad = false;
+      this.pmaoService.saveActividadPMAO(this.idIndice, actividadPMAO).subscribe(async respuesta => {
+        if (respuesta) {
+          await this.blockUI.stop()
+          sweetAlertMensaje.getMensajeTransaccionExitosa()
+          this.toggleModalFormularioPMAO()
+        }
+      })
+    }
+
+
   }
+
 }

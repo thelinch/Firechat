@@ -7,6 +7,28 @@
         </p>
       </div>
     </div>
+    <div class="col-xs-12">
+      <form [formGroup]="filtradoForm" (submit)="consultarDatoFiltradoFechas(filtradoForm.value)"  class="row around-xs margin_formulario_filtrado middle-xs">
+        <div class="field  ">
+          <div class="control has-icons-left">
+            <input type="date" class="input is-rounded col-xs-12 col-md-5" formControlName="fecha_inicio">
+            <span class="icon is-small is-left has-text-primary">
+              <i class="fas fa-calendar-day"></i>
+            </span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="control has-icons-left">
+            <input type="date" class="input is-rounded col-xs-12 col-md-5" formControlName="fecha_fin">
+            <span class="icon is-small is-left  has-text-primary">
+              <i class="fas fa-calendar-day"></i>
+            </span>
+          </div>
+        </div>
+        <button type="submit" class="button is-primary col-xs-12 col-md-2" [disabled]="!filtradoForm.valid">Consultar</button>
+      </form>
+
+    </div>
   </div>
   <div class="row around-xs">
     <div class="col-xs-12 col-md-4 margin_25"
@@ -23,11 +45,11 @@
                 EN CAMPO'?'explore':'event_note'
                 }}</i></div>
             <span class="has-text-dark">
-              {{ actividad.fecha_inicio.toDateString() | date:'mediumDate'}}
-              <strong> - </strong>
+              {{ actividad.fecha_inicio.toDate() | date:'mediumDate'}}
             </span>
             <span *ngIf="actividad.fecha_fin">
-              {{actividad.fecha_fin.toDateString() | date :'mediumDate' }}
+              <strong> - </strong>
+              {{actividad.fecha_fin.toDate() | date :'mediumDate' }}
             </span>
             <a (click)="getAllIncidenciaFindIdActividad(actividad.id) ;toggleModalListaIncidencia()"><i
                 class="material-icons is-pulled-right has-text-warning ">{{
@@ -379,6 +401,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let resultado of  listResultadoHistorial ;let i=index">
+              <th class="font_weigh_none">{{resultado["fecha_registro"].toDate() | date}}</th>
               <th class="font_weigh_none">{{resultado["parametro"]["nombreCorto"] }}</th>
               <th class="font_weigh_none">{{resultado["resultado"] }}</th>
               <th class="font_weigh_none">{{resultado["cumplio"]? resultado["riesgo"]:'INCUMPLIO' }}</th>
@@ -393,5 +416,7 @@
     </div>
   </div>
   <!--Fin del Modal para mostrar el Historial de resultado-->
+  <ng-container *ngTemplateOutlet="templateFotos;context:{fotos:listResultadoHistorial}">
 
+  </ng-container>
 </block-ui>

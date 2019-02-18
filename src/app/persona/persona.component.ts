@@ -11,6 +11,7 @@ import { NgxPermissionsService } from 'ngx-permissions';
 import { AuthService } from '../services/auth.service';
 import { sweetAlertMensaje } from '../HelperClass/SweetAlertMensaje';
 import * as $ from 'jquery'
+import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
 /**
  *
  *
@@ -41,8 +42,8 @@ export class PersonaComponent implements OnInit {
 
   constructor(private personaService: PersonaService, private route: ActivatedRoute, private authService: AuthService, private router: Router, private incidenciaService: IncidenciaService, private activatedRouter: ActivatedRoute, private permissionsService: NgxPermissionsService) {
     navigator.geolocation.getCurrentPosition(position => {
-      sessionStorage.setItem("latitud", position.coords.latitude.toString())
-      sessionStorage.setItem("longitud", position.coords.longitude.toString())
+      sessionStorage.setItem(FunctionsBasics.nombreLatitud, position.coords.latitude.toString())
+      sessionStorage.setItem(FunctionsBasics.nombreLongitud, position.coords.longitude.toString())
     })
 
   }

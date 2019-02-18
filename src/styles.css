@@ -34,6 +34,7 @@ html, body {
 .displax_block{
 display: block;
 }
+
 .animation_slideShow{
   display: block !important;
   animation-name: slideShow;
@@ -43,6 +44,12 @@ display: block;
 }
 .display_flex{
   display: flex !important;
+flex-wrap: wrap;
+justify-content: space-around;
+
+}
+.items_flex_50{
+  flex-basis: 50%;
 }
 .app-mensajes{
   overflow-y:scroll;
@@ -119,10 +126,10 @@ li:hover{
 .pgination /deep/.ngx-pagination .current{
   background: red;
 }
-.ng-valid:not(form), .ng-valid.required  {
+.ng-valid:not(form):not(div), .ng-valid.required  {
   border-left: 5px solid #42A948; /* green */
 }
-.ng-invalid:not(form)  {
+.ng-invalid:not(form):not(div)  {
   border-left: 5px solid #a94442; /* red */
 }
 /* Animaciones */
@@ -201,4 +208,7 @@ border-color: transparent
 }
 .margin_25{
   margin-top: 5%;
+}
+.margin_formulario_filtrado{
+  margin-top:.7rem;
 }

@@ -26,7 +26,7 @@ export class sweetAlertMensaje {
 
     })
   }
-  static getMensajeEdit(title: string) {
+  static getMensajeDelete(title: string) {
     return Swal({
       title: title,
       type: "warning",
@@ -41,6 +41,5 @@ export class sweetAlertMensaje {
       showCancelButton: true
     })
   }
-
 
 }

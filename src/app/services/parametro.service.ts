@@ -9,6 +9,7 @@ import { parametro_actividad } from '../modelos/parametro_actividad';
 import { actividad_persona } from '../modelos/actividad_persona';
 import { elementProperty } from '@angular/core/src/render3/instructions';
 import { async } from 'rxjs/internal/scheduler/async';
+import { Colecciones } from './../HelperClass/Colecciones';
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +24,12 @@ export class ParametroService {
     this.DataParametro.emit({ parametros: parametro })
   }
   mappingParametroActividad(idParametro: string, actividad: actividades) {
-    let referenciaActividad = this.afs.collection("actividades").doc(actividad.id).ref
+    let referenciaActividad = this.afs.collection(Colecciones.actividades).doc(actividad.id).ref
 
     this.afs.collection("parametro").doc(idParametro).collection("actividad").add({ actividadRef: referenciaActividad, activo: true })
   }
   getAllParametroFindIdActividad(idActividad: string): Observable<parametro[]> {
-    return this.afs.collection<parametro>("actividad").doc(idActividad).collection("parametro").snapshotChanges().pipe(map(actions => actions.map(documentoParametro => {
+    return this.afs.collection<parametro>(Colecciones.actividades).doc(idActividad).collection("parametro").snapshotChanges().pipe(map(actions => actions.map(documentoParametro => {
       const data = documentoParametro.payload.doc.data() as parametro
       data.id = documentoParametro.payload.doc.id
       return data
@@ -40,8 +41,10 @@ export class ParametroService {
       parametro.map(parametro => {
         this.afs.collection("area").doc(idArea).collection("parametro").add(parametro)
         actividad.parametro = true
-        this.afs.collection("actividad").doc(actividad.id).update(actividad)
-        this.afs.collection("actividad").doc(actividad.id).collection("parametro").add(parametro)
+        this.afs.collection(Colecciones.actividades).doc(actividad.id).update(actividad).then(() => {
+          this.afs.collection(Colecciones.actividades).doc(actividad.id).collection("parametro").add(parametro)
+
+        })
       })
       observer.next(true)
     })
@@ -58,7 +61,7 @@ export class ParametroService {
         return { id, ...data }
       }))).subscribe(listaParametros => {
         listaParametros.forEach(elemento => {
-          this.afs.collection("parametro").doc(elemento.id).collection("actividad").snapshotChanges().pipe(map(actions => actions.map(documentoActvidadParametro => {
+          this.afs.collection("parametro").doc(elemento.id).collection(Colecciones.actividades).snapshotChanges().pipe(map(actions => actions.map(documentoActvidadParametro => {
             const id = documentoActvidadParametro.payload.doc.id
             const data = documentoActvidadParametro.payload.doc.data() as parametro_actividad
             return { id, ...data }

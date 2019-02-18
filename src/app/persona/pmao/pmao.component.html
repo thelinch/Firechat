@@ -1,105 +1,50 @@
-<div class="row">
-  <div class="col-xs-12 parentCollapsie margin_25">
-    <div *ngFor="let aspectoAmbiental of listaAspectosAmbientales;let i=index ">
-      <div class="collapsie" #collapsie>
-        <h3
-          class="collapsie_header puntero has-background-primary  text_title margin_bottom_5rem center_text border_top_left_radius border_top_right_radius"
-          (click)="selectionOption(collapsie,aspectoAmbiental.nombre)">{{aspectoAmbiental.nombre}}</h3>
-        <div class="body ">
-          <ul class="ul">
-            <li class="li" *ngFor="let items of aspectoAmbiental.opciones">
-              <!--<ng-template [ngxPermissionsOnly]="['JEFE']">-->
-              <a (click)="seleccionarOpcion(items);resetFormActividadPMAO();toggleModalFormularioPMAO()"
-                class="button is-info is-small is-pulled-right">Agregar</a>
-              <!--</ng-template>-->
-              <app-sub-activity [idComponent]="items.id" [name]="items.nombre" [idIndice]="this.idIndice">
-              </app-sub-activity>
-            </li>
-          </ul>
+<block-ui>
+
+  <div class="row">
+    <div class="col-xs-12 parentCollapsie margin_25">
+      <div *ngFor="let aspectoAmbiental of listaAspectosAmbientales;let i=index ">
+        <div class="collapsie" #collapsie>
+          <h3
+            class="collapsie_header puntero has-background-primary  text_title margin_bottom_5rem center_text border_top_left_radius border_top_right_radius"
+            (click)="selectionOption(collapsie,aspectoAmbiental.nombre)">{{aspectoAmbiental.nombre}}</h3>
+          <div class="body ">
+            <ul class="ul">
+              <li class="li" *ngFor="let items of aspectoAmbiental.opciones">
+                <!--<ng-template [ngxPermissionsOnly]="['JEFE']">-->
+                <a (click)="seleccionarOpcion(items);resetFormActividadPMAO();toggleModalFormularioPMAO();nuevaActividad()"
+                  class="button is-info is-small is-pulled-right">Agregar</a>
+                <!--</ng-template>-->
+                <app-sub-activity [idComponent]="items.id" [name]="items.nombre" [idIndice]="this.idIndice"
+                  (seleccionActividadVisualizacionAndEdit)="captacionObjeto($event)">
+                </app-sub-activity>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<!--Modal para la creacion de Aspecto Ambiental-->
-<div class="modal" [ngClass]="{'is-active': activarModalFormPMAO}">
-  <div class="modal-background" (click)="toggleModalFormularioPMAO()"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">{{opcionSeleccionado?.nombre}}</p>
-      <button class="delete" aria-label="close" (click)="toggleModalFormularioPMAO()"></button>
-    </header>
-    <section class="modal-card-body">
-      <form [formGroup]="actividadPMAOForm" (ngSubmit)="saveActividadPMAO(actividadPMAOForm.value)">
-        <input class="input" formControlName="nombre" readonly>
-        <div class="row">
-          <div class="col-xs-6">
-            <div class="field ">
-              <label class="label">Condicion</label>
-              <div class="control ">
-                <div class="select">
-                  <select formControlName="condicion">
-                    <option value="Normal">Normal</option>
-                    <option value="Anormal">Anormal</option>
-                    <option value="Emergencia">Emergencia</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xs-6">
-            <div class="field ">
-              <label class="label ">Impacto</label>
-              <div class="control ">
-                <div class="select">
-                  <select formControlName="impacto" #impacto>
-                    <option value="Si">Si</option>
-                    <option value="No">No</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="impacto.value=='Si'">
-          <div class="row">
-            <div class="col-xs-6">
-              <div class="field">
-                <label class="label ">Severidad</label>
-                <div class="control ">
-                  <div class="select">
-                    <select formControlName="severidad" (change)="calcularClasificacion(this.actividadPMAOForm.value)">
-                      <option [ngValue]="severidad" *ngFor="let severidad of serveridadLista">{{severidad.item}}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-xs-6">
-              <div class="field ">
-                <label class="label ">Frecuencia</label>
-                <div class="control ">
-                  <div class="select">
-                    <select formControlName="frecuencia" (change)="calcularClasificacion(this.actividadPMAOForm.value)">
-                      <option [ngValue]="frecuencia" *ngFor="let frecuencia of frecuenciaLista">
-                        {{frecuencia.item}}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+  <!--Modal para la creacion de Aspecto Ambiental-->
+  <div class="modal" [ngClass]="{'is-active': activarModalFormPMAO}">
+    <div class="modal-background" (click)="toggleModalFormularioPMAO()"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">{{opcionSeleccionado?.nombre}}</p>
+        <button class="delete" aria-label="close" (click)="toggleModalFormularioPMAO()"></button>
+      </header>
+      <section class="modal-card-body">
+        <form [formGroup]="actividadPMAOForm" (ngSubmit)="saveActividadPMAO(actividadPMAOForm.value)">
+          <input class="input" formControlName="nombre" readonly>
           <div class="row">
             <div class="col-xs-6">
               <div class="field ">
-                <label class="label ">Significancia</label>
+                <label class="label">Condicion</label>
                 <div class="control ">
                   <div class="select">
-                    <select formControlName="significancia"
-                      (change)="calcularClasificacion(this.actividadPMAOForm.value)">
-                      <option [ngValue]="significancia" *ngFor="let significancia of significanciLista">
-                        {{significancia.icon}}</option>
+                    <select formControlName="condicion">
+                      <option value="Normal">Normal</option>
+                      <option value="Anormal">Anormal</option>
+                      <option value="Emergencia">Emergencia</option>
                     </select>
                   </div>
                 </div>
@@ -107,82 +52,145 @@
             </div>
             <div class="col-xs-6">
               <div class="field ">
-                <label class="label ">Clasificacion</label>
+                <label class="label ">Impacto</label>
                 <div class="control ">
-                  <input type="text" class="input" formControlName="clasificacion" readonly #clasificacion>
+                  <div class="select">
+                    <select formControlName="impacto" #impacto>
+                      <option value="Si">Si</option>
+                      <option value="No">No</option>
+                    </select>
+                  </div>
                 </div>
               </div>
-
             </div>
           </div>
-          <div class="field ">
-            <label class="label ">IMPACTO AMBIENTAL #PMAO #ICA (INTEGRADO CON EL ICA)</label>
-            <div class="control ">
-              <textarea formControlName="comentario" class="textarea"></textarea>
-            </div>
-          </div>
-          <h2 class="center_text has-text-info">Actividades Propuestas</h2>
-          <div #vc class="vc">
-            <a class="button is-primary" (click)="addItemTemplate()"><i class="material-icons">add</i></a>
-            <div class="actividades has-background-white-bis position_relative" formArrayName="subActividades"
-              *ngFor="let item of actividadPMAOForm.get('subActividades').controls; let i = index;">
-              <div class="puntero position_absolute right top padding_05rem" (click)="removeTemplate(i)">
-                <i class="material-icons has-text-danger " style="border-radius: 50%;box-shadow: 2px 3px 3px">
-                  cancel
-                </i>
-              </div>
-              <div [formGroupName]="i">
+          <div *ngIf="impacto.value=='Si'">
+            <div class="row">
+              <div class="col-xs-6">
                 <div class="field">
-                  <label for="" class="label">Actividad</label>
-                  <textarea id="" class="textarea" formControlName="actividad"
-                    placeholder="Actividad a realizar"></textarea>
-                </div>
-                <div class="row">
-                  <div class="col-xs-6">
-                    <div class="field">
-                      <label for="" class="label">
-                        <i class="material-icons has-text-primary icon_small">
-                          today
-                        </i>
-                      </label>
-                      <input type="date" id="" formControlName="fecha_inicio" class="input">
-                    </div>
-                  </div>
-                  <div class="col-xs-6">
-                    <div class=" field">
-                      <label for="" class="label">
-                        <i class="material-icons has-text-primary icon_small">
-                          insert_invitation
-                        </i></label>
-                      <input type="date" id="" formControlName="fecha_fin" class="input">
+                  <label class="label ">Severidad</label>
+                  <div class="control ">
+                    <div class="select">
+                      <select formControlName="severidad" (change)="calcularClasificacion(this.actividadPMAOForm.value)"
+                        [compareWith]="compararObjetos">
+                        <option [ngValue]="severidad" *ngFor="let severidad of serveridadLista">{{severidad.item}}
+                        </option>
+                      </select>
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-xs-6">
-                    <div class="field">
-                      <label for="" class="label">Unidad:</label>
-                      <input type="text" class="input" formControlName="unidad" id="">
+              </div>
+              <div class="col-xs-6">
+                <div class="field ">
+                  <label class="label ">Frecuencia</label>
+                  <div class="control ">
+                    <div class="select">
+                      <select formControlName="frecuencia"
+                        (change)="calcularClasificacion(this.actividadPMAOForm.value)" [compareWith]="compararObjetos">
+                        <option [ngValue]="frecuencia" *ngFor="let frecuencia of frecuenciaLista">
+                          {{frecuencia.item}}</option>
+                      </select>
                     </div>
                   </div>
-                  <div class="col-xs-6">
-                    <div class="field">
-                      <label for="" class="label">Total</label>
-                      <input type="number" id="" formControlName="total" class="input">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6">
+                <div class="field ">
+                  <label class="label ">Significancia</label>
+                  <div class="control ">
+                    <div class="select">
+                      <select formControlName="significancia"
+                        (change)="calcularClasificacion(this.actividadPMAOForm.value)" [compareWith]="compararObjetos">
+                        <option [ngValue]="significancia" *ngFor="let significancia of significanciLista">
+                          {{significancia.icon}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="field ">
+                  <label class="label ">Clasificacion</label>
+                  <div class="control ">
+                    <input type="text" class="input" formControlName="clasificacion" readonly #clasificacion>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="field ">
+              <label class="label ">IMPACTO AMBIENTAL #PMAO #ICA (INTEGRADO CON EL ICA)</label>
+              <div class="control ">
+                <textarea formControlName="comentario" class="textarea"></textarea>
+              </div>
+            </div>
+            <h2 class="center_text has-text-info">Actividades Propuestas</h2>
+            <div #vc class="vc">
+              <a class="button is-primary" [ngClass]="{disabled:!this.actividadPMAOForm.enabled}"
+                (click)="addItemTemplate()"><i class="material-icons">add</i></a>
+              <div class="actividades has-background-white-bis position_relative" formArrayName="subActividades"
+                *ngFor="let item of actividadPMAOForm.get('subActividades').controls; let i = index;">
+                <div class="puntero position_absolute right top padding_05rem"
+                  [ngClass]="{disabled:!this.actividadPMAOForm.enabled}" (click)="removeTemplate(i)">
+                  <i class="material-icons has-text-danger " style="border-radius: 50%;box-shadow: 2px 3px 3px">
+                    cancel
+                  </i>
+                </div>
+                <div [formGroupName]="i">
+                  <div class="field">
+                    <label for="" class="label">Actividad</label>
+                    <textarea id="" class="textarea" formControlName="actividad"
+                      placeholder="Actividad a realizar"></textarea>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <div class="field">
+                        <label for="" class="label">
+                          <i class="material-icons has-text-primary icon_small">
+                            today
+                          </i>
+                        </label>
+                        <input type="date" id="" formControlName="fecha_inicio" class="input">
+                      </div>
+                    </div>
+                    <div class="col-xs-6">
+                      <div class=" field">
+                        <label for="" class="label">
+                          <i class="material-icons has-text-primary icon_small">
+                            insert_invitation
+                          </i></label>
+                        <input type="date" id="" formControlName="fecha_fin" class="input">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <div class="field">
+                        <label for="" class="label">Unidad:</label>
+                        <input type="text" class="input" formControlName="unidad" id="">
+                      </div>
+                    </div>
+                    <div class="col-xs-6">
+                      <div class="field">
+                        <label for="" class="label">Total</label>
+                        <input type="number" id="" formControlName="total" class="input">
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <footer class="modal-card-foot">
-          <button type="submit" [disabled]="!this.actividadPMAOForm.valid" class="button is-success ">
-            guardar
-          </button>
-          <a class="button" (click)="toggleModalFormularioPMAO()">Cancel</a>
-        </footer>
-      </form>
-    </section>
+          <footer class="modal-card-foot">
+            <button type="submit" [disabled]="!this.actividadPMAOForm.valid" class="button is-success ">
+              Guardar
+            </button>
+            <a class="button" (click)="toggleModalFormularioPMAO()">Cancelar</a>
+          </footer>
+        </form>
+      </section>
+    </div>
   </div>
-</div>
+</block-ui>

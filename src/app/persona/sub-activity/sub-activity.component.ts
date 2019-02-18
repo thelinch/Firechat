@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2, Output, EventEmitter } from '@angular/core';
 import { Observable, Subscription, from, } from 'rxjs';
 import { actividadPMAO } from 'src/app/modelos/actividadPMAO';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -26,6 +26,7 @@ export class SubActivityComponent implements OnInit {
   @Input("name") name: string;
   @Input("idComponent") idComponent;
   @BlockUI() blockUI: NgBlockUI;
+  @Output() seleccionActividadVisualizacionAndEdit: EventEmitter<any> = new EventEmitter<any>();
   suscripcion: Subscription
   listActivityFilter: Observable<actividadPMAO[]>
   optionSelectedActivityName: string
@@ -38,7 +39,8 @@ export class SubActivityComponent implements OnInit {
   listaActividadesFiltrada: any[]
   listItemsFiltrado: Observable<actividadPMAO[]>
   actividadSeleccionada: actividadPMAO;
-  actividadPMAOForm: FormGroup;
+
+
   formEjecucion: FormGroup;
   activateModalHistory: boolean = false;
   listEjecutionsFindIdActivity: Observable<executionActivityPMAO[]>
@@ -121,16 +123,7 @@ export class SubActivityComponent implements OnInit {
 
   }
   ngOnInit() {
-    this.actividadPMAOForm = new FormGroup({
-      nombre: new FormControl('', Validators.required),
-      condicion: new FormControl('', Validators.required),
-      impacto: new FormControl('', Validators.required),
-      severidad: new FormControl('', Validators.required),
-      frecuencia: new FormControl('', Validators.required),
-      significancia: new FormControl('', Validators.required),
-      clasificacion: new FormControl('', Validators.required),
-      comentario: new FormControl('', Validators.required)
-    })
+
     this.formEjecucion = new FormGroup({
       executionComentary: new FormControl('', Validators.required),
       denomination: new FormControl('', Validators.required),
@@ -160,11 +153,7 @@ export class SubActivityComponent implements OnInit {
       this.fileUploadTemplate.clearImagePreviewPanel();
     }
   }
-  calcularClasificacion(formulario) {
-    if (formulario.frecuencia != null && formulario.severidad != null && formulario.significancia != null) {
-      this.getClasificacion(this.getRiesgoMatrizIper(formulario.frecuencia.valor, formulario.severidad.valor).valor, formulario.significancia.valor)
-    }
-  }
+
   optionSelected(element: ElementRef) {
     $(element).slideDown("slow")
     $("li").find("div.row").not(element).slideUp("slow")
@@ -236,7 +225,18 @@ export class SubActivityComponent implements OnInit {
       this.blockUI.stop()
     })
   }
-
+  visualizacionSubAcitivada(actividad: actividadPMAO) {
+    this.seleccionActividadVisualizacionAndEdit.emit({
+      actividad: actividad,
+      accion: "visualizacion"
+    })
+  }
+  edicionSubActividad(actividad: actividadPMAO) {
+    this.seleccionActividadVisualizacionAndEdit.emit({
+      actividad: actividad,
+      accion: "edicion"
+    })
+  }
   calcularTotalFromEjecucion(total: string, actual: string): number {
     let calculo: number = parseInt(actual) * 5 / parseInt(total)
     return parseFloat(calculo.toFixed(2));
@@ -259,24 +259,6 @@ export class SubActivityComponent implements OnInit {
   getAllEjecutionsFindIdActividad(idActivity: string) {
     this.listEjecutionsFindIdActivity = this.pmaoService.getAllEjecutionsFindIdActividad(this.idIndice, idActivity)
   }
-
-  resetFormActividadPMAO() {
-    this.actividadPMAOForm.reset({ nombre: this.opcionSeleccionado.nombre })
-  }
-  getClasificacion(valor: number, significancia: number) {
-
-    let significanciaValor: { name: any; inicio?: number; fin?: number; color: any; };
-
-    if (significancia > 0) {
-      significanciaValor = this.clasificacion.find(cl => valor >= cl.inicio && valor <= cl.fin)
-
-    } else {
-      significanciaValor = this.clasificacion.find(cl => -1 * valor <= cl.inicio && -1 * valor >= cl.fin)
-    }
-    this.actividadPMAOForm.get("clasificacion").setValue(significanciaValor.name)
-    this.render.setStyle(this.elementClasificacion.nativeElement, "background", significanciaValor.color)
-  }
-
   getRiesgoMatrizIper(frecuencia: number, severidad: number): any {
     return this.matrizIper.find(i => i.frecuencia == frecuencia && i.severidad == severidad)
   }
@@ -347,7 +329,7 @@ export class SubActivityComponent implements OnInit {
       inputPlaceholder: "Ingrese su observacion",
       showCancelButton: true
     }).then(respuesta => {
-      if (respuesta.value.length != 0) {
+      if (respuesta.value && respuesta.value.length != 0) {
         if (!this.actividadSeleccionada.comentarioInconformidad) {
           this.actividadSeleccionada.comentarioInconformidad = new Array<any>()
         }
