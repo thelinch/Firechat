@@ -1,6 +1,6 @@
 <button (click)="toggleModalParametro()" class="button is-info">Agregar nuevo Parametro</button>
 
-<!--Modal para registro de incidencias-->
+<!--Modal para registro de parametros-->
 <div class="modal" [ngClass]="{'is-active':activarFormParametro}">
   <div class="modal-background" (click)="toggleModalParametro()"></div>
   <div class="modal-card">
@@ -25,11 +25,17 @@
           </div>
         </div>
         <div class="field">
-
           <label class="label">U.Medidad:</label>
           <div class="control">
             <input class="input" type="text" formControlName="unidadMedida">
           </div>
+        </div>
+        <div class="field"><label class="label">Tipo</label></div>
+        <div class="select">
+          <select formControlName="categoria">
+            <option >LMP</option>
+            <option >ECA</option>
+          </select>
         </div>
         <div class="field">
 
@@ -53,7 +59,7 @@
           </div>
         </div>
 
-
+        <div class="field"><label class="label">Categoria</label></div>
         <div class="select">
           <select formControlName="categoria">
             <option [ngValue]="categoria" *ngFor="let categoria of listaCategoria">{{categoria.nombre}}</option>
@@ -62,7 +68,7 @@
         <div class="field is-grouped">
           <div class="control">
             <button type="submit" [disabled]="!this.formParametro.valid" class="button is-success ">
-              guardar
+              Guardar
             </button>
           </div>
         </div>
@@ -70,7 +76,7 @@
     </section>
     <footer class="modal-card-foot">
 
-      <button class="button" (click)="toggleModalParametro()">Cancel</button>
+      <button class="button" (click)="toggleModalParametro()">Cancelar</button>
     </footer>
 
   </div>

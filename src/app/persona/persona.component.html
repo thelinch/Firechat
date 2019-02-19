@@ -1,8 +1,8 @@
 <nav *ngIf="personaLogeada | async;let persona" class="navbar is-transparent" role="navigation"
   aria-label="main navigation">
   <div class="navbar-brand">
-    <a class="navbar-item" href="https://bulma.io">
-      APPEQC
+    <a class="navbar-item" [routerLink]="['map']" routerLinkActive="is-active">
+     <strong>APPEQC</strong> 
     </a>
 
     <a role="button" class="navbar-burger burger" aria-label="menu" [ngClass]="{'is-active': activarNavBar}"
@@ -20,11 +20,12 @@
           person
         </i>
       </a>
+      <!--
       <a [routerLink]="['map']" routerLinkActive="is-active" class="navbar-item">
         <span class=" icon">
           <fa-icon icon="home"></fa-icon>
         </span>
-      </a>
+      </a> -->
       <a class="navbar-item" routerLinkActive="is-active" [routerLink]="['parametros']">
         <i class="material-icons">view_agenda</i>
 

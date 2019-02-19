@@ -145,9 +145,9 @@
             </div>
           </div>
           <footer class="modal-card-foot ">
-            <a class="button " (click)="toggleModalActividad() ">Cancel</a>
+            <a class="button " (click)="toggleModalActividad() ">Cancelar</a>
             <button type="submit " [disabled]="!this.actividadForm.valid " class="button is-success ">
-              guardar
+              Guardar
             </button>
           </footer>
         </form>
@@ -257,7 +257,7 @@
       </section>
       <footer class="modal-card-foot ">
         <button class="button is-success" (click)="guardarResultado()">Guardar</button>
-        <a class="button " (click)="toggleModalResultado() ">Cancel</a>
+        <a class="button " (click)="toggleModalResultado() ">Cancelar</a>
       </footer>
 
     </div>
@@ -295,6 +295,7 @@
               </div>
             </div>
           </div>
+          <div class="field"><label class="label ">Nivel de Impacto</label></div>
           <div class="select ">
             <select formControlName="tipoIncidencia">
               <option [ngValue]="tipoIncidenica" *ngFor="let tipoIncidenica of (listaTipoIncidencias | async )">
@@ -303,9 +304,9 @@
           </div>
           <footer class="modal-card-foot ">
             <button type="submit " [disabled]="!this.incidenciaForm.valid " class="button is-success ">
-              guardar
+              Guardar
             </button>
-            <a class="button " (click)="toggleModalIncidencia() ">Cancel</a>
+            <a class="button " (click)="toggleModalIncidencia() ">Cancelar</a>
           </footer>
         </form>
       </section>
@@ -369,7 +370,7 @@
         </div>
       </section>
       <footer class="modal-card-foot ">
-        <button class="button " (click)="toggleModalEstadistica() ">Cancel</button>
+        <button class="button " (click)="toggleModalEstadistica() ">Salir</button>
       </footer>
 
     </div>
@@ -380,7 +381,7 @@
     <div class="modal-background " (click)="toggleModalHistorialResultado() "></div>
     <div class="modal-card ">
       <header class="modal-card-head ">
-        <p class="modal-card-title ">Lista Resultado</p>
+        <p class="modal-card-title ">Lista de  Resultados</p>
         <button class="delete " aria-label="close " (click)="toggleModalHistorialResultado() "></button>
       </header>
       <section class="modal-card-body ">
