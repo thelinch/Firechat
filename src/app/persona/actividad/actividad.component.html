@@ -8,7 +8,8 @@
       </div>
     </div>
     <div class="col-xs-12">
-      <form [formGroup]="filtradoForm" (submit)="consultarDatoFiltradoFechas(filtradoForm.value)"  class="row around-xs margin_formulario_filtrado middle-xs">
+      <form [formGroup]="filtradoForm" (submit)="consultarDatoFiltradoFechas(filtradoForm.value)"
+        class="row around-xs margin_formulario_filtrado middle-xs">
         <div class="field  ">
           <div class="control has-icons-left">
             <input type="date" class="input is-rounded col-xs-12 col-md-5" formControlName="fecha_inicio">
@@ -25,7 +26,8 @@
             </span>
           </div>
         </div>
-        <button type="submit" class="button is-primary col-xs-12 col-md-2" [disabled]="!filtradoForm.valid">Consultar</button>
+        <button type="submit" class="button is-primary col-xs-12 col-md-2"
+          [disabled]="!filtradoForm.valid">Consultar</button>
       </form>
 
     </div>
@@ -74,24 +76,25 @@
               class="material-icons">
               format_list_bulleted
             </i></a>
-          <a class="card-footer-item has-text-success" [ngClass]="{'disabled':!actividad.isParametro}"
-            (click)="seleccionarActividad(actividad);getAllParametroFindIdActividad(actividad.id);toggleModalResultado()">
-            <span class="icon is-large ">
-              <i class="material-icons" style="font-size: 2rem">receipt</i>
-            </span>
-          </a>
           <a class="card-footer-item has-text-link" [ngClass]="{'disabled':!actividad.isResultado}"
             (click)="seleccionarActividad(actividad);toggleModalEstadistica();getResultadoEstadisticoFindIdActividad(actividad)">
             <span class="icon is-large ">
-              <i class="fas fa-chart-line " style="font-size: 2rem"></i>
+              <i class="fas fa-chart-line "></i>
             </span>
           </a>
+          <a (click)="seleccionarActividad(actividad);editarActividad();toggleModalActividad()"
+            class="card-footer-item "><i class="fas fa-edit">
+            </i></a>
+          <a (click)="seleccionarActividad(actividad);eliminarActividad()" class="card-footer-item "><i
+              class="fas fa-trash-alt" style="color:red">
+            </i></a>
           <a class="card-footer-item has-text-warning"
             (click)="seleccionarActividad(actividad);toggleModalIncidencia(); ">
             <span class="icon is-large ">
-              <i class="material-icons" style="font-size: 2rem">assignment</i>
+              <i class="material-icons">assignment</i>
             </span>
           </a>
+
         </footer>
       </div>
     </div>
@@ -119,7 +122,7 @@
             <label for="" class="label">Tipo de Actividad</label>
             <div class="control">
               <div class="select ">
-                <select formControlName="componente" (change)="changeOptionsComponent()">
+                <select formControlName="componente" (change)="changeOptionsComponent()" [compareWith]="compararObjeto">
                   <option [ngValue]="componente" *ngFor="let componente of listaDeComponentes | async ">
                     {{componente.nombre}}</option>
                 </select>
@@ -335,17 +338,27 @@
             </div>
           </header>
           <div class="card-content">
-            <div class="content">
-              {{parametro.descripcion}}
+            <div class="row">
+              <div class="col-xs-12 col-md-6">
+                <div class="content">
+                  {{parametro.descripcion}}
+                </div>
+              </div>
+              <div class="col-xs-12 col-md-6">
+                <div *ngIf="check.checked">
+                  <input type="number" class="input" [(ngModel)]="parametro.resultado">
+                </div>
+              </div>
             </div>
+
+
           </div>
 
         </div>
       </section>
       <footer class="modal-card-foot ">
         <button class="button is-success" (click)="saveParametroFromIdActividadAndIdArea()"
-          [disabled]="this.listParametrosSeleccionados.length==0">Agregar
-          parametros</button>
+          [disabled]="this.listParametrosSeleccionados.length==0">Guardar Resultados</button>
         <button class="button " (click)="toggleModalParametro() ">Cancel</button>
 
       </footer>
@@ -381,7 +394,7 @@
     <div class="modal-background " (click)="toggleModalHistorialResultado() "></div>
     <div class="modal-card ">
       <header class="modal-card-head ">
-        <p class="modal-card-title ">Lista de  Resultados</p>
+        <p class="modal-card-title ">Lista de Resultados</p>
         <button class="delete " aria-label="close " (click)="toggleModalHistorialResultado() "></button>
       </header>
       <section class="modal-card-body ">

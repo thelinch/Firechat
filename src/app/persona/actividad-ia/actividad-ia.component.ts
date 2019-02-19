@@ -14,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
 import { FunctionsBasics } from './../../HelperClass/FunctionBasics';
 import * as firebase from "firebase/app";
+import { Colecciones } from 'src/app/HelperClass/Colecciones';
 
 @Component({
   selector: 'app-actividad-ia',
@@ -144,7 +145,7 @@ export class ActividadIAComponent implements OnInit {
   uploadImagen(): Observable<any> {
     return from((this.fileUploadTemplate.cachedFileArray && this.fileUploadTemplate.cachedFileArray.length > 0) ? this.fileUploadTemplate.cachedFileArray : [])
       .pipe(take(this.fileUploadTemplate.cachedFileArray.length),
-        flatMap((file: File) => this.fileService.uploadFile(file, "incidencias")))
+        flatMap((file: File) => this.fileService.uploadFile(file, Colecciones.incidencias)))
 
   }
 

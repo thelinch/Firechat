@@ -106,6 +106,10 @@ export class ActividadService {
   updateAtividad(activida: actividades) {
     this.afs.collection(Colecciones.actividades).doc(activida.id).update(activida)
   }
+
+  deleteActividad(actividad: actividades) {
+    this.afs.collection(Colecciones.actividades).doc(actividad.id).update({ estado: false })
+  }
   getAllActividadFindIdIndice(idIndice: string, fecha_inicio, fecha_fin): Observable<actividades[]> {
 
     console.log(firebase.firestore.Timestamp.fromDate(new Date()))

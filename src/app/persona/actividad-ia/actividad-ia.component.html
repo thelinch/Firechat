@@ -16,11 +16,11 @@
     <div class="modal-background " (click)="toggleFormIncidencia() "></div>
     <div class="modal-card ">
       <header class="modal-card-head ">
-        <p class="modal-card-title ">Registro de Incidencia</p>
+        <p class="modal-card-title ">{{accion? 'Registro':'Edicion'}} de Incidencia</p>
         <button class="delete " aria-label="close " (click)="toggleFormIncidencia()"></button>
       </header>
       <section class="modal-card-body ">
-        <form [formGroup]="incidenciaForm " (submit)="saveIncidencia(incidenciaForm.value) ">
+        <form [formGroup]="incidenciaForm " (submit)="saveAndEditIncidencia(incidenciaForm.value) ">
           <div class="field ">
 
             <label class="label ">Detalle de la Incidencia</label>
@@ -42,29 +42,29 @@
                 <div class="custom-file-container__image-preview"></div>
               </div>
             </div>
-          </div>
-          <div>
-            <label>Impacto</label>
+            <div
+              *ngIf="this.incidenciaSeleccionada && incidenciaSeleccionada.urlListOfPhotos && (incidenciaSeleccionada.urlListOfPhotos | filterName | async).length>0">
+              <ng-container *ngTemplateOutlet="templateFotos;context:{fotos:incidenciaSeleccionada.urlListOfPhotos}">
+
+              </ng-container>
+            </div>
           </div>
           <div class="select ">
-            
-            <select formControlName="tipoIncidencia">
+            <select formControlName="tipoIncidencia" [compareWith]="compareTipoIncidencia">
               <option [ngValue]="tipoIncidenica" *ngFor="let tipoIncidenica of (listaTipoIncidencias | async )">
                 {{tipoIncidenica.tipo}}</option>
             </select>
           </div>
           <footer class="modal-card-foot ">
             <button type="submit " [disabled]="!this.incidenciaForm.valid " class="button is-success ">
-              Guardar
+              {{accion? 'Guardar':'Editar'}}
             </button>
-            <button class="button " (click)="toggleFormIncidencia() ">Cancelar</button>
+            <a class="button " (click)="toggleFormIncidencia() ">Cancelar</a>
           </footer>
         </form>
       </section>
     </div>
   </div>
-
-=======
   <form class="row around-xs middle-xs margin_formulario_filtrado" [formGroup]="filtroIncidenciaForm"
     (submit)="consultarFiltroIncidenciaDate(filtroIncidenciaForm.value)">
     <div class="field is-horizontal  col-xs-12 col-md-4">
@@ -152,98 +152,45 @@
   <!--modalVistaPersonalReporteIncidencias-->
 
 
-<div class="modal " [ngClass]="{ 'is-active':activarModalIncidencia} ">
-  <div class="modal-background " (click)="toggleModalIncidencia() "></div>
-  <div class="modal-card ">
-    <header class="modal-card-head ">
-      <p class="modal-card-title ">Persona Responsable</p>
-      <button class="delete " aria-label="close " (click)="toggleModalIncidencia() "></button>
-    </header>
-    <section class="modal-card-body " *ngIf="incidenciaSeleccionada">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Nombres</th>
-            <th>Apellidos</th>
-            <th>Cargo</th>
-            <th>Área</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{incidenciaSeleccionada.persona.nombre}}</td>
-            <td>{{incidenciaSeleccionada.persona.apellidos}}</td>
-            <td>{{incidenciaSeleccionada.persona.gerencia.nombre}}</td>
-            <td>{{incidenciaSeleccionada.persona.area.area}}</td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="modal " [ngClass]="{ 'is-active':activarModalIncidencia} ">
+    <div class="modal-background " (click)="toggleModalIncidencia() "></div>
+    <div class="modal-card ">
+      <header class="modal-card-head ">
+        <p class="modal-card-title ">Persona Responsable</p>
+        <button class="delete " aria-label="close " (click)="toggleModalIncidencia() "></button>
+      </header>
+      <section class="modal-card-body " *ngIf="incidenciaSeleccionada">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Cargo</th>
+              <th>Área</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{incidenciaSeleccionada.persona.nombre}}</td>
+              <td>{{incidenciaSeleccionada.persona.apellidos}}</td>
+              <td>{{incidenciaSeleccionada.persona.gerencia.nombre}}</td>
+              <td>{{incidenciaSeleccionada.persona.area.area}}</td>
+            </tr>
+          </tbody>
+        </table>
 
-    </section>
-    <footer class="modal-card-foot ">
-      <button class="button " (click)="toggleModalIncidencia() ">Cancelar</button>
-    </footer>
-      
+      </section>
+      <footer class="modal-card-foot ">
+        <button class="button " (click)="toggleModalIncidencia() ">Cancelar</button>
+      </footer>
+
       <footer class="modal-card-foot ">
         <button class="button " (click)="toggleModalIncidencia() ">Cancel</button>
       </footer>
     </div>
   </div>
 
-  <!--Modal para registro de incidencias-->
-  <div class="modal " [ngClass]="{ 'is-active':activarFormIncidencia} ">
-    <div class="modal-background " (click)="toggleFormIncidencia() "></div>
-    <div class="modal-card ">
-      <header class="modal-card-head ">
-        <p class="modal-card-title ">{{accion? 'Registro':'Edicion'}} de Incidencia</p>
-        <button class="delete " aria-label="close " (click)="toggleFormIncidencia()"></button>
-      </header>
-      <section class="modal-card-body ">
-        <form [formGroup]="incidenciaForm " (submit)="saveAndEditIncidencia(incidenciaForm.value) ">
-          <div class="field ">
 
-            <label class="label ">Detalle de la Incidencia</label>
-            <div class="control ">
-              <textarea class="textarea " formControlName="detalle" placeholder="lo que se va a hacer "></textarea>
-            </div>
-          </div>
-          <div class="field">
-            <div class="control">
-              <div class="custom-file-container" data-upload-id="template">
-                <label>Fotos:<a href="javascript:void(0)" class="custom-file-container__image-clear"
-                    title="Clear Image">x</a></label>
-                <label class="custom-file-container__custom-file">
-                  <input type="file" formControlName="files"
-                    class="custom-file-container__custom-file__custom-file-input" accept="image/*" multiple>
-                  <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
-                  <span class="custom-file-container__custom-file__custom-file-control"></span>
-                </label>
-                <div class="custom-file-container__image-preview"></div>
-              </div>
-            </div>
-            <div
-              *ngIf="this.incidenciaSeleccionada && incidenciaSeleccionada.urlListOfPhotos && (incidenciaSeleccionada.urlListOfPhotos | filterName | async).length>0">
-              <ng-container *ngTemplateOutlet="templateFotos;context:{fotos:incidenciaSeleccionada.urlListOfPhotos}">
-
-              </ng-container>
-            </div>
-          </div>
-          <div class="select ">
-            <select formControlName="tipoIncidencia" [compareWith]="compareTipoIncidencia">
-              <option [ngValue]="tipoIncidenica" *ngFor="let tipoIncidenica of (listaTipoIncidencias | async )">
-                {{tipoIncidenica.tipo}}</option>
-            </select>
-          </div>
-          <footer class="modal-card-foot ">
-            <button type="submit " [disabled]="!this.incidenciaForm.valid " class="button is-success ">
-              {{accion? 'Guardar':'Editar'}}
-            </button>
-            <a class="button " (click)="toggleFormIncidencia() ">Cancelar</a>
-          </footer>
-        </form>
-      </section>
-    </div>
-  </div>
 
 
 </block-ui>

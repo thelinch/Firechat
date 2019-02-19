@@ -21,6 +21,7 @@ import { FileService } from 'src/app/services/file.service';
 import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import * as firebase from "firebase/app";
+import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
 @Component({
   selector: 'app-actividad',
   templateUrl: './actividad.component.html',
@@ -71,7 +72,8 @@ export class ActividadComponent implements OnInit {
       actividad: new FormControl('', Validators.required),
       fecha_inicio: new FormControl(FunctionsBasics.getCurrentDate(), Validators.required),
       fecha_fin: new FormControl(FunctionsBasics.getCurrentDate()),
-      componente: new FormControl('', Validators.required)
+      componente: new FormControl('', Validators.required),
+      id: new FormControl()
     })
     this.filtradoForm = new FormGroup({
       fecha_inicio: new FormControl(FunctionsBasics.getCurrentDate(), Validators.required),
@@ -111,6 +113,7 @@ export class ActividadComponent implements OnInit {
 
   }
   cambioEstadoInput(input, index: number, parametro: parametro) {
+    console.log("Elemento", parametro, " Index " + this.listParametrosSeleccionados.indexOf(parametro), " Array ", this.listParametrosSeleccionados)
     if (input.checked) {
       this.agrearParametro(parametro)
     } else {
@@ -139,16 +142,36 @@ export class ActividadComponent implements OnInit {
   }
   guardarResultado() {
     this.actividadSeleccionada.isResultado = true;
-    this.resultadoService.guardarResultado(this.listaParametros, this.actividadSeleccionada).subscribe(resultado => {
+    this.resultadoService.guardarResultado(this.listParametrosSeleccionados, this.actividadSeleccionada).subscribe(resultado => {
       if (this.actividadSeleccionada.componente.nombre == "MONITOREO EN CAMPO") {
         this.actividadSeleccionada.fecha_fin = firebase.firestore.Timestamp.now();
       }
-      if (resultado) {
-        this.actividadService.updateAtividad(this.actividadSeleccionada)
-        this.toggleModalResultado()
-      }
+      this.actividadService.updateAtividad(this.actividadSeleccionada)
     });
 
+  }
+  editarActividad() {
+    this.actividadForm.get("actividad").setValue(this.actividadSeleccionada.actividad)
+    console.log(this.actividadSeleccionada.fecha_inicio.toDate().toDateString(), this.actividadSeleccionada.fecha_inicio.toDate().toLocaleDateString())
+    let fecha_inicio = this.actividadSeleccionada.fecha_inicio.toDate()
+    this.actividadForm.get("fecha_inicio").setValue(fecha_inicio.toISOString())
+    if (this.actividadSeleccionada.fecha_fin) {
+      this.actividadForm.get("fecha_fin").patchValue(this.actividadSeleccionada.fecha_fin.toDate().toDateString())
+
+    }
+    this.actividadForm.get("componente").patchValue({
+      id: this.actividadSeleccionada.componente.id
+    })
+  }
+  compararObjeto(objeto1: any, objeto2: any) {
+    return objeto1 && objeto2 ? objeto1.id === objeto2.id : objeto1 === objeto2;
+  }
+  eliminarActividad() {
+    sweetAlertMensaje.getMensajeDelete("Esta seguro de eliminar la actividad").then(respuesta => {
+      if (respuesta.value) {
+        this.actividadService.deleteActividad(this.actividadSeleccionada)
+      }
+    })
   }
   toggleModalResultado() {
     this.activarModalResultado = !this.activarModalResultado
@@ -161,7 +184,7 @@ export class ActividadComponent implements OnInit {
       this.actividadSeleccionada.isParametro = true
       this.parametroService.saveParametroFromIdActividadAndIdArea(this.idArea, this.actividadSeleccionada, this.listParametrosSeleccionados)
         .subscribe(respuesta => {
-          this.actividadService.updateAtividad(this.actividadSeleccionada)
+          this.guardarResultado()
           if (respuesta) {
             this.toggleModalParametro()
           }
