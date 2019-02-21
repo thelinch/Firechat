@@ -24,8 +24,9 @@ export class ParametroMapeoComponent implements OnInit {
       valor_minimo: new FormControl(""),
       nombreCorto: new FormControl("", Validators.required),
       unidadMedida: new FormControl("", Validators.required),
-      descripcion:new FormControl("",Validators.required),
-      categoria: new FormControl("", Validators.required)
+      descripcion: new FormControl("", Validators.required),
+      categoria: new FormControl("", Validators.required),
+      tipo: new FormControl("", Validators.required)
     })
 
     this.parametroService.getAllActividadesFindParametros("k3j2g3RlGbYu2HCt4XKA")
@@ -43,13 +44,14 @@ export class ParametroMapeoComponent implements OnInit {
     })
   }
   saveParametro(parametro: parametro) {
-    this.parametroService.saveParametro(parametro).then(documentoParametro => {
+    console.log(parametro)
+    /*this.parametroService.saveParametro(parametro).then(documentoParametro => {
       documentoParametro.get().then(dataParametro => {
         console.log((dataParametro.data() as parametro).nombre)
         this.formParametro.reset()
       //  this.cerraModal();
       })
-    })
+    })*/
   }
   toggleModalParametro() {
     this.activarFormParametro = !this.activarFormParametro;

@@ -32,13 +32,12 @@
         </div>
         <div class="field"><label class="label">Tipo</label></div>
         <div class="select">
-          <select formControlName="categoria">
-            <option >LMP</option>
-            <option >ECA</option>
+          <select formControlName="tipo">
+            <option [ngValue]="{nombre:'LMP',id:1}">LMP</option>
+            <option [ngValue]="{nombre:'ECA',id:2}">ECA</option>
           </select>
         </div>
         <div class="field">
-
           <label class="label">Descripcion:</label>
           <div class="control">
             <textarea class="textarea" formControlName="descripcion"></textarea>
