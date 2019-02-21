@@ -147,6 +147,17 @@
                     <textarea id="" class="textarea" formControlName="actividad"
                       placeholder="Actividad a realizar"></textarea>
                   </div>
+                  <div class="field">
+                    <div class="control">
+                      <label for="" class="label">Tipo Trabajo</label>
+                      <div class="select">
+                        <select formControlName="tipoTrabajo" (change)="calcularProgramacion(item)">
+                          <option value="weeks">Semana</option>
+                          <option value="M">Mes</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                   <div class="row">
                     <div class="col-xs-6">
                       <div class="field">
@@ -155,7 +166,8 @@
                             today
                           </i>
                         </label>
-                        <input type="date" id="" formControlName="fecha_inicio" class="input">
+                        <input type="date" id="" formControlName="fecha_inicio" (change)="calcularProgramacion(item)"
+                          #fecha_inicio_actividad class="input">
                       </div>
                     </div>
                     <div class="col-xs-6">
@@ -164,7 +176,8 @@
                           <i class="material-icons has-text-primary icon_small">
                             insert_invitation
                           </i></label>
-                        <input type="date" id="" formControlName="fecha_fin" class="input">
+                        <input type="date" id="" formControlName="fecha_fin" (change)="calcularProgramacion(item)"
+                          #fecha_fin_actividad class="input">
                       </div>
                     </div>
                   </div>
@@ -178,7 +191,34 @@
                     <div class="col-xs-6">
                       <div class="field">
                         <label for="" class="label">Total</label>
-                        <input type="number" id="" formControlName="total" class="input">
+                        <input type="text" readonly formControlName="total" class="input">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 " *ngIf="item.get('programacion')">
+                    <h2 class="has-text-centered has-text-info">Programacion</h2>
+                    <div class="row" formArrayName="programacion"
+                      *ngFor="let programacion of item.get('programacion').controls;let j=index">
+                      <div class="col-xs-12" [formGroupName]="j">
+                        <div class="row">
+                          <div class=" col-xs-6 ">
+                            <div class="field">
+                              <div class="control">
+                                <label for="" class="label">Fecha:</label>
+                                <input type="date" formControlName="mes" class="input" readonly>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-xs-6">
+                            <div class="field">
+                              <div class="control">
+                                <label for="" class="label">Valor:</label>
+                                <input type="number" formControlName="cantidad" #inputValor class="input"
+                                  (change)="sumarValor(item,inputValor.value)">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

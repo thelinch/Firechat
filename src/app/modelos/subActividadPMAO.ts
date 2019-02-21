@@ -1,3 +1,5 @@
+import { programacionPMAO } from "./programacionPMAO";
+
 export class subActividadPMAO {
   id?: string
   actividad: string
@@ -8,5 +10,6 @@ export class subActividadPMAO {
   unidad: string
   total: number
   estadoActividad: boolean;
+  programacion: programacionPMAO[]
   observaciones?: Array<{ mensaje: string, estado: boolean, isVisto: boolean, fecha_regitro: firebase.firestore.Timestamp, fecha_visto: firebase.firestore.Timestamp }>
 }

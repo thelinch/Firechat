@@ -6,6 +6,7 @@ import { Colecciones } from '../HelperClass/Colecciones';
 import { actividadPMAO } from '../modelos/actividadPMAO';
 import { executionActivityPMAO } from '../modelos/executionActivityPMAO';
 import { subActividadPMAO } from 'src/app/modelos/subActividadPMAO';
+import { estadoActividad } from './../modelos/estado_actividad';
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +62,11 @@ export class ActividadPmaoService {
       })
 
     })
+  }
+  updateEstadoActividadFindIdIndice(actividad: actividadPMAO, idIndice: string) {
+    console.log("actividad ", actividad)
+    this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").doc(actividad.id).update({ estadoActividad: actividad.estadoActividad })
+
   }
   updateObservacionesFindActividadAndId(actividad: actividadPMAO, idIndice: string) {
     console.log("ID DE LA ATIVIS:" + actividad.id)

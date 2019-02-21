@@ -317,8 +317,9 @@ export class SubActivityComponent implements OnInit {
         confirmButtonText: "OK"
       }).then(respuesta => {
         if (respuesta.value) {
+
           this.actividadSeleccionada.estadoActividad = true;
-          this.pmaoService.updateActividadPMAO(this.actividadSeleccionada, this.idIndice)
+          this.pmaoService.updateEstadoActividadFindIdIndice(this.actividadSeleccionada, this.idIndice)
         }
       })
     }

@@ -11,7 +11,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Renderer2, Tem
 import { ActividadPmaoService } from 'src/app/services/actividad-pmao.service';
 import { ActivatedRoute } from '@angular/router';
 import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, FormGroupName } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { actividadPMAO } from 'src/app/modelos/actividadPMAO';
@@ -225,7 +225,7 @@ export class PmaoComponent implements OnInit, AfterViewInit {
       significancia: new FormControl('', Validators.required),
       clasificacion: new FormControl('', Validators.required),
       comentario: new FormControl('', Validators.required),
-      subActividades: this.formBuilder.array([this.createItem()])
+      subActividades: this.formBuilder.array([this.createItem()], Validators.required)
     })
   }
   ngAfterViewInit(): void {
@@ -237,14 +237,48 @@ export class PmaoComponent implements OnInit, AfterViewInit {
       actividad: ["", Validators.required],
       fecha_fin: [FunctionsBasics.getCurrentDate(), Validators.required],
       fecha_inicio: [FunctionsBasics.getCurrentDate(), Validators.required],
+      tipoTrabajo: ["", Validators.required],
       unidad: ["", Validators.required],
-      total: ["", Validators.required]
-
+      total: ["", Validators.required],
+      // programacion: this.formBuilder.array([this.crearProgramacion()])
     })
   }
 
+  calcularProgramacion(item: FormGroup) {
+    if (item.get("fecha_fin").value != "" && item.get("fecha_inicio").value != "" && item.get("tipoTrabajo").value != "") {
+      item.removeControl("programacion")
+      item.get("total").setValue(0)
+      let tipoTrabajo = item.get("tipoTrabajo").value
+      let fecha_fin = moment(new Date(item.get("fecha_fin").value));
+      let fecha_incio = moment(new Date(item.get("fecha_inicio").value));
+      let periodo = fecha_fin.diff(fecha_incio, tipoTrabajo);
+      let controlArray = new Array<any>()
+      for (let index = 1; index <= periodo; index++) {
+        controlArray.push(this.crearProgramacion(fecha_incio.add(1, tipoTrabajo).format("YYYY-MM-DD").toString()))
+      }
+
+      item.addControl("programacion", this.formBuilder.array(controlArray))
+    }
+
+    //(item.get("programacion") as FormArray).push(this.crearProgramacion())
+  }
+  sumarValor(item: FormGroup, valor: number) {
+    console.log(parseFloat(item.get("total").value != "" ? item.get("total").value : 0), parseFloat(valor.toString()))
+    let suma = parseFloat(item.get("total").value != "" ? item.get("total").value : 0) + parseFloat(valor.toString())
+    item.get("total").setValue(suma)
+  }
+
+  crearProgramacion(mes: string) {
+    return this.formBuilder.group({
+      mes: [mes, Validators.required],
+      cantidad: ["", Validators.required]
+    })
+  }
   addItemTemplate(): void {
     (this.actividadPMAOForm.get("subActividades") as FormArray).push(this.createItem())
+  }
+  addProgramacion(i: number) {
+    (this.actividadPMAOForm.get("subActividades") as FormArray)
   }
   removeTemplate(index: number) {
     (this.actividadPMAOForm.get("subActividades") as FormArray).removeAt(index)
@@ -393,38 +427,39 @@ export class PmaoComponent implements OnInit, AfterViewInit {
     return this.matrizIper.find(i => i.frecuencia == frecuencia && i.severidad == severidad)
   }
   saveActividadPMAO(actividadPMAO: actividadPMAO) {
-    this.blockUI.start()
-    actividadPMAO.subActividades.forEach(subAc => {
-      let fecha_fin = moment(new Date(subAc.fecha_fin));
-      let fecha_incio = moment(new Date(subAc.fecha_inicio));
-      let periodo = fecha_fin.diff(fecha_incio, "days");
-      let tipoPeriodo = "Dias"
-      if (fecha_fin.diff(fecha_incio, "M") > 0) {
-        tipoPeriodo = "Meses"
-        periodo = fecha_fin.diff(fecha_incio, "M");
-      }
-      subAc.tipoPeriodo = tipoPeriodo
-      subAc.periodo = periodo
-    })
-    if (actividadPMAO.id != null) {
-      this.pmaoService.updateActividadPMAO(actividadPMAO, this.idIndice).subscribe(async respuesta => {
-        if (respuesta) {
-          sweetAlertMensaje.getMensajeTransaccionExitosa()
+    console.log(actividadPMAO)
+    /* this.blockUI.start()
+     actividadPMAO.subActividades.forEach(subAc => {
+       let fecha_fin = moment(new Date(subAc.fecha_fin));
+       let fecha_incio = moment(new Date(subAc.fecha_inicio));
+       let periodo = fecha_fin.diff(fecha_incio, "weeks");
+       let tipoPeriodo = "Dias"
+       if (fecha_fin.diff(fecha_incio, "M") > 0) {
+         tipoPeriodo = "Meses"
+         periodo = fecha_fin.diff(fecha_incio, "M");
+       }
+       subAc.tipoPeriodo = tipoPeriodo
+       subAc.periodo = periodo
+     })
+     if (actividadPMAO.id != null) {
+       this.pmaoService.updateActividadPMAO(actividadPMAO, this.idIndice).subscribe(async respuesta => {
+         if (respuesta) {
+           sweetAlertMensaje.getMensajeTransaccionExitosa()
 
-          await this.blockUI.stop()
-          this.toggleModalFormularioPMAO()
-        }
-      })
-    } else {
-      actividadPMAO.estadoActividad = false;
-      this.pmaoService.saveActividadPMAO(this.idIndice, actividadPMAO).subscribe(async respuesta => {
-        if (respuesta) {
-          await this.blockUI.stop()
-          sweetAlertMensaje.getMensajeTransaccionExitosa()
-          this.toggleModalFormularioPMAO()
-        }
-      })
-    }
+           await this.blockUI.stop()
+           this.toggleModalFormularioPMAO()
+         }
+       })
+     } else {
+       actividadPMAO.estadoActividad = false;
+       this.pmaoService.saveActividadPMAO(this.idIndice, actividadPMAO).subscribe(async respuesta => {
+         if (respuesta) {
+           await this.blockUI.stop()
+           sweetAlertMensaje.getMensajeTransaccionExitosa()
+           this.toggleModalFormularioPMAO()
+         }
+       })
+     }*/
 
 
   }
