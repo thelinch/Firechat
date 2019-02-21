@@ -323,26 +323,6 @@ export class SubActivityComponent implements OnInit {
       })
     }
   }
-  setMensajeActividad() {
-    Swal({
-      input: "textarea",
-      inputPlaceholder: "Ingrese su observacion",
-      showCancelButton: true
-    }).then(respuesta => {
-      if (respuesta.value && respuesta.value.length != 0) {
-        if (!this.actividadSeleccionada.comentarioInconformidad) {
-          this.actividadSeleccionada.comentarioInconformidad = new Array<any>()
-        }
-        this.actividadSeleccionada.estadoLectura = true;
-        this.actividadSeleccionada.comentarioInconformidad.push({ comentario: respuesta.value, persona: this.personaLoged, activo: true, fecha_registro: new Date() });
-        this.actividadSeleccionada.personaRegistroMensaje = this.personaLoged
-        this.pmaoService.updateActividadPMAO(this.actividadSeleccionada, this.idIndice)
-      }
-    })
-  }
-  getMensajeFindIdPersona() {
-    this.comentarioActividad = Observable.create(observer => {
-      observer.next(this.actividadSeleccionada.comentarioInconformidad.filter(comentario => comentario.activo))
-    })
-  }
+
+
 }

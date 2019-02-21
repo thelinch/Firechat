@@ -15,7 +15,6 @@ export interface actividadPMAO {
   isEjecuciones: boolean
   estadoActividad: boolean;
   personaRegistro: persona
-  comentarioInconformidad?: Array<{ comentario: string, persona: persona, activo: boolean,fecha_registro:Date,fecha_lectura?:Date }>
   estadoLectura:boolean;
   personaRegistroMensaje:persona;
   subActividades: subActividadPMAO[]

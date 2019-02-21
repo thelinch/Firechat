@@ -50,6 +50,7 @@ export class ActividadComponent implements OnInit {
   fileUploadTemplate: any
   idArea: string;
   lineChartData: Array<any>
+  format = { day: "2-digit", month: "2-digit", year: "numeric" }
   dataEstadistica = new Array<any>();
   public lineChartLabels: Array<any> = ['enero', 'febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'];
   private listaResultado = new Array<resultado>()
@@ -152,9 +153,8 @@ export class ActividadComponent implements OnInit {
   }
   editarActividad() {
     this.actividadForm.get("actividad").setValue(this.actividadSeleccionada.actividad)
-    console.log(this.actividadSeleccionada.fecha_inicio.toDate().toDateString(), this.actividadSeleccionada.fecha_inicio.toDate().toLocaleDateString())
     let fecha_inicio = this.actividadSeleccionada.fecha_inicio.toDate()
-    this.actividadForm.get("fecha_inicio").setValue(fecha_inicio.toISOString())
+    console.log(fecha_inicio.toLocaleDateString("es", this.format), this.actividadSeleccionada.fecha_inicio.toDate().toLocaleDateString())
     if (this.actividadSeleccionada.fecha_fin) {
       this.actividadForm.get("fecha_fin").patchValue(this.actividadSeleccionada.fecha_fin.toDate().toDateString())
 

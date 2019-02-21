@@ -34,7 +34,10 @@ html, body {
 .displax_block{
 display: block;
 }
-
+.width_15_percent
+{
+  width: 15%;
+}
 .animation_slideShow{
   display: block !important;
   animation-name: slideShow;

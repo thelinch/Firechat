@@ -130,13 +130,16 @@
             <div #vc class="vc">
               <a class="button is-primary" [ngClass]="{disabled:!this.actividadPMAOForm.enabled}"
                 (click)="addItemTemplate()"><i class="material-icons">add</i></a>
-              <div class="actividades has-background-white-bis position_relative" formArrayName="subActividades"
+              <div class="actividades  has-background-white-bis position_relative" formArrayName="subActividades"
                 *ngFor="let item of actividadPMAOForm.get('subActividades').controls; let i = index;">
-                <div class="puntero position_absolute right top padding_05rem"
-                  [ngClass]="{disabled:!this.actividadPMAOForm.enabled}" (click)="removeTemplate(i)">
-                  <i class="material-icons has-text-danger " style="border-radius: 50%;box-shadow: 2px 3px 3px">
+                <div class="puntero display_flex width_15_percent position_absolute right top padding_05rem">
+                  <i class="material-icons has-text-danger " (click)="removeTemplate(i)"
+                    [ngClass]="{disabled:!this.actividadPMAOForm.enabled}"
+                    style="border-radius: 50%;box-shadow: 2px 3px 3px">
                     cancel
                   </i>
+                  <a *ngIf="!this.actividadPMAOForm.enabled" (click)="guardarObservacion(i)"><i
+                      class="fas fa-comments"></i></a>
                 </div>
                 <div [formGroupName]="i">
                   <div class="field">

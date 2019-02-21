@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Colecciones } from '../HelperClass/Colecciones';
 import { actividadPMAO } from '../modelos/actividadPMAO';
 import { executionActivityPMAO } from '../modelos/executionActivityPMAO';
+import { subActividadPMAO } from 'src/app/modelos/subActividadPMAO';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +60,14 @@ export class ActividadPmaoService {
         observer.next(true)
       })
 
+    })
+  }
+  updateObservacionesFindActividadAndId(actividad: actividadPMAO, idIndice: string) {
+    console.log("ID DE LA ATIVIS:" + actividad.id)
+    this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").doc(actividad.id).update({
+      subActividades: actividad.subActividades,
+      estadoLectura: actividad.estadoLectura,
+      personaRegistroMensaje: actividad.personaRegistro
     })
   }
   setValoracionFindIdActividad(idIndice: string, actividad: actividadPMAO): Observable<boolean> {

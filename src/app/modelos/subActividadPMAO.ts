@@ -7,6 +7,6 @@ export class subActividadPMAO {
   tipoPeriodo: string
   unidad: string
   total: number
-  estadoActividad: false;
-
+  estadoActividad: boolean;
+  observaciones?: Array<{ mensaje: string, estado: boolean, isVisto: boolean, fecha_regitro: firebase.firestore.Timestamp, fecha_visto: firebase.firestore.Timestamp }>
 }

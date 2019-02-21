@@ -19,6 +19,8 @@ import * as $ from "jquery"
 import * as moment from "moment";
 import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
+import Swal from 'sweetalert2';
+import * as firebase from "firebase/app";
 @Component({
   selector: 'app-pmao',
   templateUrl: './pmao.component.html',
@@ -425,6 +427,32 @@ export class PmaoComponent implements OnInit, AfterViewInit {
     }
 
 
+  }
+
+  guardarObservacion(index: number) {
+    Swal({
+      title: "Ingrese Observacion",
+      input: "textarea",
+      showCancelButton: true
+    }).then(respuesta => {
+      if (respuesta.value) {
+
+        if (!this.actividadPMAOSeleccionado.subActividades[index].observaciones) {
+          this.actividadPMAOSeleccionado.subActividades[index].observaciones = new Array<any>()
+          console.log("enteo al if")
+        }
+
+        this.actividadPMAOSeleccionado.subActividades[index].observaciones.push({ mensaje: respuesta.value, estado: true, isVisto: false, fecha_regitro: firebase.firestore.Timestamp.now(), fecha_visto: firebase.firestore.Timestamp.now() })
+        console.log(this.actividadPMAOSeleccionado)
+        this.actividadPMAOSeleccionado.personaRegistroMensaje = JSON.parse(sessionStorage.getItem("personaLoged"))
+        this.actividadPMAOSeleccionado.estadoLectura = true
+        this.pmaoService.updateObservacionesFindActividadAndId(this.actividadPMAOSeleccionado, this.idIndice)
+      }
+    })
+
+  }
+  seleccionarActividadPmao(actividadPMAO: actividadPMAO) {
+    this.actividadPMAOSeleccionado = actividadPMAO;
   }
 
 }
