@@ -6,11 +6,9 @@
 right: 10px;
 border-radius: 10px;
 }
-.position_relative{
-    position: relative;
-}
-.position_absolute{
-    position: absolute;
+app-sub-activity{
+display: block;
+margin-top: 2rem;
 }
  .wrapper {
     max-width: 75%;

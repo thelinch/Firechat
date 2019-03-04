@@ -9,10 +9,10 @@
             (click)="selectionOption(collapsie,aspectoAmbiental.nombre)">{{aspectoAmbiental.nombre}}</h3>
           <div class="body ">
             <ul class="ul">
-              <li class="li" *ngFor="let items of aspectoAmbiental.opciones">
+              <li class="li" *ngFor="let items of aspectoAmbiental.opciones" style="position: relative;">
                 <!--<ng-template [ngxPermissionsOnly]="['JEFE']">-->
                 <a (click)="seleccionarOpcion(items);resetFormActividadPMAO();toggleModalFormularioPMAO();nuevaActividad()"
-                  class="button is-info is-small is-pulled-right">Agregar</a>
+                  class="button is-info is-small position_absolute  right top">Agregar</a>
                 <!--</ng-template>-->
                 <app-sub-activity [idComponent]="items.id" [name]="items.nombre" [idIndice]="this.idIndice"
                   (seleccionActividadVisualizacionAndEdit)="captacionObjeto($event)">
@@ -151,9 +151,10 @@
                     <div class="control">
                       <label for="" class="label">Tipo Trabajo</label>
                       <div class="select">
-                        <select formControlName="tipoTrabajo" (change)="calcularProgramacion(item)">
-                          <option value="weeks">Semana</option>
-                          <option value="M">Mes</option>
+                        <select formControlName="tipoTrabajo" (change)="calcularProgramacion(item)"
+                          [compareWith]="compararObjetos">
+                          <option [ngValue]="{id:1,valor:'weeks'}">Semanas</option>
+                          <option [ngValue]="{id:2,valor:'M'}">Meses</option>
                         </select>
                       </div>
                     </div>
@@ -167,7 +168,7 @@
                           </i>
                         </label>
                         <input type="date" id="" formControlName="fecha_inicio" (change)="calcularProgramacion(item)"
-                          #fecha_inicio_actividad class="input">
+                          class="input">
                       </div>
                     </div>
                     <div class="col-xs-6">
@@ -177,7 +178,7 @@
                             insert_invitation
                           </i></label>
                         <input type="date" id="" formControlName="fecha_fin" (change)="calcularProgramacion(item)"
-                          #fecha_fin_actividad class="input">
+                          class="input">
                       </div>
                     </div>
                   </div>
@@ -213,7 +214,7 @@
                             <div class="field">
                               <div class="control">
                                 <label for="" class="label">Valor:</label>
-                                <input type="number" formControlName="cantidad" #inputValor class="input"
+                                <input type="text" formControlName="valor" #inputValor class="input"
                                   (change)="sumarValor(item,inputValor.value)">
                               </div>
                             </div>

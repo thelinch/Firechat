@@ -9,14 +9,14 @@ export interface actividadPMAO {
   severidad: any
   frecuencia: any
   significancia: any
-  comentario:string,
+  comentario: string,
   clasificacion: string
   valoracion?: { nombre: string, valor: number }
   isEjecuciones: boolean
   estadoActividad: boolean;
   personaRegistro: persona
-  estadoLectura:boolean;
-  personaRegistroMensaje:persona;
+  estadoLectura: boolean;
+  personaRegistroMensaje: persona;
   subActividades: subActividadPMAO[]
   porcentageOfImplementation: number
 

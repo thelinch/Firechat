@@ -19,6 +19,11 @@ export class ActividadPmaoService {
   saveActividadPMAO(idIndice: string, actividad: actividadPMAO): Observable<boolean> {
     return Observable.create(obsever => {
       actividad.personaRegistro = JSON.parse(sessionStorage.getItem("personaLoged"))
+      actividad.subActividades.forEach(subActividad => {
+        subActividad.programacion.forEach(programacion => {
+          programacion.id = this.afs.createId();
+        })
+      })
       this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").add(actividad)
       obsever.next(true)
     })
@@ -28,9 +33,7 @@ export class ActividadPmaoService {
       this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").doc(actividad.id).collection(Colecciones.ejecuciones).add(execution).then(respuest => {
         this.updateActividadPMAO(actividad, idIndice)
         observer.next(true)
-
       })
-
     })
   }
   getAllActividadPMAO(idIndice: string): Observable<actividadPMAO[]> {
