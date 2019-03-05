@@ -104,6 +104,7 @@ export class ActividadComponent implements OnInit {
     this.parametroService.getAllParametroFindIdActividad(idActividad).subscribe(lista => {
       this.listaParametros = lista
     });
+    
   }
   toggleModalEstadistica() {
     this.activarModalEstadistica = !this.activarModalEstadistica

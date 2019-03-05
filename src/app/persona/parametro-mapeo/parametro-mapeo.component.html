@@ -1,5 +1,24 @@
 <button (click)="toggleModalParametro()" class="button is-info">Agregar nuevo Parametro</button>
-
+<div class="row">
+  <div class="col-xs-12 col-md-4" *ngFor="let parametro of listaParametros | async ;let i=index">
+    <div class="card margin_25">
+      <header class="card-header">
+        <p class="card-header-title">
+          {{parametro.nombre}}
+        </p>
+      </header>
+      <div class="card-content">
+        <div class="row">
+          <div class="col-xs-12 col-md-6">
+            <div class="content">
+              {{parametro.descripcion}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <!--Modal para registro de parametros-->
 <div class="modal" [ngClass]="{'is-active':activarFormParametro}">
   <div class="modal-background" (click)="toggleModalParametro()"></div>
@@ -74,12 +93,20 @@
       </form>
     </section>
     <footer class="modal-card-foot">
-
       <button class="button" (click)="toggleModalParametro()">Cancelar</button>
     </footer>
 
   </div>
 </div>
+<!--Fin de modal para registro registros-->
 
 
-<!--Fin de modal para registro e incidencias-->
+<!--Mostrar los parametros registrados -->
+
+<!--Fin Mostrar parametros registrados-->
+
+<!--Editar los parametros registrados-->
+<!--Fin Editar parametros registrados-->
+
+<!--Eliminar los parametros registrados-->
+<!--Fin Eliminar parametros registrados-->

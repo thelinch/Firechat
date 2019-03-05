@@ -5,6 +5,7 @@ import { CategoriaService } from '../../services/categoria.service';
 import { categoria } from '../../modelos/categoria';
 import { parametro } from '../../modelos/parametro';
 import { validateConfig } from '@angular/router/src/config';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-parametro-mapeo',
@@ -15,6 +16,7 @@ export class ParametroMapeoComponent implements OnInit {
   activarFormParametro: boolean = false;
   formParametro: FormGroup;
   listaCategoria: categoria[]
+  listaParametros: Observable<parametro[]>
   constructor(private parametroService: ParametroService, private categoriaService: CategoriaService) { }
 
   ngOnInit() {
@@ -28,8 +30,10 @@ export class ParametroMapeoComponent implements OnInit {
       categoria: new FormControl("", Validators.required),
       tipo: new FormControl("", Validators.required)
     })
-
+    
     this.parametroService.getAllActividadesFindParametros("k3j2g3RlGbYu2HCt4XKA")
+    this.listaParametros = this.parametroService.getAllParametro();
+
   }
   cerraModal() {
     setTimeout(() => {
@@ -44,14 +48,14 @@ export class ParametroMapeoComponent implements OnInit {
     })
   }
   saveParametro(parametro: parametro) {
-    console.log(parametro)
-    /*this.parametroService.saveParametro(parametro).then(documentoParametro => {
+    
+    this.parametroService.saveParametro(parametro).then(documentoParametro => {
       documentoParametro.get().then(dataParametro => {
         console.log((dataParametro.data() as parametro).nombre)
         this.formParametro.reset()
-      //  this.cerraModal();
+        this.cerraModal();
       })
-    })*/
+    })
   }
   toggleModalParametro() {
     this.activarFormParametro = !this.activarFormParametro;
@@ -59,6 +63,9 @@ export class ParametroMapeoComponent implements OnInit {
       this.getAllCategoria()
     }
   }
+   
+ 
 
-
+  
+ 
 }
