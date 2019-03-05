@@ -50,7 +50,7 @@
           <!--<ng-template [ngxPermissionsOnly]="['CONTRATISTA']">-->
           <a class="card-footer-item has-text-success"
             [ngClass]="{'disabled':actividad.porcentageOfImplementation || !actividad.estadoActividad}"
-            (click)="this.resetFormEjecucion();seleccionarActividad(actividad);toogleFormEjecucion()">
+            (click)="this.resetFormEjecucion();seleccionarActividad(actividad);toogleFormEjecucion();removeItemImagen()">
             <span class="icon is-large ">
               <i class="material-icons" style="font-size: 2rem">filter_list</i>
             </span>
@@ -120,7 +120,7 @@
                           title="Clear Image">x</a></label>
                       <label class="custom-file-container__custom-file">
                         <input type="file" name="files" class="custom-file-container__custom-file__custom-file-input"
-                          accept="image/*" multiple>
+                          accept="image/*" multiple (click)="createImageUpload(programacion.id)">
                         <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
                         <span class="custom-file-container__custom-file__custom-file-control"></span>
                       </label>

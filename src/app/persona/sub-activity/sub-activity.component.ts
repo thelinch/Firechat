@@ -11,13 +11,13 @@ import { executionActivityPMAO } from 'src/app/modelos/executionActivityPMAO';
 import FileUploadWithPreview from 'file-upload-with-preview'
 import { FileService } from 'src/app/services/file.service';
 import { file } from 'src/app/modelos/File';
-import { map, reduce } from 'rxjs/operators';
+import { map, reduce, flatMap, take } from 'rxjs/operators';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { subActividadPMAO } from 'src/app/modelos/subActividadPMAO';
 import { persona } from 'src/app/modelos/persona';
 import * as moment from "moment";
-import { programacionPMAO } from 'src/app/modelos/programacionPMAO';
 import * as firebase from "firebase/app";
+import { Colecciones } from 'src/app/HelperClass/Colecciones';
 @Component({
   selector: 'app-sub-activity',
   templateUrl: './sub-activity.component.html',
@@ -142,8 +142,13 @@ export class SubActivityComponent implements OnInit {
     }
   }
   createImageUpload(programcionId: string) {
-    this.listImagen.push(new FileUploadWithPreview(programcionId))
-    return programcionId;
+    if (!this.listImagen.find(fileUploader => fileUploader.uploadId == programcionId)) {
+      this.listImagen.push(new FileUploadWithPreview(programcionId))
+    }
+
+  }
+  removeItemImagen() {
+    this.listImagen.splice(0, this.listImagen.length)
   }
   toogleFormEjecucion() {
     this.activarModalFormEjecucion = !this.activarModalFormEjecucion
@@ -293,7 +298,31 @@ export class SubActivityComponent implements OnInit {
     }
   }
   guardarResultado(subActividad: subActividadPMAO, resultado: string, indiceProgramacion: number) {
+    this.blockUI.start();
     subActividad.programacion[indiceProgramacion].resultado = { resultado: parseFloat(resultado), estado: true, fecha_registro: firebase.firestore.Timestamp.now() }
+    if (!subActividad.programacion[indiceProgramacion].resultado.urlListOfPhotos) {
+      subActividad.programacion[indiceProgramacion].resultado.urlListOfPhotos = new Array<file>()
+    }
+    let listImagenUpload = this.listImagen.find(fileUploader => fileUploader.uploadId == subActividad.programacion[indiceProgramacion].id)
+    from(listImagenUpload ? listImagenUpload.cachedFileArray : [])
+      .pipe(take(listImagenUpload.cachedFileArray.length),
+        flatMap((file: File) =>
+          this.fileService.uploadFile(file, Colecciones.pmao)
+        )).subscribe(
+          {
+            next: file => {
+              subActividad.programacion[indiceProgramacion].resultado.urlListOfPhotos.push(file)
+            },
+            complete: () => {
+              this.pmaoService.updateSubActividad(this.actividadSeleccionada, this.idIndice).subscribe(respuesta => {
+                if (respuesta) {
+                  this.blockUI.stop();
+                  this.toogleFormEjecucion();
+                }
+              })
+            }
+          }
+        )
     console.log(subActividad.programacion[indiceProgramacion])
 
   }

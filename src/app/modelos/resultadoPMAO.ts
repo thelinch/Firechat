@@ -5,4 +5,5 @@ export class resultadoPMAO {
   resultado: number
   estado: boolean
   fecha_registro: firebase.firestore.Timestamp
+  urlListOfPhotos?: file[]
 }
