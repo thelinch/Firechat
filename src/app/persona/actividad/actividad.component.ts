@@ -22,6 +22,8 @@ import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import * as firebase from "firebase/app";
 import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
+import * as moment from "moment";
+
 @Component({
   selector: 'app-actividad',
   templateUrl: './actividad.component.html',
@@ -152,12 +154,15 @@ export class ActividadComponent implements OnInit {
     });
 
   }
+  nuevaActividad() {
+    this.actividadForm.reset()
+  }
   editarActividad() {
     this.actividadForm.get("actividad").setValue(this.actividadSeleccionada.actividad)
     let fecha_inicio = this.actividadSeleccionada.fecha_inicio.toDate()
-    console.log(fecha_inicio.toLocaleDateString("es", this.format), this.actividadSeleccionada.fecha_inicio.toDate().toLocaleDateString())
+    this.actividadForm.get("fecha_inicio").patchValue(moment(this.actividadSeleccionada.fecha_inicio.toDate()).format("YYYY-MM-DD"))
     if (this.actividadSeleccionada.fecha_fin) {
-      this.actividadForm.get("fecha_fin").patchValue(this.actividadSeleccionada.fecha_fin.toDate().toDateString())
+      this.actividadForm.get("fecha_fin").patchValue(moment(this.actividadSeleccionada.fecha_fin.toDate()).format("YYYY-MM-DD"))
 
     }
     this.actividadForm.get("componente").patchValue({

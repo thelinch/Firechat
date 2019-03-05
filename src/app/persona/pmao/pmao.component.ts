@@ -247,8 +247,9 @@ export class PmaoComponent implements OnInit, AfterViewInit {
   calcularProgramacion(item: FormGroup) {
     if (item.get("fecha_fin").value != "" && item.get("fecha_inicio").value != "" && item.get("tipoTrabajo").value != "") {
       item.removeControl("programacion")
+      console.log(item.get("tipoTrabajo").value)
       item.get("total").setValue(0)
-      let tipoTrabajo = item.get("tipoTrabajo").value
+      let tipoTrabajo = item.get("tipoTrabajo").value.valor
       let fecha_fin = moment(new Date(item.get("fecha_fin").value));
       let fecha_incio = moment(new Date(item.get("fecha_inicio").value));
       let periodo = fecha_fin.diff(fecha_incio, tipoTrabajo);
@@ -263,7 +264,7 @@ export class PmaoComponent implements OnInit, AfterViewInit {
     //(item.get("programacion") as FormArray).push(this.crearProgramacion())
   }
   sumarValor(item: FormGroup, valor: number) {
-    console.log(parseFloat(item.get("total").value != "" ? item.get("total").value : 0), parseFloat(valor.toString()))
+    console.log(parseFloat(item.get("total").value) + " " + parseFloat(valor.toString()))
     let suma = parseFloat(item.get("total").value != "" ? item.get("total").value : 0) + parseFloat(valor.toString())
     item.get("total").setValue(suma)
   }
@@ -271,7 +272,7 @@ export class PmaoComponent implements OnInit, AfterViewInit {
   crearProgramacion(mes: string) {
     return this.formBuilder.group({
       mes: [mes, Validators.required],
-      cantidad: ["", Validators.required]
+      valor: ["", Validators.required]
     })
   }
   addItemTemplate(): void {
@@ -327,17 +328,27 @@ export class PmaoComponent implements OnInit, AfterViewInit {
     let controlSubActividad = <FormArray>this.actividadPMAOForm.controls.subActividades;
     this.clearFormArray();
     this.actividadPMAOSeleccionado.subActividades.forEach(actividad => {
+      let programacionArray = new Array<FormGroup>();
+      actividad.programacion.forEach(programacion => {
+        programacionArray.push(this.formBuilder.group({ mes: moment(programacion.mes.toDate()).format("YYYY-MM-DD"), valor: programacion.valor }))
+      })
       controlSubActividad.push(this.formBuilder.group({
         actividad: actividad.actividad,
-        fecha_fin: actividad.fecha_fin,
-        fecha_inicio: actividad.fecha_inicio,
+        fecha_fin: moment(actividad.fecha_fin.toDate()).format("YYYY-MM-DD").toString(),
+        fecha_inicio: moment(actividad.fecha_inicio.toDate()).format("YYYY-MM-DD").toString(),
         unidad: actividad.unidad,
-        total: actividad.total
+        total: actividad.total,
+        tipoTrabajo: actividad.tipoTrabajo,
+        programacion: this.formBuilder.array(programacionArray)
       }))
+
     })
     this.actividadPMAOForm.updateValueAndValidity();
     this.toggleModalFormularioPMAO();
 
+  }
+  compareObjectString(objeto1: any, objeto2: any) {
+    return objeto1 === objeto2
   }
   clearFormArray() {
     let array = (this.actividadPMAOForm.get("subActividades") as FormArray)
@@ -426,42 +437,42 @@ export class PmaoComponent implements OnInit, AfterViewInit {
   getRiesgoMatrizIper(frecuencia: number, severidad: number): any {
     return this.matrizIper.find(i => i.frecuencia == frecuencia && i.severidad == severidad)
   }
-  saveActividadPMAO(actividadPMAO: actividadPMAO) {
-    console.log(actividadPMAO)
-    /* this.blockUI.start()
-     actividadPMAO.subActividades.forEach(subAc => {
-       let fecha_fin = moment(new Date(subAc.fecha_fin));
-       let fecha_incio = moment(new Date(subAc.fecha_inicio));
-       let periodo = fecha_fin.diff(fecha_incio, "weeks");
-       let tipoPeriodo = "Dias"
-       if (fecha_fin.diff(fecha_incio, "M") > 0) {
-         tipoPeriodo = "Meses"
-         periodo = fecha_fin.diff(fecha_incio, "M");
-       }
-       subAc.tipoPeriodo = tipoPeriodo
-       subAc.periodo = periodo
-     })
-     if (actividadPMAO.id != null) {
-       this.pmaoService.updateActividadPMAO(actividadPMAO, this.idIndice).subscribe(async respuesta => {
-         if (respuesta) {
-           sweetAlertMensaje.getMensajeTransaccionExitosa()
-
-           await this.blockUI.stop()
-           this.toggleModalFormularioPMAO()
-         }
-       })
-     } else {
-       actividadPMAO.estadoActividad = false;
-       this.pmaoService.saveActividadPMAO(this.idIndice, actividadPMAO).subscribe(async respuesta => {
-         if (respuesta) {
-           await this.blockUI.stop()
-           sweetAlertMensaje.getMensajeTransaccionExitosa()
-           this.toggleModalFormularioPMAO()
-         }
-       })
-     }*/
-
-
+  saveActividadPMAO(actividadPMAO: any) {
+    this.blockUI.start()
+    actividadPMAO.subActividades.forEach(subAc => {
+      let fecha_fin = moment(new Date(subAc.fecha_fin));
+      let fecha_incio = moment(new Date(subAc.fecha_inicio));
+      let periodo = fecha_fin.diff(fecha_incio, "weeks");
+      let tipoPeriodo = "Dias"
+      if (fecha_fin.diff(fecha_incio, "M") > 0) {
+        tipoPeriodo = "Meses"
+        periodo = fecha_fin.diff(fecha_incio, "M");
+      }
+      subAc.programacion.forEach(programacion => {
+        programacion.mes = firebase.firestore.Timestamp.fromDate(new Date(programacion.mes))
+      });
+      subAc.fecha_inicio = firebase.firestore.Timestamp.fromDate(fecha_incio.toDate())
+      subAc.fecha_fin = firebase.firestore.Timestamp.fromDate(fecha_fin.toDate())
+      subAc.tipoPeriodo = tipoPeriodo
+      subAc.periodo = periodo
+    })
+    if (actividadPMAO.id != null) {
+      this.pmaoService.updateActividadPMAO(actividadPMAO, this.idIndice).subscribe(respuesta => {
+        if (respuesta) {
+          sweetAlertMensaje.getMensajeTransaccionExitosa()
+          this.blockUI.stop()
+        }
+      })
+    } else {
+      actividadPMAO.estadoActividad = false;
+      this.pmaoService.saveActividadPMAO(this.idIndice, actividadPMAO).subscribe(async respuesta => {
+        if (respuesta) {
+          await this.blockUI.stop()
+          sweetAlertMensaje.getMensajeTransaccionExitosa()
+        }
+      })
+    }
+    this.toggleModalFormularioPMAO()
   }
 
   guardarObservacion(index: number) {
@@ -474,7 +485,6 @@ export class PmaoComponent implements OnInit, AfterViewInit {
 
         if (!this.actividadPMAOSeleccionado.subActividades[index].observaciones) {
           this.actividadPMAOSeleccionado.subActividades[index].observaciones = new Array<any>()
-          console.log("enteo al if")
         }
 
         this.actividadPMAOSeleccionado.subActividades[index].observaciones.push({ mensaje: respuesta.value, estado: true, isVisto: false, fecha_regitro: firebase.firestore.Timestamp.now(), fecha_visto: firebase.firestore.Timestamp.now() })

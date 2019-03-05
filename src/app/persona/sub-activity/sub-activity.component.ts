@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2, Output, EventEmitter } from '@angular/core';
 import { Observable, Subscription, from, } from 'rxjs';
 import { actividadPMAO } from 'src/app/modelos/actividadPMAO';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
 import { ActividadPmaoService } from 'src/app/services/actividad-pmao.service';
 import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
@@ -11,10 +11,13 @@ import { executionActivityPMAO } from 'src/app/modelos/executionActivityPMAO';
 import FileUploadWithPreview from 'file-upload-with-preview'
 import { FileService } from 'src/app/services/file.service';
 import { file } from 'src/app/modelos/File';
-import { take, flatMap, map, reduce } from 'rxjs/operators';
+import { map, reduce, flatMap, take } from 'rxjs/operators';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { subActividadPMAO } from 'src/app/modelos/subActividadPMAO';
 import { persona } from 'src/app/modelos/persona';
+import * as moment from "moment";
+import * as firebase from "firebase/app";
+import { Colecciones } from 'src/app/HelperClass/Colecciones';
 @Component({
   selector: 'app-sub-activity',
   templateUrl: './sub-activity.component.html',
@@ -119,19 +122,13 @@ export class SubActivityComponent implements OnInit {
   @ViewChild("clasificacion") elementClasificacion: ElementRef
   activarModalComentarioActividad: boolean = false;
   personaLoged: persona;
-  constructor(private render: Renderer2, private pmaoService: ActividadPmaoService, private fileService: FileService) {
+  listImagen: Array<FileUploadWithPreview>;
+  constructor(private render: Renderer2, private pmaoService: ActividadPmaoService, private fileService: FileService, private formBuilder: FormBuilder) {
 
   }
   ngOnInit() {
-
-    this.formEjecucion = new FormGroup({
-      executionComentary: new FormControl('', Validators.required),
-      denomination: new FormControl('', Validators.required),
-      unity: new FormControl('', Validators.required),
-      files: new FormControl('', Validators.required),
-      current: new FormControl('', Validators.required),
-      total: new FormControl('', Validators.required)
-    })
+    this.listImagen = new Array<FileUploadWithPreview>()
+    this.formEjecucion = this.formBuilder.group({})
     this.personaLoged = JSON.parse(sessionStorage.getItem("personaLoged"))
   }
 
@@ -144,14 +141,18 @@ export class SubActivityComponent implements OnInit {
 
     }
   }
+  createImageUpload(programcionId: string) {
+    if (!this.listImagen.find(fileUploader => fileUploader.uploadId == programcionId)) {
+      this.listImagen.push(new FileUploadWithPreview(programcionId))
+    }
 
+  }
+  removeItemImagen() {
+    this.listImagen.splice(0, this.listImagen.length)
+  }
   toogleFormEjecucion() {
     this.activarModalFormEjecucion = !this.activarModalFormEjecucion
-    if (this.activarModalFormEjecucion && !this.fileUploadTemplate) {
-      this.fileUploadTemplate = new FileUploadWithPreview(this.idComponent)
-    } else if (!this.activarModalFormEjecucion && this.fileUploadTemplate) {
-      this.fileUploadTemplate.clearImagePreviewPanel();
-    }
+
   }
 
   optionSelected(element: ElementRef) {
@@ -166,36 +167,7 @@ export class SubActivityComponent implements OnInit {
   seleccionarActividad(actividad: actividadPMAO) {
     this.actividadSeleccionada = actividad;
   }
-  /**
-   * guarda los datos de la ejecucion de la actividad seleccionada
-  *@param {json}  datos que el formulario recopila
-   */
-  saveEjecucion(form: FormGroup) {
-    this.blockUI.start()
-    form.setControl("calculation", new FormControl(this.calcularTotalFromEjecucion(form.get("total").value, form.get("current").value)))
-    form.setControl("registrationDate", new FormControl(new Date()))
-    let executionActivity: executionActivityPMAO = (form.value as executionActivityPMAO)
-    executionActivity.urlListOfPhotos = new Array<file>();
-    this.actividadSeleccionada.isEjecuciones = true
-    from(this.fileUploadTemplate.cachedFileArray).pipe(take(this.fileUploadTemplate.cachedFileArray.length), flatMap((file: File) => this.fileService.uploadFile(file, "executionPMAO"))).subscribe(
-      {
-        next: file => {
-          executionActivity.urlListOfPhotos.push(file)
-        },
-        error: err => console.log(err),
-        complete: () => {
-          console.log(executionActivity)
-          this.pmaoService.saveActividadEjecucionPMAOFindIdActividad(this.actividadSeleccionada, this.idIndice, executionActivity).subscribe(respuesta => {
-            if (respuesta) {
-              this.blockUI.stop()
-              // sweetAlertMensaje.getMensajeTransaccionExitosa()
-              this.toogleFormEjecucion();
-            }
-          })
-        }
-      })
 
-  }
   getMessageInfoValidation(activity: actividadPMAO) {
     let html: any = `<div><span>Valoracion :<strong>${activity.valoracion.nombre}</strong></span></div>
                       <div><span>Clasificacion : <strong>${activity.clasificacion}</strong></span></div>`
@@ -226,6 +198,7 @@ export class SubActivityComponent implements OnInit {
     })
   }
   visualizacionSubAcitivada(actividad: actividadPMAO) {
+    console.log(actividad)
     this.seleccionActividadVisualizacionAndEdit.emit({
       actividad: actividad,
       accion: "visualizacion"
@@ -324,6 +297,34 @@ export class SubActivityComponent implements OnInit {
       })
     }
   }
+  guardarResultado(subActividad: subActividadPMAO, resultado: string, indiceProgramacion: number) {
+    this.blockUI.start();
+    subActividad.programacion[indiceProgramacion].resultado = { resultado: parseFloat(resultado), estado: true, fecha_registro: firebase.firestore.Timestamp.now() }
+    if (!subActividad.programacion[indiceProgramacion].resultado.urlListOfPhotos) {
+      subActividad.programacion[indiceProgramacion].resultado.urlListOfPhotos = new Array<file>()
+    }
+    let listImagenUpload = this.listImagen.find(fileUploader => fileUploader.uploadId == subActividad.programacion[indiceProgramacion].id)
+    from(listImagenUpload ? listImagenUpload.cachedFileArray : [])
+      .pipe(take(listImagenUpload.cachedFileArray.length),
+        flatMap((file: File) =>
+          this.fileService.uploadFile(file, Colecciones.pmao)
+        )).subscribe(
+          {
+            next: file => {
+              subActividad.programacion[indiceProgramacion].resultado.urlListOfPhotos.push(file)
+            },
+            complete: () => {
+              this.pmaoService.updateSubActividad(this.actividadSeleccionada, this.idIndice).subscribe(respuesta => {
+                if (respuesta) {
+                  this.blockUI.stop();
+                  this.toogleFormEjecucion();
+                }
+              })
+            }
+          }
+        )
+    console.log(subActividad.programacion[indiceProgramacion])
 
+  }
 
 }

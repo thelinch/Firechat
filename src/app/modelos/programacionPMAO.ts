@@ -1,4 +1,9 @@
+import { resultadoPMAO } from "./resultadoPMAO";
+
 export interface programacionPMAO {
-  fecha: firebase.firestore.Timestamp,
+  id: string
+  mes: firebase.firestore.Timestamp,
   valor: number
+  resultado: resultadoPMAO,
+
 }

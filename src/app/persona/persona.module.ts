@@ -29,8 +29,9 @@ import { BlockUIModule } from 'ng-block-ui';
 import { ActividadIAComponent } from './actividad-ia/actividad-ia.component';
 import { PruebaDirective } from '../directivas/prueba.directive';
 import { NgxPaginationModule } from 'ngx-pagination'
+import { FilterProgramcionPipe } from '../pipes/filter-programcion.pipe';
 @NgModule({
-  declarations: [PersonaComponent, PruebaDirective, ActividadIAComponent, HomeComponent, SubActivityComponent, FilterNamePipe, PmaoDirective, DashboardComponent, MapComponent, ActividadComponent, ParametroMapeoComponent, PmaoComponent],
+  declarations: [PersonaComponent, FilterProgramcionPipe, PruebaDirective, ActividadIAComponent, HomeComponent, SubActivityComponent, FilterNamePipe, PmaoDirective, DashboardComponent, MapComponent, ActividadComponent, ParametroMapeoComponent, PmaoComponent],
   imports: [CommonModule,
     NgxPaginationModule,
     BlockUIModule.forRoot(),
