@@ -39,7 +39,7 @@ export class ActividadService {
     return formatedDate;
   }
   update(actividad: actividades) {
-    this.afs.collection("actividades").doc(actividad.id).update(actividad)
+    this.afs.collection(Colecciones.actividades).doc(actividad.id).update(actividad)
   }
   getAllIncidenciaFindIdActividad(idAvctividad: string, idIndice: string): Observable<incidencias[]> {
     return this.getCollectionActividades(idIndice).doc(idAvctividad).collection<incidencias>("incidencias").snapshotChanges().

@@ -117,7 +117,7 @@
         <button class=" delete " aria-label=" close " (click)=" toggleModalActividad() "></button>
       </header>
       <section class=" modal-card-body ">
-        <form [formGroup]=" actividadForm " (submit)=" saveActividad(actividadForm.value) ">
+        <form [formGroup]=" actividadForm " (submit)=" saveAndEditActividad(actividadForm.value) ">
           <div class=" field">
             <label for="" class="label">Tipo de Actividad</label>
             <div class="control">

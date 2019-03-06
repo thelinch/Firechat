@@ -106,7 +106,7 @@ export class ActividadComponent implements OnInit {
     this.parametroService.getAllParametroFindIdActividad(idActividad).subscribe(lista => {
       this.listaParametros = lista
     });
-    
+
   }
   toggleModalEstadistica() {
     this.activarModalEstadistica = !this.activarModalEstadistica
@@ -168,6 +168,7 @@ export class ActividadComponent implements OnInit {
     this.actividadForm.get("componente").patchValue({
       id: this.actividadSeleccionada.componente.id
     })
+    this.actividadForm.get("id").patchValue(this.actividadSeleccionada.id)
   }
   compararObjeto(objeto1: any, objeto2: any) {
     return objeto1 && objeto2 ? objeto1.id === objeto2.id : objeto1 === objeto2;
@@ -293,27 +294,39 @@ export class ActividadComponent implements OnInit {
     this.activarFormIncidencia = !this.activarFormIncidencia
 
   }
-  saveActividad(actividad) {
-    let actividadNew: actividades = actividad as actividades;
-    actividadNew.persona = JSON.parse(sessionStorage.getItem("personaLoged"))
-    actividadNew.fecha_inicio = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_inicio));
-    actividadNew.isParametro = false;
-    actividadNew.incidencia = false;
-    actividadNew.lat = sessionStorage.getItem(FunctionsBasics.nombreLatitud)
-    actividadNew.lng = sessionStorage.getItem(FunctionsBasics.nombreLongitud)
-    actividadNew.idIndice = this.idIndice;
-    actividadNew.estadoObjeto = { estado: "Guardado" }
-    actividadNew.estado = true
-    //actividad.fecha_inicio = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_inicio))
-    if (actividad.fecha_fin) {
-      actividadNew.fecha_fin = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_fin));
-    }
-    this.actividadService.saveActividad(actividadNew).subscribe(valor => {
-      if (valor) {
-        this.actividadForm.reset()
-        this.toggleModalActividad();
+  saveAndEditActividad(actividad) {
+    console.log(actividad)
+    if (actividad.id) {
+      this.actividadSeleccionada.fecha_fin = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_fin))
+      this.actividadSeleccionada.fecha_inicio = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_inicio))
+      this.actividadSeleccionada.componente = actividad.componente
+      this.actividadSeleccionada.actividad = actividad.actividad
+
+      this.actividadService.update(this.actividadSeleccionada)
+      this.toggleModalActividad()
+    } else {
+      let actividadNew: actividades = actividad as actividades;
+      actividadNew.persona = JSON.parse(sessionStorage.getItem("personaLoged"))
+      actividadNew.fecha_inicio = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_inicio));
+      actividadNew.isParametro = false;
+      actividadNew.incidencia = false;
+      actividadNew.lat = sessionStorage.getItem(FunctionsBasics.nombreLatitud)
+      actividadNew.lng = sessionStorage.getItem(FunctionsBasics.nombreLongitud)
+      actividadNew.idIndice = this.idIndice;
+      actividadNew.estadoObjeto = { estado: "Guardado" }
+      actividadNew.estado = true
+      //actividad.fecha_inicio = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_inicio))
+      if (actividad.fecha_fin) {
+        actividadNew.fecha_fin = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_fin));
       }
-    })
+      this.actividadService.saveActividad(actividadNew).subscribe(valor => {
+        if (valor) {
+          this.actividadForm.reset()
+          this.toggleModalActividad();
+        }
+      })
+    }
+
 
   }
   //Funcionalidades de usuarios
