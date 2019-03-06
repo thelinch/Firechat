@@ -297,8 +297,8 @@ export class ActividadComponent implements OnInit {
   saveAndEditActividad(actividad) {
     console.log(actividad)
     if (actividad.id) {
-      this.actividadSeleccionada.fecha_fin = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_fin))
-      this.actividadSeleccionada.fecha_inicio = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_inicio))
+      this.actividadSeleccionada.fecha_fin = firebase.firestore.Timestamp.fromDate(moment(actividad.fecha_fin).toDate())
+      this.actividadSeleccionada.fecha_inicio = firebase.firestore.Timestamp.fromDate(moment(actividad.fecha_inicio).toDate())
       this.actividadSeleccionada.componente = actividad.componente
       this.actividadSeleccionada.actividad = actividad.actividad
 
@@ -307,7 +307,7 @@ export class ActividadComponent implements OnInit {
     } else {
       let actividadNew: actividades = actividad as actividades;
       actividadNew.persona = JSON.parse(sessionStorage.getItem("personaLoged"))
-      actividadNew.fecha_inicio = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_inicio));
+      actividadNew.fecha_inicio = firebase.firestore.Timestamp.fromDate(moment(actividad.fecha_inicio).toDate());
       actividadNew.isParametro = false;
       actividadNew.incidencia = false;
       actividadNew.lat = sessionStorage.getItem(FunctionsBasics.nombreLatitud)
@@ -317,7 +317,7 @@ export class ActividadComponent implements OnInit {
       actividadNew.estado = true
       //actividad.fecha_inicio = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_inicio))
       if (actividad.fecha_fin) {
-        actividadNew.fecha_fin = firebase.firestore.Timestamp.fromDate(new Date(actividad.fecha_fin));
+        actividadNew.fecha_fin = firebase.firestore.Timestamp.fromDate(moment(actividad.fecha_fin).toDate());
       }
       this.actividadService.saveActividad(actividadNew).subscribe(valor => {
         if (valor) {
