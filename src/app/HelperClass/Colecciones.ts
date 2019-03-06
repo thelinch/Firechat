@@ -4,4 +4,5 @@ export class Colecciones {
   static incidencias: string = "incidencias"
   static actividades: string = "actividades"
   static pmao="pmao"
+  static parametro: string="parametro"
 }

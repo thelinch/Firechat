@@ -10,6 +10,7 @@ export interface parametro {
   unidadMedida: string
   descripcion: string
   resultado: number
-  tipo: { nombre: string }
-  catergoria: categoria
+  tipo: { nombre: string ,id:string}
+  categoria: categoria
+  estado: boolean
 }

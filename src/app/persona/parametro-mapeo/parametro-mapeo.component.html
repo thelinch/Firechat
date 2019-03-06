@@ -1,43 +1,66 @@
-<button (click)="toggleModalParametro()" class="button is-info">Agregar nuevo Parametro</button>
-<div class="row">
-  <div class="col-xs-12 col-md-4" *ngFor="let parametro of listaParametros | async ;let i=index">
-    <div class="card margin_25">
+<button (click)="nuevoParametro();toggleModalParametro()" class="button is-info">Agregar nuevo Parametro</button>
+<!--Mostrar los parametros registrados -->
+
+<div class="row around-xs">
+  <div class="col-xs-12 col-md-4 margin_25" *ngFor="let parametro of (listaParametros | async);let i=index">
+    <div class="card">
       <header class="card-header">
-        <p class="card-header-title">
-          {{parametro.nombre}}
-        </p>
+        <div class="card-header-title ">
+          <span class="has-text-dark">
+            {{parametro.nombre }}
+          </span>
+        </div>
       </header>
-      <div class="card-content">
-        <div class="row">
-          <div class="col-xs-12 col-md-6">
-            <div class="content">
-              {{parametro.descripcion}}
-            </div>
-          </div>
+      <div class="card-content ">
+        <div>
+          <ul>
+            <li>
+              <h3>Unidad : {{parametro.unidadMedida}}</h3>
+            </li>
+            <li>
+              <h3>Tipo : {{parametro.tipo.nombre}}</h3>
+            </li>
+            <li>
+              <h3>Categoria: {{parametro.categoria.nombre}}</h3>
+            </li>
+          </ul>
         </div>
       </div>
+      <footer class="card-footer ">
+        <a (click)="setParametro(parametro);editarParametro();toggleModalParametro()" class="card-footer-item "><i
+            class="fas fa-edit">
+          </i></a>
+        <a (click)="setParametro(parametro);eliminarParametro()" class="card-footer-item "><i class="fas fa-trash-alt"
+            style="color:red">
+          </i></a>
+      </footer>
     </div>
   </div>
 </div>
+<!--Fin Mostrar parametros registrados-->
+
 <!--Modal para registro de parametros-->
 <div class="modal" [ngClass]="{'is-active':activarFormParametro}">
   <div class="modal-background" (click)="toggleModalParametro()"></div>
   <div class="modal-card">
     <header class="modal-card-head">
-      <p class="modal-card-title">Registro de Parametros</p>
+      <p class="modal-card-title">{{accion? 'Registro':'Edicion'}} de Parametros</p>
       <button class="delete" aria-label="close" (click)="toggleModalParametro()"></button>
     </header>
     <section class="modal-card-body">
       <form [formGroup]="formParametro" (submit)="saveParametro(formParametro.value)">
         <div class="field">
-
+          <div class="control">
+            <input class="input" formControlName="id" type="hidden">
+          </div>
+        </div>
+        <div class="field">
           <label class="label">Nombre: </label>
           <div class="control">
             <input class="input" formControlName="nombre" placeholder="nombre del parametro">
           </div>
         </div>
         <div class="field">
-
           <label class="label">Abreviacion:</label>
           <div class="control">
             <input class="input" type="text" formControlName="nombreCorto">
@@ -51,9 +74,9 @@
         </div>
         <div class="field"><label class="label">Tipo</label></div>
         <div class="select">
-          <select formControlName="tipo">
-            <option [ngValue]="{nombre:'LMP',id:1}">LMP</option>
-            <option [ngValue]="{nombre:'ECA',id:2}">ECA</option>
+          <select formControlName="tipo" [compareWith]="compareTipoParametro">
+            <option [ngValue]="{nombre:'LMP',id:'1'}">LMP</option>
+            <option [ngValue]="{nombre:'ECA',id:'2'}">ECA</option>
           </select>
         </div>
         <div class="field">
@@ -63,30 +86,27 @@
           </div>
         </div>
         <div class="field">
-
           <label class="label">Valor maximo: </label>
           <div class="control">
             <input class="input" type="number" formControlName="valor_maximo" placeholder="No debe pasar de este valor">
           </div>
         </div>
         <div class="field">
-
           <label class="label">Valor Minimo: </label>
           <div class="control">
             <input class="input" type="number" formControlName="valor_minimo">
           </div>
         </div>
-
         <div class="field"><label class="label">Categoria</label></div>
         <div class="select">
-          <select formControlName="categoria">
-            <option [ngValue]="categoria" *ngFor="let categoria of listaCategoria">{{categoria.nombre}}</option>
+          <select formControlName="categoria" [compareWith]="compareTipoParametro">
+            <option [ngValue]="categoria" *ngFor="let categoria of listaCategoria | async">{{categoria.nombre}}</option>
           </select>
         </div>
         <div class="field is-grouped">
           <div class="control">
             <button type="submit" [disabled]="!this.formParametro.valid" class="button is-success ">
-              Guardar
+                {{accion? 'Guardar':'Editar'}}
             </button>
           </div>
         </div>
@@ -95,18 +115,6 @@
     <footer class="modal-card-foot">
       <button class="button" (click)="toggleModalParametro()">Cancelar</button>
     </footer>
-
   </div>
 </div>
 <!--Fin de modal para registro registros-->
-
-
-<!--Mostrar los parametros registrados -->
-
-<!--Fin Mostrar parametros registrados-->
-
-<!--Editar los parametros registrados-->
-<!--Fin Editar parametros registrados-->
-
-<!--Eliminar los parametros registrados-->
-<!--Fin Eliminar parametros registrados-->

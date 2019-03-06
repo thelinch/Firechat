@@ -97,17 +97,28 @@ export class ParametroService {
     })))
   }
   getAllParametro(): Observable<parametro[]> {
-    return this.getCollectionParametro().snapshotChanges().pipe(map(actions => actions.map(parametroData => {
+    return this.afs.collection(Colecciones.parametro,ref=>ref.where("estado","==",true)).snapshotChanges().pipe(map(actions => actions.map(parametroData => {
       const id = parametroData.payload.doc.id;
       const data = parametroData.payload.doc.data() as parametro
       return { id, ...data }
     })))
   }
-  saveParametro(parametro: parametro): Promise<DocumentReference> {
-    return this.getCollectionParametro().add(parametro)
+  saveParametro(parametro: parametro) {
+    this.getCollectionParametro().add(parametro)
   }
   getCollectionParametro(): AngularFirestoreCollection<parametro> {
-    return this.afs.collection<parametro>("parametro")
+    return this.afs.collection<parametro>(Colecciones.parametro)
   }
 
+  updateEstadoParametro(parametro: parametro) {
+   this.afs.collection(Colecciones.parametro).doc(parametro.id).update({estado:parametro.estado})
+  }
+
+  updateParametro(parametro: parametro): Observable<boolean> {
+    return Observable.create(observer => {
+      this.afs.collection(Colecciones.parametro).doc(parametro.id).update(parametro).then(() => {
+        observer.next(true)
+      })
+    })
+  }
 }

@@ -6,6 +6,8 @@ import { categoria } from '../../modelos/categoria';
 import { parametro } from '../../modelos/parametro';
 import { validateConfig } from '@angular/router/src/config';
 import { Observable } from 'rxjs';
+import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-parametro-mapeo',
@@ -15,12 +17,15 @@ import { Observable } from 'rxjs';
 export class ParametroMapeoComponent implements OnInit {
   activarFormParametro: boolean = false;
   formParametro: FormGroup;
-  listaCategoria: categoria[]
+  listaCategoria: Observable<categoria[]>
   listaParametros: Observable<parametro[]>
+  parametroSeleccionado: parametro
+  accion :boolean =false
   constructor(private parametroService: ParametroService, private categoriaService: CategoriaService) { }
 
   ngOnInit() {
     this.formParametro = new FormGroup({
+      id: new FormControl(""),
       nombre: new FormControl("", Validators.required),
       valor_maximo: new FormControl("", Validators.required),
       valor_minimo: new FormControl(""),
@@ -30,42 +35,80 @@ export class ParametroMapeoComponent implements OnInit {
       categoria: new FormControl("", Validators.required),
       tipo: new FormControl("", Validators.required)
     })
-    
-    this.parametroService.getAllActividadesFindParametros("k3j2g3RlGbYu2HCt4XKA")
     this.listaParametros = this.parametroService.getAllParametro();
-
+    this.getAllCategoria()
   }
   cerraModal() {
-    setTimeout(() => {
-      if (this.activarFormParametro) {
-        this.toggleModalParametro();
-      }
-    }, 1500)
-  }
-  getAllCategoria() {
-    this.categoriaService.getAllCategoria().subscribe(categorias => {
-      this.listaCategoria = categorias;
-    })
-  }
-  saveParametro(parametro: parametro) {
-    
-    this.parametroService.saveParametro(parametro).then(documentoParametro => {
-      documentoParametro.get().then(dataParametro => {
-        console.log((dataParametro.data() as parametro).nombre)
-        this.formParametro.reset()
-        this.cerraModal();
-      })
-    })
-  }
-  toggleModalParametro() {
-    this.activarFormParametro = !this.activarFormParametro;
     if (this.activarFormParametro) {
-      this.getAllCategoria()
+      this.toggleModalParametro();
     }
   }
-   
+  getAllCategoria() {
+    this.listaCategoria = this.categoriaService.getAllCategoria()
+  }
  
+  saveParametro(parametro: parametro) {
+    if (parametro.id != null) {
+       this.parametroService.updateParametro(parametro).subscribe(async respuesta =>{
+        this.cerraModal(); 
+       })
+    } else {
+      parametro.estado = true;
+      this.parametroService.saveParametro(parametro)
+      this.cerraModal(); 
+    }
 
-  
- 
+    console.log(parametro)
+  }
+
+  toggleModalParametro() {
+    this.activarFormParametro = !this.activarFormParametro;
+  }
+
+
+  setParametro(parametros: parametro) {
+    this.parametroSeleccionado = parametros;
+  }
+  eliminarParametro() {
+    sweetAlertMensaje.getMensajeDelete("Desea eliminar el Parametro").then(respuesta => {
+      if (respuesta.value) {
+        this.parametroSeleccionado.estado = false;
+        this.parametroService.updateEstadoParametro(this.parametroSeleccionado);
+      }
+    })
+
+  }
+  compareTipoParametro(parametro1: any, parametro2: any) {
+    return parametro1 && parametro2 ? parametro1.id === parametro2.id : parametro1 === parametro2;
+  }
+
+  editarParametro() {
+    this.accion=false
+    this.formParametro.get("nombre").setValue(this.parametroSeleccionado.nombre)
+    this.formParametro.get("nombreCorto").setValue(this.parametroSeleccionado.nombreCorto)
+    this.formParametro.get("unidadMedida").setValue(this.parametroSeleccionado.unidadMedida)
+    this.formParametro.get("tipo").setValue(this.parametroSeleccionado.tipo)
+    this.formParametro.get("descripcion").setValue(this.parametroSeleccionado.descripcion)
+    this.formParametro.get("valor_maximo").setValue(this.parametroSeleccionado.valor_maximo)
+    this.formParametro.get("valor_minimo").setValue(this.parametroSeleccionado.valor_minimo)
+    this.formParametro.get("id").patchValue(this.parametroSeleccionado.id)
+    this.formParametro.get("tipo").patchValue(
+      {
+        id: this.parametroSeleccionado.tipo.id
+      })
+    this.formParametro.get("categoria").patchValue(
+      {
+        id: this.parametroSeleccionado.categoria.id
+      })
+
+
+    
+  }
+  nuevoParametro() {
+    this.accion=true
+    this.formParametro.reset()
+  }
+  toggleAccion() {
+    this.accion = !this.accion;
+  }
 }
