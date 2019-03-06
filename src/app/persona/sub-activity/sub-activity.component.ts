@@ -198,7 +198,6 @@ export class SubActivityComponent implements OnInit {
     })
   }
   visualizacionSubAcitivada(actividad: actividadPMAO) {
-    console.log(actividad)
     this.seleccionActividadVisualizacionAndEdit.emit({
       actividad: actividad,
       accion: "visualizacion"
@@ -229,8 +228,8 @@ export class SubActivityComponent implements OnInit {
       this.listaActividades = lista
     })
   }
-  getAllEjecutionsFindIdActividad(idActivity: string) {
-    this.listEjecutionsFindIdActivity = this.pmaoService.getAllEjecutionsFindIdActividad(this.idIndice, idActivity)
+  getAllEjecutionsFindIdActividad() {
+
   }
   getRiesgoMatrizIper(frecuencia: number, severidad: number): any {
     return this.matrizIper.find(i => i.frecuencia == frecuencia && i.severidad == severidad)
@@ -264,14 +263,14 @@ export class SubActivityComponent implements OnInit {
     }).then(seleccion => {
       if (seleccion["value"] != null && seleccion["value"] != "") {
         actividad.valoracion = { nombre: $("select.valoracion option:selected").text(), valor: (parseInt(seleccion["value"])) }
-        this.pmaoService.getAllEjecutionsFindIdActividad(this.idIndice, actividad.id).subscribe(listEjecutions => {
+       /* this.pmaoService.getAllEjecutionsFindIdActividad(this.idIndice, actividad.id).subscribe(listEjecutions => {
           let numeroTotalEjecuciones: number = listEjecutions.length
           from(listEjecutions).pipe(map(ejecution => ejecution.calculation), reduce((total, current) => total + current), map((totalSum: number) => parseFloat((totalSum / numeroTotalEjecuciones).toFixed(2)))).subscribe(efficiencyOne => {
             actividad.porcentageOfImplementation = parseFloat(((efficiencyOne * FunctionsBasics.valueEficiencyOne + actividad.valoracion.valor * FunctionsBasics.valueEficiencyTwo) / 5).toFixed(2));
             this.pmaoService.updateActividadPMAO(actividad, this.idIndice)
           })
 
-        })
+        })*/
       }
     })
   }
@@ -314,7 +313,8 @@ export class SubActivityComponent implements OnInit {
               subActividad.programacion[indiceProgramacion].resultado.urlListOfPhotos.push(file)
             },
             complete: () => {
-              this.pmaoService.updateSubActividad(this.actividadSeleccionada, this.idIndice).subscribe(respuesta => {
+              this.actividadSeleccionada.isEjecuciones = true;
+              this.pmaoService.updateActividadPMAO(this.actividadSeleccionada, this.idIndice).subscribe(respuesta => {
                 if (respuesta) {
                   this.blockUI.stop();
                   this.toogleFormEjecucion();

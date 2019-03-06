@@ -36,7 +36,7 @@ export class ActividadPmaoService {
       })
     })
   }
-  updateSubActividad(actividadPmao: actividadPMAO, idIndice: string):Observable<boolean> {
+  updateSubActividad(actividadPmao: actividadPMAO, idIndice: string): Observable<boolean> {
     return Observable.create(observer => {
       this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").doc(actividadPmao.id).update({ subActividades: actividadPmao.subActividades })
       observer.next(true)
@@ -49,13 +49,7 @@ export class ActividadPmaoService {
       return data
     })))
   }
-  getAllEjecutionsFindIdActividad(idIndice: string, idActivity: string): Observable<executionActivityPMAO[]> {
-    return this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").doc(idActivity).collection(Colecciones.ejecuciones).snapshotChanges().pipe(map(actions => actions.map(documentoActividad => {
-      const data = documentoActividad.payload.doc.data() as executionActivityPMAO
-      data.id = documentoActividad.payload.doc.id
-      return data
-    })))
-  }
+
 
   getAllActividadFromName(idIndice: string, nombre: string): Observable<actividadPMAO[]> {
     return this.afs.collection("indice").doc(idIndice).collection("actividadPMAO", f => f.where("nombre", "==", nombre)).snapshotChanges().pipe(map(actions => actions.map(documentoActividad => {
@@ -66,9 +60,8 @@ export class ActividadPmaoService {
   }
   updateActividadPMAO(actividad: actividadPMAO, idIndice: string): Observable<boolean> {
     return Observable.create(observer => {
-      this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").doc(actividad.id).update(actividad).then(() => {
-        observer.next(true)
-      })
+      this.afs.collection("indice").doc(idIndice).collection("actividadPMAO").doc(actividad.id).update(actividad)
+      observer.next(true)
 
     })
   }
