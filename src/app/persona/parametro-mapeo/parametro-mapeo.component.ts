@@ -47,20 +47,19 @@ export class ParametroMapeoComponent implements OnInit {
     this.listaCategoria = this.categoriaService.getAllCategoria()
   }
  
-  saveParametro(parametro: parametro) {
-    if (parametro.id != null) {
-       this.parametroService.updateParametro(parametro).subscribe(async respuesta =>{
+    saveParametro(parametro: parametro) {
+    if (parametro.id !=null && this.parametroSeleccionado) {
+        this.parametroService.updateParametro(this.parametroSeleccionado).subscribe(async respuesta =>{
+          this.cerraModal(); 
+        })
+      } else {
+        parametro.estado = true;
+        this.parametroService.saveParametro(parametro)
         this.cerraModal(); 
-       })
-    } else {
-      parametro.estado = true;
-      this.parametroService.saveParametro(parametro)
-      this.cerraModal(); 
+      }
     }
 
-    console.log(parametro)
-  }
-
+ 
   toggleModalParametro() {
     this.activarFormParametro = !this.activarFormParametro;
   }
@@ -76,7 +75,6 @@ export class ParametroMapeoComponent implements OnInit {
         this.parametroService.updateEstadoParametro(this.parametroSeleccionado);
       }
     })
-
   }
   compareTipoParametro(parametro1: any, parametro2: any) {
     return parametro1 && parametro2 ? parametro1.id === parametro2.id : parametro1 === parametro2;
@@ -100,9 +98,6 @@ export class ParametroMapeoComponent implements OnInit {
       {
         id: this.parametroSeleccionado.categoria.id
       })
-
-
-    
   }
   nuevoParametro() {
     this.accion=true

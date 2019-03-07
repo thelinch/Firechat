@@ -6,22 +6,25 @@
     <div class="card">
       <header class="card-header">
         <div class="card-header-title ">
-          <span class="has-text-dark">
-            {{parametro.nombre }}
-          </span>
+            <span class="has-text-dark">
+              {{parametro.nombre }}
+            </span>
+       
+          
         </div>
       </header>
-      <div class="card-content ">
-        <div>
+      <div class="card-content " >
+          <div class="head"> <b><u>Detalle</u></b></div>
+          <div class="descripcion"> 
           <ul>
             <li>
-              <h3>Unidad : {{parametro.unidadMedida}}</h3>
+              <h3> <b>Unidad :</b> {{parametro.unidadMedida}}</h3>
             </li>
             <li>
-              <h3>Tipo : {{parametro.tipo.nombre}}</h3>
+              <h3><b>Tipo :</b> {{parametro.tipo.nombre}}</h3>
             </li>
             <li>
-              <h3>Categoria: {{parametro.categoria.nombre}}</h3>
+              <h3><b>Categoria :</b> {{parametro.categoria.nombre}}</h3>
             </li>
           </ul>
         </div>

@@ -118,7 +118,9 @@ export class ParametroService {
     return Observable.create(observer => {
       this.afs.collection(Colecciones.parametro).doc(parametro.id).update(parametro).then(() => {
         observer.next(true)
+        
       })
     })
+    
   }
 }
