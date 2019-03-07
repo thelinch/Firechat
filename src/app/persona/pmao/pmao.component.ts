@@ -210,6 +210,7 @@ export class PmaoComponent implements OnInit, AfterViewInit {
     { name: "Medio", inicio: 9, fin: 15, color: "blue" },
     { name: "Bajo", inicio: 16, fin: 25, color: "#c4bfbd" }]
   ngOnInit() {
+    FunctionsBasics.iniciarMaterialBoxed();
     this.router.params.subscribe(dataUrl => {
       this.idIndice = dataUrl.idIndice;
 

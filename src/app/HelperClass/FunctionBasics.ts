@@ -1,3 +1,5 @@
+import * as $ from 'jquery';
+import * as M from 'materialize-css'
 export class FunctionsBasics {
   static valueEficiencyOne: number = 0.1;
   static valueEficiencyTwo: number = 0.9
@@ -11,6 +13,9 @@ export class FunctionsBasics {
   static closeModal(variable: boolean): boolean {
     variable = false;
     return variable;
+  }
+  static iniciarMaterialBoxed() {
+    M.Materialbox.init($('.materialboxed'));
   }
   static getCurrentDate(): string {
 

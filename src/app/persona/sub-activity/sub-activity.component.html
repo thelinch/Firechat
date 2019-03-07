@@ -151,13 +151,13 @@
       </header>
       <section class="modal-card-body">
         <div class="columns is-multiline">
-          <div *ngFor="let actividad of actividadSeleccionada.subActividades | transformSubactividades;let i=index" class="column box is-full">
+          <div *ngFor="let actividad of actividadSeleccionada.subActividades ;let i=index" class="column box is-full">
             <div class="columns   is-multiline">
               <div class="column is-full has-text-centered ">
                 <h3>{{actividad.actividad}} <strong>({{actividad.total}})</strong></h3>
               </div>
               <div class="column is-12 margin_button_75"
-                *ngFor="let programacion of actividad.programacion;let j=index">
+                *ngFor="let programacion of actividad.programacion | transformSubactividades | async;let j=index">
                 <div class="columns is-multiline has-background-white-ter ">
                   <div class="column is-full has-text-centered has-text-info position_relative">
                     <p>{{programacion.mes.toDate() | date :'mediumDate'}}(<strong>{{programacion.valor}}</strong>)</p>
@@ -169,7 +169,10 @@
                     </div>
                   </div>
                   <div class="column is-full  ">
+                    <ng-container
+                      *ngTemplateOutlet="templateFotos;context:{fotos:programacion.resultado.urlListOfPhotos}">
 
+                    </ng-container>
                   </div>
                 </div>
               </div>
@@ -213,3 +216,24 @@
 
 
 </block-ui>
+<ng-template #templateFotos let-arrayFotos="fotos">
+  <article class="message is-info">
+    <div class="message-header">
+      <p>Lista de Fotos</p>
+    </div>
+    <div class="message-body">
+      <div class="display_flex">
+        <figure class="image is-128x128 " *ngFor="let foto of (arrayFotos | filterName) | async;let i=index">
+          <div class="display_flex position_absolute right padding_2">
+            <a class="delete" (click)="deleteImagenIncidencia(foto)" aria-label="delete"></a>
+            <a>
+              <i class="fas fa-download"></i>
+            </a>
+
+          </div>
+          <img [src]="foto.url" class="materialboxed" [alt]="foto.name">
+        </figure>
+      </div>
+    </div>
+  </article>
+</ng-template>

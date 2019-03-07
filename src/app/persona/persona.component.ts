@@ -49,6 +49,7 @@ export class PersonaComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.activatedRouter.params.subscribe(params => {
       this.idPerson = params["id"]
     })

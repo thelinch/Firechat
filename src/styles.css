@@ -1,4 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+.materialboxed {
+  display: block;
+  cursor: -webkit-zoom-in;
+  cursor: zoom-in;
+  position: relative;
+  -webkit-transition: opacity .4s;
+  transition: opacity .4s;
+  -webkit-backface-visibility: hidden;
+}
+.materialboxed:hover:not(.active) {
+  opacity: .8;
+}
+.materialboxed.active {
+  cursor: -webkit-zoom-out;
+  cursor: zoom-out;
+}
+.carousel.scrolling .carousel-item .materialboxed,
+.carousel .carousel-item:not(.active) .materialboxed {
+  pointer-events: none;
+}
+
 .main-container{
   margin-top: 40px;
   margin-bottom: 150px;

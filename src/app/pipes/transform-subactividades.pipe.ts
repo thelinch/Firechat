@@ -8,15 +8,12 @@ import { flatMap, map, filter, switchMap, mapTo, toArray, pairwise } from 'rxjs/
   name: 'transformSubactividades'
 })
 export class TransformSubactividadesPipe implements PipeTransform {
-  transform(subActividad: subActividadPMAO[]): Observable<programacionPMAO[]> {
-    let obserVableSub = from(subActividad);
+  transform(programacion: programacionPMAO[]): Observable<programacionPMAO[]> {
+    let obserVableSub = from(programacion);
     obserVableSub
-      .pipe(
-        flatMap(subactividad => from(subactividad.programacion)),
-        flatMap(progra => iif(() => progra.resultado !== null, obserVableSub, of())), toArray()).subscribe(data => {
-          console.log(data)
-        })
-    return from(subActividad).pipe(switchMap(subActividad => subActividad.programacion), filter(programacion => programacion.resultado != null), toArray());
+      .pipe(filter(progra => progra.resultado != null),toArray()).subscribe(da => console.log(da))
+    return obserVableSub
+      .pipe(filter(progra => progra.resultado != null),toArray())
   }
 
   /*  transform(subActividades: subActividadPMAO[]): Observable<programacionPMAO[]> {
