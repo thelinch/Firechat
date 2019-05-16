@@ -157,7 +157,7 @@ export class SubActivityComponent implements OnInit {
 
   optionSelected(element: ElementRef) {
     $(element).slideDown("slow")
-    $("li").find("div.row").not(element).slideUp("slow")
+    $("li").find("div.row").not(element.nativeElement).slideUp("slow")
     this.optionSelectedActivityName = name
   }
   /**
