@@ -413,8 +413,11 @@ export class PmaoComponent implements OnInit, AfterViewInit {
   }
 
   selectionOption(element: ElementRef, nombre: string) {
-    $(element).find(".body").slideToggle("slow")
-    $(element).parent().parent().find(".collapsie").not(element.nativeElement).find("div.body").slideUp("slow")
+    console.log($(element));
+    $(element).parent().parent().find(".body").slideUp();
+    $(element).find(".body").slideToggle();
+    //$(element).find(".body").slideToggle("slow")
+    //$(element).parent().parent().find(".collapsie").not(element.nativeElement).find("div.body").slideUp("slow")
   }
   seleccionarOpcion(item: any) {
     this.opcionSeleccionado = item

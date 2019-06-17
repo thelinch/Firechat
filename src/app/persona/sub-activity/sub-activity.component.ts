@@ -156,8 +156,12 @@ export class SubActivityComponent implements OnInit {
   }
 
   optionSelected(element: ElementRef) {
-    $(element).slideDown("slow")
-    $("li").find("div.row").not(element.nativeElement).slideUp("slow")
+    console.log($(element));
+    console.log($(element).parent().parent().parent().parent());
+    $(element).parent().parent().parent().parent().find("div.row").slideUp('slow');
+    $(element).slideToggle('slow');
+    //$(element).slideDown("slow");
+    //$("li").find("div.row").not( $(element) ).slideUp("slow")
     this.optionSelectedActivityName = name
   }
   /**
@@ -263,14 +267,14 @@ export class SubActivityComponent implements OnInit {
     }).then(seleccion => {
       if (seleccion["value"] != null && seleccion["value"] != "") {
         actividad.valoracion = { nombre: $("select.valoracion option:selected").text(), valor: (parseInt(seleccion["value"])) }
-       /* this.pmaoService.getAllEjecutionsFindIdActividad(this.idIndice, actividad.id).subscribe(listEjecutions => {
-          let numeroTotalEjecuciones: number = listEjecutions.length
-          from(listEjecutions).pipe(map(ejecution => ejecution.calculation), reduce((total, current) => total + current), map((totalSum: number) => parseFloat((totalSum / numeroTotalEjecuciones).toFixed(2)))).subscribe(efficiencyOne => {
-            actividad.porcentageOfImplementation = parseFloat(((efficiencyOne * FunctionsBasics.valueEficiencyOne + actividad.valoracion.valor * FunctionsBasics.valueEficiencyTwo) / 5).toFixed(2));
-            this.pmaoService.updateActividadPMAO(actividad, this.idIndice)
-          })
-
-        })*/
+        /* this.pmaoService.getAllEjecutionsFindIdActividad(this.idIndice, actividad.id).subscribe(listEjecutions => {
+           let numeroTotalEjecuciones: number = listEjecutions.length
+           from(listEjecutions).pipe(map(ejecution => ejecution.calculation), reduce((total, current) => total + current), map((totalSum: number) => parseFloat((totalSum / numeroTotalEjecuciones).toFixed(2)))).subscribe(efficiencyOne => {
+             actividad.porcentageOfImplementation = parseFloat(((efficiencyOne * FunctionsBasics.valueEficiencyOne + actividad.valoracion.valor * FunctionsBasics.valueEficiencyTwo) / 5).toFixed(2));
+             this.pmaoService.updateActividadPMAO(actividad, this.idIndice)
+           })
+ 
+         })*/
       }
     })
   }
