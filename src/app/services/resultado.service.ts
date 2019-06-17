@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentData } from 'angularfire2/firestore';
-import { resultado } from '../modelos/resultadoICa';
+import { resultado } from '../modelos/resultadoICA';
 import { Observable } from 'rxjs';
 import { actividades } from '../modelos/actividades';
 import { ActividadService } from './actividad.service';
