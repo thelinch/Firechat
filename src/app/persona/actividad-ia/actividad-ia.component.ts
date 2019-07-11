@@ -134,6 +134,7 @@ export class ActividadIAComponent implements OnInit {
         next: file => incidencia.urlListOfPhotos.push(file),
         error: error => console.log(error),
         complete: () => {
+          incidencia.fecha_registro = firebase.firestore.Timestamp.now();
           this.incidenciaService.setIncidenciaFindIA(this.idIA, incidencia).then(async documento => {
             this.toggleFormIncidencia()
             await this.stopBlock();

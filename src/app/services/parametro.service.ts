@@ -10,7 +10,7 @@ import { actividad_persona } from '../modelos/actividad_persona';
 import { elementProperty } from '@angular/core/src/render3/instructions';
 import { async } from 'rxjs/internal/scheduler/async';
 import { Colecciones } from './../HelperClass/Colecciones';
-
+import * as firebase from "firebase/app";
 @Injectable({
   providedIn: 'root'
 })
@@ -72,15 +72,7 @@ export class ParametroService {
               })
             })
           })
-          /*this.afs.doc(elemento.id).collection("actividad").snapshotChanges().pipe(map(actions => actions.map(documentoActividad => {
-            const id = documentoActividad.payload.doc.id;
-            const data = documentoActividad.payload.doc.data() as parametro_actividad;
-            return { id, ...data }
-          }))).pipe(map(listaParametroActividad => listaParametroActividad.map(parametroActividad => {
-            parametroActividad.actividadRef.get().then(actividad => {
-              arrayActividad.push((actividad.data() as actividades))
-            })
-          })))*/
+      
         })
       })
 

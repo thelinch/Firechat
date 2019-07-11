@@ -253,6 +253,7 @@ export class ActividadComponent implements OnInit {
       this.actividadSeleccionada.incidencia = true
       incidencia.idTipoReferencia = this.actividadSeleccionada.id
       incidencia.tipoReferencia = "actividad"
+      incidencia.fecha_registro = firebase.firestore.Timestamp.now();
       incidencia.estado = true;
       incidencia.persona = JSON.parse(sessionStorage.getItem("personaLoged"))
       incidencia.latitud = sessionStorage.getItem(FunctionsBasics.nombreLatitud);
