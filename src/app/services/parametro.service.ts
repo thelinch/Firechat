@@ -97,10 +97,10 @@ export class ParametroService {
     })))
   }
   getAllParametro(): Observable<parametro[]> {
-    return this.afs.collection(Colecciones.parametro,ref=>ref.where("estado","==",true)).snapshotChanges().pipe(map(actions => actions.map(parametroData => {
-      const id = parametroData.payload.doc.id;
-      const data = parametroData.payload.doc.data() as parametro
-      return { id, ...data }
+    return this.afs.collection(Colecciones.parametro, ref => ref.where("estado", "==", true)).snapshotChanges().pipe(map(actions => actions.map(parametroData => {
+      const parametro = parametroData.payload.doc.data() as parametro
+      parametro.id = parametroData.payload.doc.id
+      return parametro
     })))
   }
   saveParametro(parametro: parametro) {
@@ -111,16 +111,16 @@ export class ParametroService {
   }
 
   updateEstadoParametro(parametro: parametro) {
-   this.afs.collection(Colecciones.parametro).doc(parametro.id).update({estado:parametro.estado})
+    this.afs.collection(Colecciones.parametro).doc(parametro.id).update({ estado: parametro.estado })
   }
 
   updateParametro(parametro: parametro): Observable<boolean> {
     return Observable.create(observer => {
       this.afs.collection(Colecciones.parametro).doc(parametro.id).update(parametro).then(() => {
         observer.next(true)
-        
+
       })
     })
-    
+
   }
 }

@@ -20,7 +20,7 @@ export class ParametroMapeoComponent implements OnInit {
   listaCategoria: Observable<categoria[]>
   listaParametros: Observable<parametro[]>
   parametroSeleccionado: parametro
-  accion :boolean =false
+  accion: boolean = false
   constructor(private parametroService: ParametroService, private categoriaService: CategoriaService) { }
 
   ngOnInit() {
@@ -46,20 +46,21 @@ export class ParametroMapeoComponent implements OnInit {
   getAllCategoria() {
     this.listaCategoria = this.categoriaService.getAllCategoria()
   }
- 
-    saveParametro(parametro: parametro) {
-    if (parametro.id !=null && this.parametroSeleccionado) {
-        this.parametroService.updateParametro(this.parametroSeleccionado).subscribe(async respuesta =>{
-          this.cerraModal(); 
-        })
-      } else {
-        parametro.estado = true;
-        this.parametroService.saveParametro(parametro)
-        this.cerraModal(); 
-      }
-    }
 
- 
+  saveAndEditParametro(parametro: parametro) {
+    if (parametro.id != null) {
+      console.log(parametro)
+      this.parametroService.updateParametro(parametro).subscribe(respuesta => {
+        this.cerraModal();
+      })
+    } else {
+      parametro.estado = true;
+      this.parametroService.saveParametro(parametro)
+      this.cerraModal();
+    }
+  }
+
+
   toggleModalParametro() {
     this.activarFormParametro = !this.activarFormParametro;
   }
@@ -72,6 +73,7 @@ export class ParametroMapeoComponent implements OnInit {
     sweetAlertMensaje.getMensajeDelete("Desea eliminar el Parametro").then(respuesta => {
       if (respuesta.value) {
         this.parametroSeleccionado.estado = false;
+        console.log(this.parametroSeleccionado)
         this.parametroService.updateEstadoParametro(this.parametroSeleccionado);
       }
     })
@@ -81,7 +83,7 @@ export class ParametroMapeoComponent implements OnInit {
   }
 
   editarParametro() {
-    this.accion=false
+    this.accion = false
     this.formParametro.get("nombre").setValue(this.parametroSeleccionado.nombre)
     this.formParametro.get("nombreCorto").setValue(this.parametroSeleccionado.nombreCorto)
     this.formParametro.get("unidadMedida").setValue(this.parametroSeleccionado.unidadMedida)
@@ -92,15 +94,17 @@ export class ParametroMapeoComponent implements OnInit {
     this.formParametro.get("id").patchValue(this.parametroSeleccionado.id)
     this.formParametro.get("tipo").patchValue(
       {
-        id: this.parametroSeleccionado.tipo.id
+        id: this.parametroSeleccionado.tipo.id,
+        nombre: this.parametroSeleccionado.tipo.nombre
       })
     this.formParametro.get("categoria").patchValue(
       {
-        id: this.parametroSeleccionado.categoria.id
+        id: this.parametroSeleccionado.categoria.id,
+        nombre: this.parametroSeleccionado.categoria.nombre
       })
   }
   nuevoParametro() {
-    this.accion=true
+    this.accion = true
     this.formParametro.reset()
   }
   toggleAccion() {

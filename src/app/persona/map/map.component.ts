@@ -9,7 +9,6 @@ import { area } from 'src/app/modelos/area';
 import { AreaService } from 'src/app/services/area.service';
 import { google } from '@agm/core/services/google-maps-types';
 import { IndiceService } from 'src/app/services/indice.service';
-import { async } from '@angular/core/testing';
 import { indice } from './../../modelos/indice';
 import { take, map } from 'rxjs/operators';
 import * as $ from "jquery"
@@ -17,7 +16,6 @@ import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
 import { resultado } from 'src/app/modelos/resultadoICA';
 import { ResultadoService } from 'src/app/services/resultado.service';
 import { persona } from 'src/app/modelos/persona';
-import { element } from '@angular/core/src/render3';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -55,15 +53,13 @@ export class MapComponent implements OnInit {
     let optionOutput = {}
     this.areaService.getAllIndiceFindAreaId(idArea).pipe(take(1)).pipe(take(1)).subscribe({
       next: listRef => {
-        listRef.map(ref => {
-          ref.get().then(indiceRef => {
-            const indice = indiceRef.data() as indice;
-            indice.id = indiceRef.id
-            arrayIndice.push(indice)
-          })
 
+        listRef.map(async ref => {
+          const dataIndice = await ref.get()
+          const indice = dataIndice.data() as indice
+          indice.id = dataIndice.id;
+          arrayIndice.push(indice)
         })
-
       },
       complete: () => {
         Swal({
@@ -114,14 +110,14 @@ export class MapComponent implements OnInit {
   ocultarLeyendaTogle(elemento: ElementRef) {
     $(elemento).parent()
     $(elemento).detach().appendTo("#prueba")
-      $("#prueba").css("display","block")
-    if($("#prueba2").is(":hidden")){
+    $("#prueba").css("display", "block")
+    if ($("#prueba2").is(":hidden")) {
       $("#prueba2").show("slow");
       $("#boton").slideUp()
       $(elemento).detach().appendTo("#prueba2")
-      $("#prueba").css("display","none")
+      $("#prueba").css("display", "none")
 
-    }else{
+    } else {
       $("#prueba2").slideUp()
 
     }

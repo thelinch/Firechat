@@ -6,16 +6,16 @@
     <div class="card">
       <header class="card-header">
         <div class="card-header-title ">
-            <span class="has-text-dark">
-              {{parametro.nombre }}
-            </span>
-       
-          
+          <span class="has-text-dark">
+            {{parametro.nombre }}
+          </span>
+
+
         </div>
       </header>
-      <div class="card-content " >
-          <div class="head"> <b><u>Detalle</u></b></div>
-          <div class="descripcion"> 
+      <div class="card-content ">
+        <div class="head"> <b><u>Detalle</u></b></div>
+        <div class="descripcion">
           <ul>
             <li>
               <h3> <b>Unidad :</b> {{parametro.unidadMedida}}</h3>
@@ -45,13 +45,14 @@
 <!--Modal para registro de parametros-->
 <div class="modal" [ngClass]="{'is-active':activarFormParametro}">
   <div class="modal-background" (click)="toggleModalParametro()"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">{{accion? 'Registro':'Edicion'}} de Parametros</p>
-      <button class="delete" aria-label="close" (click)="toggleModalParametro()"></button>
-    </header>
-    <section class="modal-card-body">
-      <form [formGroup]="formParametro" (submit)="saveParametro(formParametro.value)">
+  <form [formGroup]="formParametro" (submit)="saveAndEditParametro(formParametro.value)">
+    <div class="modal-card">
+
+      <header class="modal-card-head">
+        <p class="modal-card-title">{{accion? 'Registro':'Edicion'}} de Parametros</p>
+        <button class="delete" aria-label="close" (click)="toggleModalParametro()"></button>
+      </header>
+      <section class="modal-card-body">
         <div class="field">
           <div class="control">
             <input class="input" formControlName="id" type="hidden">
@@ -106,18 +107,21 @@
             <option [ngValue]="categoria" *ngFor="let categoria of listaCategoria | async">{{categoria.nombre}}</option>
           </select>
         </div>
+
+      </section>
+      <footer class="modal-card-foot">
         <div class="field is-grouped">
           <div class="control">
             <button type="submit" [disabled]="!this.formParametro.valid" class="button is-success ">
-                {{accion? 'Guardar':'Editar'}}
+              {{accion? 'Guardar':'Editar'}}
             </button>
           </div>
+          <div class="control">
+            <button class="button" (click)="toggleModalParametro()">Cancelar</button>
+          </div>
         </div>
-      </form>
-    </section>
-    <footer class="modal-card-foot">
-      <button class="button" (click)="toggleModalParametro()">Cancelar</button>
-    </footer>
-  </div>
+      </footer>
+    </div>
+  </form>
 </div>
 <!--Fin de modal para registro registros-->
