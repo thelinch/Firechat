@@ -54,103 +54,53 @@ export class PmaoComponent implements OnInit, AfterViewInit {
 
   listaAspectosAmbientales = [
     {
-      nombre: "RIESGO E IMPACTO EN EL AGUA",
-      opciones: [
-        { nombre: "Uso de agua superficial", id: "1" },
-        { nombre: "Uso de agua subterranea", id: "2" },
-        { nombre: "Descargas de agua al mar (Efluentes)", id: "3" },
-        { nombre: "Descargas de agua a rios y quebradas (Efluentes)", id: "4" },
-        { nombre: "Descargas a pozos subterraneos (Acuiferos)", id: "5" },
-        { nombre: "Potencial de contacto con el nivel freatico", id: "6" },
-        { nombre: "Generacion de lodos y sedimentos (movimiento de tierra, cruces en cuerpos de agua, etc)", id: "7" },
-        { nombre: "Agregar otros +" },
-      ]
-    },
-    {
       nombre: "RIESGO E IMPACTO EN AIRE",
       opciones: [
-        { nombre: "Generacion de polvo (Uso de vias no pavimentadas)", id: "8" },
-        { nombre: "Generacion de gases / humos / olores", id: "9" },
-        { nombre: "Generacion de ruido", id: "10" },
-        { nombre: "Generacion de vibraciones", id: "11" },
-        { nombre: "Potencial impacto en una estacion de calidad de aire (Indicar cuales)", id: "12" },
-        { nombre: "Uso de equipos con fuerte radioactividad", id: "13" },
-        { nombre: "Uso de equipos con fuerte radiacion no ionizante (Antenas de radio, ceular, lineas electricas)", id: "14" },
-        { nombre: "Consumo de energia electrica (cambio climatico)", id: "15" },
-        { nombre: "Agregar otros +" },
+        { nombre: "Generacion de polvo (Uso de vias no pavimentadas)", id: "1" },
+        { nombre: "Generacion de gases / humos / olores", id: "2" },
+        { nombre: "Generacion de ruidos molestos", id: "3" },
       ]
     },
+
     {
       nombre: "RIESGO E IMPACTO EN BIOLOGIA Y RECURSOS NATURALES",
       opciones: [
-        { nombre: "Perturbacion o disturbacion de cobertura vegetal (Colles, quenuales, pastos, etc)", id: "16" },
-        { nombre: "Perturbacion o disturbacion de habitats acuaticos o terrestres", id: "17" },
-        { nombre: "Reubicacion de especies de flora y fauna", id: "18" },
-        { nombre: "Consumo de papel", id: "19" },
-        { nombre: " Consumo de hidrocarburos", id: "20" },
-        { nombre: "Agregar otros +" },
+        { nombre: "Perturbacion o disturbacion de cobertura vegetal (pastos, etc)", id: "4" },
+        { nombre: "Perturbacion o disturbacion de habitats  terrestres", id: "5" },
       ]
     },
     {
       nombre: "RIESGO E IMPACTO EN SUELOS",
       opciones: [
-        { nombre: "Generacion de suelos organico (Retiro de Top soil)", id: "21" },
-        { nombre: "Generacion de material inerte", id: "22" },
-        { nombre: "Uso de canteras internas (autorizadas)", id: "23" },
-        { nombre: "Generacion de erosion", id: "24" },
-        { nombre: "Agregar otros +" },
+        { nombre: "Deterioro de la calidad del suelo", id: "6" },
+
       ]
 
     },
-    {
-      nombre: "RIESGO E IMPACTO EN DESMONTES",
-      opciones: [
-        { nombre: " Uso de desmonte para actividades como lastrado (indicar clase)", id: "25" },
-        { nombre: "Uso de suelos organico", id: "26" },
-        { nombre: "Agregar otros +" },
-      ]
-    },
-    {
-      nombre: "RIESGO E IMPACTO EN RESIDUOS",
-      opciones: [
-        { nombre: "Generacion de residuos peligrosos", id: "27" },
-        { nombre: "Generacion de residuos no peligrosos", id: "28" },
-        { nombre: " Uso de insumos quimicos fiscalizados", id: "29" },
-        { nombre: "Uso de insumos quimicos / reactivos", id: "30" },
-        { nombre: "Uso de baños (portatiles u otros)", id: "31" },
-        { nombre: "Potencial derrame de hidrocarburos (transporte / almacenamiento y/o abastecimiento)", id: "32" },
-        { nombre: "Potencial derrame de productos quimicos / reactivos (Transporte / almacenamiento y/o abastecimiento)", id: "33" },
-        { nombre: "Agregar otros +" },
-      ]
-
-    },
-
-    {
-      nombre: "RIESGO E IMPACTO POR INFRAESTRUCTURA Y EQUIPAMIENTO",
-      opciones: [
-        { nombre: "Uso de talleres temporales", id: "34" },
-        { nombre: "Uso de instalaciones temporales (campamento / almacenes / oficinas)", id: "35" },
-        { nombre: " Uso de equipos pesados y/o auxiliares", id: "36" },
-        { nombre: "Agregar otros +" },
-      ]
-
-    },
-
     {
       nombre: "RIESGO E IMPACTO POR FUERA DE LA PROPIEDAD",
       opciones: [
-        { nombre: "Ejecucion de actividades fuera del limite de propiedad", id: "37" },
-        { nombre: "Comunicaciones a las pobaciones vecinas, comunidades y/o autoridades locales", id: "38" },
-        { nombre: "Contratacion de personal local", id: "39" },
-        { nombre: "Agregar otros +" },
+        { nombre: "Ejecución de actividades fuera del límite de propiedad", id: "7" },
+        { nombre: "Presencia de Residuos Sólidos fuera del área apropiado", id: "8" },
+        { nombre: "Contratación de personal local", id: "9" },
       ]
-
     },
     {
-      nombre: "AGREGAR OTROS ",
+      nombre: "SEGURIDAD Y SALUD OCUPACIONAL",
+      opciones: [
+        { nombre: "Presencia de Vectores(mosquitos, zancudos, gallinazos, perros, etc)", id: "10" },
+        { nombre: "Ausencia de Equipos de Protección Personal en los trabajadores", id: "11" },
+        { nombre: "Movimientos repetitivos en el personal de la Planta", id: "12" },
+        { nombre: "Uso de inPosturas inadecuadas en el personal de la Planta", id: "13" },
+      ]
+    },
+
+    {
+      nombre: "PRODUCTIVIDAD ",
       opciones: [
 
-        { nombre: "Agregar otros +" },
+        { nombre: "Número de familias sensibilizadas", id: "14" },
+        { nombre: "Ubicación de familias sensibilizadas", id: "15" },
       ]
 
     }
