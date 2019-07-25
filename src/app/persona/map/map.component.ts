@@ -24,8 +24,8 @@ import { persona } from 'src/app/modelos/persona';
 
 
 export class MapComponent implements OnInit {
-  latitudCenter: number = -9.5504168
-  longitudCenter: number = -77.0543888
+  latitudCenter: number = -9.211581
+  longitudCenter: number = -75.984001
   listaIncidencia: Observable<incidencias[]>
   listArea: Observable<area[]>
   listIndice: Array<indice> = new Array<indice>()
