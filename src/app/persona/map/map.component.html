@@ -1,7 +1,7 @@
 <agm-map [panControl]="true" [zoom]=11 [disableDefaultUI]="true" [mapTypeId]="'hybrid'" [latitude]="this.latitudCenter"
   [mapTypeControl]="true" [longitude]="this.longitudCenter">
   <agm-polygon *ngFor="let area of (listArea | async)" [paths]="area.paths" (polyClick)="mostrarMensaje(area.id,area.area)"
-    [strokeColor]="area.color" [zIndex]="area.zIndex"></agm-polygon>
+    [strokeColor]="area.color"></agm-polygon>
 
   <agm-marker iconUrl="./assets/iconos-IA/{{incidencia.tipoIncidencia.tipo+'.png'}}" [longitude]="incidencia.longitud"
     [latitude]="incidencia.latitud" *ngFor="let incidencia of (listaIncidencia | async)">

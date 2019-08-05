@@ -30,8 +30,7 @@
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/materialize-css/dist/js/materialize.min.js",
-              "node_modules/jquery-ui/jquery-ui.js"
+              "node_modules/materialize-css/dist/js/materialize.min.js"
             ]
           },
           "configurations": {

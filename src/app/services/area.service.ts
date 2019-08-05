@@ -16,7 +16,7 @@ export class AreaService {
 
   getAllIndiceFindAreaId(idArea: string): Observable<DocumentReference[]> {
     return this.afs.collection<indice>("area").doc(idArea).collection("indice").snapshotChanges().pipe(map(actions => actions.map(documentoIndice => {
-      const ref: DocumentReference = (documentoIndice.payload.doc.data() as area_indice).indiceRef
+      let ref: DocumentReference = (documentoIndice.payload.doc.data() as area_indice).indiceRef
       return ref
     })));
   }
