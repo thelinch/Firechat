@@ -8,6 +8,7 @@ import { AngularFireMessaging } from "@angular/fire/messaging";
 import { BehaviorSubject } from "rxjs";
 import { take } from "rxjs/operators";
 import { persona } from "../modelos/persona";
+import { incidencias } from "../modelos/incidencias";
 
 @Injectable()
 export class MessagingService {
@@ -46,9 +47,7 @@ export class MessagingService {
       }
     );
   }
-  saveToken(user, token) {}
-  sentMessage(message) {
-    console.log(localStorage.getItem("tokenNotification"));
+  sentMessage(message, incidencia: incidencias) {
     let header = new HttpHeaders()
       .set("Content-Type", "application/json")
       .set(
@@ -62,7 +61,7 @@ export class MessagingService {
         "localhost:4200/persona/ZLrWK5DXkP5s296ZeXkW/area/D8a5UgSogRhTreAED5BG/map",
       data: {
         landing_page: "second",
-        price: "$3,000.00",
+        incidencia: incidencia.tipoIncidencia.tipo,
         user: JSON.parse(sessionStorage.getItem("personaLoged")).nombre
       },
       to: localStorage.getItem("tokenNotification")
@@ -75,7 +74,6 @@ export class MessagingService {
   }
   receiveMessage() {
     this.messaging.onMessage(payload => {
-      console.log("recived ", payload);
       this.currentMessage.next(payload);
     });
   }

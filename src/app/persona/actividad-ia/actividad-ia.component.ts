@@ -160,7 +160,7 @@ export class ActividadIAComponent implements OnInit {
             .setIncidenciaFindIA(this.idIA, incidencia)
             .then(async documento => {
               console.log("entro a la crecion de a incidencian");
-              this.messageService.sentMessage("NUEVA INCIDENCIA");
+              this.messageService.sentMessage("NUEVA INCIDENCIA",incidencia);
               this.toggleFormIncidencia();
               await this.stopBlock();
             });
