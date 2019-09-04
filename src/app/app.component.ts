@@ -11,17 +11,7 @@ import { MessagingService } from "./services/messaging.service";
 })
 export class AppComponent implements OnInit {
   title = "firechat";
-  message;
-  constructor(
-    db: AngularFirestore,
-    private swUpdate: SwUpdate,
-    private messagingService: MessagingService
-  ) {
-    const userId = "user001";
-    this.messagingService.requestPermission(userId);
-    this.messagingService.receiveMessage();
-    this.message = this.messagingService.currentMessage;
-  }
+  constructor(db: AngularFirestore, private swUpdate: SwUpdate) {}
   ngOnInit(): void {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.available.subscribe({
