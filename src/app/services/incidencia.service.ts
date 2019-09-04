@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { actividades } from '../modelos/actividades';
 import { Colecciones } from '../HelperClass/Colecciones';
 import * as firebase from "firebase/app";
+import { MessagingService } from './messaging.service';
 
 @Injectable({
   providedIn: 'root'
