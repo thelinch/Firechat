@@ -69,7 +69,9 @@ export class PersonaComponent implements OnInit {
     this.messagingService.requestPermission(userLoged);
     this.messagingService.receiveMessage();
     this.messagingService.currentMessage.subscribe(payload => {
-      FunctionsBasics.getToast("nuevo mensaje" + payload.data.user);
+      FunctionsBasics.getToast(
+        "nuevo mensaje" + payload.data ? payload.data.user : "wdwdwd"
+      );
     });
     this.activatedRouter.params.subscribe(params => {
       this.idPerson = params["id"];
