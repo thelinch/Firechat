@@ -11,6 +11,7 @@ import { sweetAlertMensaje } from "../HelperClass/SweetAlertMensaje";
 import * as $ from "jquery";
 import { FunctionsBasics } from "src/app/HelperClass/FunctionBasics";
 import { MessagingService } from "../services/messaging.service";
+import { tap } from "rxjs/operators";
 /**
  *
  *
@@ -68,11 +69,15 @@ export class PersonaComponent implements OnInit {
     ) as persona;
     this.messagingService.requestPermission(userLoged);
     this.messagingService.receiveMessage();
-    this.messagingService.currentMessage.subscribe(payload => {
-      FunctionsBasics.getToast(
-        "nuevo mensaje" + payload.data ? payload.data.user : "wdwdwd"
-      );
-    });
+    this.messagingService.currentMessage.pipe(
+      tap(payload => {
+        FunctionsBasics.getToast(
+          "nuevo mensaje" + payload.data != undefined
+            ? payload.data.user
+            : "wdwdwd"
+        );
+      })
+    );
     this.activatedRouter.params.subscribe(params => {
       this.idPerson = params["id"];
     });
