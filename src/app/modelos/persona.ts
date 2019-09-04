@@ -5,14 +5,15 @@ import { tipoPersona } from "./tipoPersona";
 import { gerencia } from "./gerencia";
 
 export interface persona {
-    id?: string
-    nombre: string
-    apellidos: string
-    area: area
-    UserName: string
-    email: string
-    password: string
-    tipoPersona: tipoPersona
-    gerencia: gerencia
-    actividad_persona: actividad_persona[]
-} 
+  id?: string;
+  nombre: string;
+  apellidos: string;
+  area: area;
+  UserName: string;
+  email: string;
+  password: string;
+  tipoPersona: tipoPersona;
+  gerencia: gerencia;
+  actividad_persona: actividad_persona[];
+  token?: string;
+}

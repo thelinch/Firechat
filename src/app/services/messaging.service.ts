@@ -1,3 +1,4 @@
+import { PersonaService } from "./persona.service";
 import { Injectable } from "@angular/core";
 import * as firebase from "firebase";
 import { AngularFireDatabase } from "@angular/fire/database";
@@ -6,6 +7,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AngularFireMessaging } from "@angular/fire/messaging";
 import { BehaviorSubject } from "rxjs";
 import { take } from "rxjs/operators";
+import { persona } from "../modelos/persona";
 
 @Injectable()
 export class MessagingService {
@@ -15,19 +17,21 @@ export class MessagingService {
     private angularFireMessaging: AngularFireMessaging,
     private angularFireAuth: AngularFireAuth,
     private angularFireDB: AngularFireDatabase,
-    private http: HttpClient
+    private http: HttpClient,
+    private personaService: PersonaService
   ) {
     this.angularFireMessaging.messaging.subscribe(_messaging => {
       _messaging.onMessage = _messaging.onMessage.bind(_messaging);
       _messaging.onTokenRefresh = _messaging.onTokenRefresh.bind(_messaging);
     });
   }
-  updateToken(userId, token) {
+  updateToken(user: persona, token) {
     // we can change this function to request our backend service
     this.angularFireAuth.authState.pipe(take(1)).subscribe(() => {
       const data = {};
-      data[userId] = token;
-      this.angularFireDB.object("fcmTokens/").update(data);
+      user.token = token;
+      console.log("USER ", user, "token", token);
+      this.personaService.update(user);
     });
   }
   requestPermission(userId) {
@@ -42,6 +46,7 @@ export class MessagingService {
       }
     );
   }
+  saveToken(user, token) {}
   sentMessage(message) {
     console.log(localStorage.getItem("tokenNotification"));
     let header = new HttpHeaders()

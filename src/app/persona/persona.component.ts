@@ -63,8 +63,10 @@ export class PersonaComponent implements OnInit {
   }
 
   ngOnInit() {
-    const userId = sessionStorage.getItem("loget");
-    this.messagingService.requestPermission(userId);
+    const userLoged = JSON.parse(
+      sessionStorage.getItem("personaLoged")
+    ) as persona;
+    this.messagingService.requestPermission(userLoged);
     this.messagingService.receiveMessage();
     this.message = this.messagingService.currentMessage;
     this.activatedRouter.params.subscribe(params => {
