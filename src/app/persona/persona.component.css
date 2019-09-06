@@ -1,25 +1,25 @@
-.display_block{
-    display: none;
+.display_block {
+  display: none;
 }
-.notificacion_header{
+.notificacion_header {
   position: relative;
 }
-.notificacion_active{
-content: "";
-width: 10px;
-height: 10px;
-position: relative;
-display: inline-block;
-right: 12px;
-top:-10px;
-border-radius: 50%;
-background: red;
-font-size: 8px;
-text-align: center;
-color: white;
-font-weight: bold;
+.notificacion_active {
+  content: "";
+  width: 10px;
+  height: 10px;
+  position: relative;
+  display: inline-block;
+  right: 12px;
+  top: -10px;
+  border-radius: 50%;
+  background: red;
+  font-size: 8px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
 }
-.notificacion_body{
+.notificacion_body {
   position: absolute;
-
+  right: 10px;
 }

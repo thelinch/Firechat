@@ -80,7 +80,6 @@ export class ActividadComponent implements OnInit {
     })
     this.filtradoForm = new FormGroup({
       fecha_inicio: new FormControl(FunctionsBasics.getCurrentDate(), Validators.required),
-      fecha_fin: new FormControl(FunctionsBasics.getCurrentDate(), Validators.required),
     })
     this.incidenciaForm = new FormGroup({
       detalle: new FormControl("", Validators.required),
@@ -90,7 +89,7 @@ export class ActividadComponent implements OnInit {
     this.listaTipoIncidencias = this.tipoIncidenciaService.getAllTipoIncidencia()
     this.fileUploadTemplate = new FileUploadWithPreview("template")
     this.listaDeComponentes = this.componenteService.getAllComponente()
-    this.listaActividades = this.actividadService.getAllActividadFindIdIndice(this.idIndice, Date.now(), Date.now())
+    this.listaActividades = this.actividadService.getAllActividadFindIdIndice(this.idIndice, Date.now())
     this.listaActividades.subscribe(respuesta => {
       this.blockUI.stop()
     })
@@ -139,7 +138,7 @@ export class ActividadComponent implements OnInit {
   }
   consultarDatoFiltradoFechas(form: any) {
     this.startBlock()
-    this.listaActividades = this.actividadService.getAllActividadFindIdIndice(this.idIndice, form.fecha_inicio, form.fecha_fin)
+    this.listaActividades = this.actividadService.getAllActividadFindIdIndice(this.idIndice, form.fecha_inicio)
     this.listaActividades.subscribe(respuesta => {
       this.stopBlock()
     })

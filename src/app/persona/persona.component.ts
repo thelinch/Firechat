@@ -126,4 +126,7 @@ export class PersonaComponent implements OnInit {
       ]);
     });
   }
+  effect() {
+    $(".notificacion_body").toggle("slow");
+  }
 }
