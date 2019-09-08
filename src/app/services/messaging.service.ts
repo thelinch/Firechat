@@ -20,12 +20,7 @@ export class MessagingService {
     private angularFireDB: AngularFireDatabase,
     private http: HttpClient,
     private personaService: PersonaService
-  ) {
-    this.angularFireMessaging.messaging.subscribe(_messaging => {
-      _messaging.onMessage = _messaging.onMessage.bind(_messaging);
-      _messaging.onTokenRefresh = _messaging.onTokenRefresh.bind(_messaging);
-    });
-  }
+  ) {}
   updateToken(user: persona, token) {
     // we can change this function to request our backend service
     this.angularFireAuth.authState.pipe(take(1)).subscribe(() => {

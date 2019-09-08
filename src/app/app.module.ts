@@ -4,8 +4,6 @@ import { AppComponent } from "./app.component";
 import { registerLocaleData } from "@angular/common";
 import { AngularFireModule } from "angularfire2";
 import { environment } from "../environments/environment";
-import { AngularFireAuthModule } from "angularfire2/auth";
-import { AngularFirestoreModule } from "angularfire2/firestore";
 import { AngularFireDatabase } from "@angular/fire/database";
 import { AppRoutingModule } from "./app.rounting.module";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -17,13 +15,15 @@ import localeEn from "@angular/common/locales/en";
 import localeEsAr from "@angular/common/locales/es-AR";
 import { NgxPermissionsModule } from "ngx-permissions";
 import { LoginComponent } from "./login/login.component";
-import { AngularFireStorageModule } from "angularfire2/storage";
 import { FileService } from "./services/file.service";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { AngularFireMessagingModule } from "@angular/fire/messaging";
 import { MessagingService } from "./services/messaging.service";
 import { HttpClientModule } from "@angular/common/http";
+import { AngularFireStorageModule } from "@angular/fire/storage";
+import { AngularFireAuthModule } from "@angular/fire/auth";
+import { AngularFirestore } from "@angular/fire/firestore";
 
 registerLocaleData(localePy, "es");
 registerLocaleData(localePt, "pt");
@@ -52,6 +52,7 @@ library.add(fas);
   exports: [FontAwesomeModule, FormsModule, ReactiveFormsModule],
   providers: [
     AngularFireDatabase,
+    AngularFirestore,
     MessagingService,
     { provide: LOCALE_ID, useValue: "es-Ar" },
     FileService
