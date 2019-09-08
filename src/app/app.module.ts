@@ -23,8 +23,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { AngularFireMessagingModule } from "@angular/fire/messaging";
 import { MessagingService } from "./services/messaging.service";
-import { AsyncPipe } from "../../node_modules/@angular/common";
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from "@angular/common/http";
 
 registerLocaleData(localePy, "es");
 registerLocaleData(localePt, "pt");
@@ -39,7 +38,7 @@ library.add(fas);
     NgxPermissionsModule.forRoot(),
     AngularFireMessagingModule,
     AngularFireStorageModule,
-    AngularFirestoreModule.enablePersistence(),
+    //AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
     FontAwesomeModule,
@@ -54,7 +53,6 @@ library.add(fas);
   providers: [
     AngularFireDatabase,
     MessagingService,
-    AsyncPipe,
     { provide: LOCALE_ID, useValue: "es-Ar" },
     FileService
   ],
