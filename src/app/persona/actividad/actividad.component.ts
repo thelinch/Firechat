@@ -20,10 +20,9 @@ import { flatMap, take } from 'rxjs/operators';
 import { FileService } from 'src/app/services/file.service';
 import { FunctionsBasics } from 'src/app/HelperClass/FunctionBasics';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import * as firebase from "firebase/app";
+const firebase=require("firebase/app");
 import { sweetAlertMensaje } from 'src/app/HelperClass/SweetAlertMensaje';
 import * as moment from "moment";
-
 @Component({
   selector: 'app-actividad',
   templateUrl: './actividad.component.html',

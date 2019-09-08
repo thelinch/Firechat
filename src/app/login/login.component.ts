@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
       if (respuesta) {
         this.personaService.getPersonaFindCorreo(this.authService.getAuth().auth.currentUser.email).subscribe(persona => {
           sweetAlertMensaje.getMensajeTransaccionExitosa();
+        
           this.router.navigateByUrl("/persona/" + persona[0].id + "/area/" + persona[0].area.id + "/map")
         })
       } else {

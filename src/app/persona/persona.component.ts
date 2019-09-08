@@ -67,7 +67,9 @@ export class PersonaComponent implements OnInit {
     const userLoged = JSON.parse(
       sessionStorage.getItem("personaLoged")
     ) as persona;
-    this.messagingService.requestPermission(userLoged);
+    if (userLoged.token) {
+      this.messagingService.requestPermission(userLoged);
+    }
     this.messagingService.receiveMessage();
     this.messagingService.currentMessage.pipe(
       tap(payload => {
