@@ -39,8 +39,8 @@ export class MessagingService {
   requestPermission(userId) {
     this.angularFireMessaging.requestToken.subscribe(
       token => {
-        console.log(token);
         const user = { id: userId.id, token: token };
+        console.log(user);
         localStorage.setItem("tokenNotification", token);
         this.sendMessageservice.registeredAndUpdateToken(user);
         this.updateToken(userId, token);

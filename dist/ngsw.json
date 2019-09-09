@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "index": "/index.html",
+  "index": "/",
   "assetGroups": [
     {
       "name": "app",
@@ -9,13 +9,13 @@
       "urls": [
         "/0.ba68d2bcfd2cdc794459.js",
         "/1.dc4c3e63c474e0decd1c.js",
-        "/2.5c879c0d76a411a95976.js",
+        "/2.14118bea4185882b6fc7.js",
         "/favicon.ico",
         "/firebase-messaging-sw.js",
         "/index.html",
         "/main.e9c70dd8d70adee43985.js",
         "/polyfills.e637e0bc8ee0114440f1.js",
-        "/runtime.f51d014a4cdbc1ed2c57.js",
+        "/runtime.4b338dfe22da7e7ff79a.js",
         "/scripts.d2350948bb6f0dd9a083.js",
         "/styles.d92fa71e86affafc74ab.css"
       ],
@@ -54,7 +54,7 @@
   "hashTable": {
     "/0.ba68d2bcfd2cdc794459.js": "5ff8fe2080e049ea9b79a48bb7ece5c8115c25e1",
     "/1.dc4c3e63c474e0decd1c.js": "f4922f8ac9aa639ba76cab9d9880cc288f3b2339",
-    "/2.5c879c0d76a411a95976.js": "e48ae752bf63a39031522d276fe999275aba476c",
+    "/2.14118bea4185882b6fc7.js": "9867077a41193817f20558d143f3ff520720276a",
     "/assets/87591.jpg": "5e198f485f730bf12d9ea67b68e63639e8e50e67",
     "/assets/Iconos-ica/incumplimiento-ica.png": "a090b477cff99bb7ddef762bf42015a5b7a5cf25",
     "/assets/Iconos-ica/riesgo-alto-ica.png": "6f0b5fc40a86417de81c5fc7fe8dcc9a2b136bb8",
@@ -77,10 +77,10 @@
     "/assets/img_login/logo.png": "edd6157cb59ca4a0b32dba0b4640b38b8b9a4b1a",
     "/favicon.ico": "84161b857f5c547e3699ddfbffc6d8d737542e01",
     "/firebase-messaging-sw.js": "94dd158d9808a6e20b8ac538921dbcf6dabb76ad",
-    "/index.html": "2f9efff5243aa46238b2968b938e0aedd5c91e9d",
+    "/index.html": "982150b91513ea876710574f359f839163e76cd2",
     "/main.e9c70dd8d70adee43985.js": "71b0286b2499c99d7043aa54d390736fbcbf5132",
     "/polyfills.e637e0bc8ee0114440f1.js": "d5d5770f0744e079ab3677bb80d0124bf3faddc4",
-    "/runtime.f51d014a4cdbc1ed2c57.js": "2e1155a661d7a0ca51e3651796990589003a1c83",
+    "/runtime.4b338dfe22da7e7ff79a.js": "13521714028b7a1b4911a43e13f41ab1936b8198",
     "/scripts.d2350948bb6f0dd9a083.js": "bac21dc97dc59f4af03f7d6f6e57ff0880530743",
     "/styles.d92fa71e86affafc74ab.css": "dc2aeab933a91c11d105d425ea84f5e369c73122"
   },
