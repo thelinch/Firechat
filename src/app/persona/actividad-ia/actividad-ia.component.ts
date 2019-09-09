@@ -16,6 +16,7 @@ import { FunctionsBasics } from "./../../HelperClass/FunctionBasics";
 import * as firebase from "firebase/app";
 import { Colecciones } from "src/app/HelperClass/Colecciones";
 import { MessagingService } from "src/app/services/messaging.service";
+import { SendMessageService } from "src/app/services/send-message.service";
 
 @Component({
   selector: "app-actividad-ia",
@@ -40,7 +41,8 @@ export class ActividadIAComponent implements OnInit {
     private messageService: MessagingService,
     private router: ActivatedRoute,
     private tipoIncidenciaService: TipoIncidenciaService,
-    private incidenciaService: IncidenciaService
+    private incidenciaService: IncidenciaService,
+    private sendMessageService: SendMessageService
   ) {}
 
   ngOnInit() {
@@ -160,7 +162,22 @@ export class ActividadIAComponent implements OnInit {
             .setIncidenciaFindIA(this.idIA, incidencia)
             .then(async documento => {
               console.log("entro a la crecion de a incidencian");
-              this.messageService.sentMessage("NUEVA INCIDENCIA",incidencia);
+              const titleNotification =
+                "Nueva Incidencia " + incidencia.detalle;
+              const bodyNotification =
+                "La incidencia tiene un grado " +
+                incidencia.tipoIncidencia.tipo;
+              const data = {
+                lt: incidencia.latitud,
+                ln: incidencia.longitud,
+                urlImage: incidencia.urlListOfPhotos[0].url
+              };
+              this.sendMessageService.sendMessagingDevices(
+                bodyNotification,
+                titleNotification,
+                data,
+                incidencia.persona
+              );
               this.toggleFormIncidencia();
               await this.stopBlock();
             });

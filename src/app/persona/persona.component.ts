@@ -12,6 +12,7 @@ import * as $ from "jquery";
 import { FunctionsBasics } from "src/app/HelperClass/FunctionBasics";
 import { MessagingService } from "../services/messaging.service";
 import { tap } from "rxjs/operators";
+import { Location } from "@angular/common";
 /**
  *
  *
@@ -32,8 +33,6 @@ export class PersonaComponent implements OnInit {
   Subscription: Subscription;
   idPerson: string;
   listIncidenciaNotificacion: Observable<incidencias[]>;
-  message;
-
   /**
    *Creates an instance of PersonaComponent.
    * @param {PersonaService} personaService
@@ -49,7 +48,8 @@ export class PersonaComponent implements OnInit {
     private incidenciaService: IncidenciaService,
     private activatedRouter: ActivatedRoute,
     private permissionsService: NgxPermissionsService,
-    private messagingService: MessagingService
+    private messagingService: MessagingService,
+    private location: Location
   ) {
     navigator.geolocation.getCurrentPosition(position => {
       sessionStorage.setItem(
@@ -69,15 +69,27 @@ export class PersonaComponent implements OnInit {
     ) as persona;
     this.messagingService.requestPermission(userLoged);
     this.messagingService.receiveMessage();
-    this.messagingService.currentMessage.pipe(
-      tap(payload => {
-        FunctionsBasics.getToast(
-          "nuevo mensaje" + payload.data != undefined
-            ? payload.data.user
-            : "wdwdwd"
+    this.messagingService.currentMessage.subscribe(message => {
+      if (message) {
+        console.log(message);
+        const url =
+          "/persona/" +
+          userLoged.id +
+          "/area/" +
+          userLoged.area.id +
+          "/map" +
+          "?lt=" +
+          message.data.lt +
+          "&ln=" +
+          message.data.ln;
+        sweetAlertMensaje.getMessageNotifiction(
+          message.notification.title,
+          message.notification.body,
+          url,
+          message.data.urlImage
         );
-      })
-    );
+      }
+    });
     this.activatedRouter.params.subscribe(params => {
       this.idPerson = params["id"];
     });

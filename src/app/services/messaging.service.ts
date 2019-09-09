@@ -9,6 +9,7 @@ import { BehaviorSubject } from "rxjs";
 import { take } from "rxjs/operators";
 import { persona } from "../modelos/persona";
 import { incidencias } from "../modelos/incidencias";
+import { SendMessageService } from "./send-message.service";
 
 @Injectable()
 export class MessagingService {
@@ -19,8 +20,13 @@ export class MessagingService {
     private angularFireAuth: AngularFireAuth,
     private angularFireDB: AngularFireDatabase,
     private http: HttpClient,
-    private personaService: PersonaService
-  ) {}
+    private personaService: PersonaService,
+    private sendMessageservice: SendMessageService
+  ) {
+    this.messaging.onTokenRefresh = this.messaging.onTokenRefresh.bind(
+      this.messaging
+    );
+  }
   updateToken(user: persona, token) {
     // we can change this function to request our backend service
     this.angularFireAuth.authState.pipe(take(1)).subscribe(() => {
@@ -34,7 +40,9 @@ export class MessagingService {
     this.angularFireMessaging.requestToken.subscribe(
       token => {
         console.log(token);
+        const user = { id: userId.id, token: token };
         localStorage.setItem("tokenNotification", token);
+        this.sendMessageservice.registeredAndUpdateToken(user);
         this.updateToken(userId, token);
       },
       err => {

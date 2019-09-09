@@ -53,7 +53,6 @@ library.add(fas);
   providers: [
     AngularFireDatabase,
     AngularFirestore,
-    MessagingService,
     { provide: LOCALE_ID, useValue: "es-Ar" },
     FileService
   ],

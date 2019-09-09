@@ -98,7 +98,13 @@
                 class="item_notificacion margin_bottom_5rem"
                 *ngFor="let incidencia of incidencias"
               >
-                <a [routerLink]="['map']" [queryParams]="{ lt: incidencia.latitud,ln:incidencia.longitud }">
+                <a
+                  [routerLink]="['map']"
+                  [queryParams]="{
+                    lt: incidencia.latitud,
+                    ln: incidencia.longitud
+                  }"
+                >
                   <div class="box">
                     <article class="media">
                       <div class="media-content">
@@ -125,5 +131,4 @@
     </div>
   </div>
 </nav>
-
 <router-outlet></router-outlet>
