@@ -22,4 +22,6 @@
 .notificacion_body {
   position: absolute;
   right: 10px;
+  height: 300px;
+  overflow-y: scroll;
 }
