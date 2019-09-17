@@ -5,7 +5,7 @@ import { HttpClient } from "@angular/common/http";
   providedIn: "root"
 })
 export class SendMessageService {
-  private urlControlador = "https://api.appecc.tk/api/";
+  private urlControlador = "http://localhost:8042/api/";
   constructor(private _http: HttpClient) {}
   sendMessagingDevices(message, title, data, user) {
     let notification = {
