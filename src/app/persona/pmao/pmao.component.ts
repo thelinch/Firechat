@@ -101,6 +101,11 @@ export class PmaoComponent implements OnInit, AfterViewInit {
 
         { nombre: "Número de familias sensibilizadas", id: "14" },
         { nombre: "Ubicación de familias sensibilizadas", id: "15" },
+        { nombre: "Número de familias activas en el programa", id: "16" },
+        { nombre: "Peso de residuos sólidos orgánicos recolectados por dia", id: "17" },
+        { nombre: "Peso de residuos sólidos inorgánicos recolectados por dia", id: "18" },
+        { nombre: "Peso de residuos sólidos inorganicos dentro de los organicos", id: "19" },
+        { nombre: "Peso de residuos sólidos orgánicos dentro de los inorgánicos", id: "20" },
       ]
 
     }
