@@ -163,10 +163,9 @@ export class ActividadIAComponent implements OnInit {
             .then(async documento => {
               console.log("entro a la crecion de a incidencian");
               const titleNotification =
-                "Nueva Incidencia " + incidencia.detalle;
-              const bodyNotification =
-                "La incidencia tiene un grado " +
+                "Incidencia Ocurrida de nivel " +
                 incidencia.tipoIncidencia.tipo;
+              const bodyNotification = incidencia.detalle;
               const data = {
                 lt: incidencia.latitud,
                 ln: incidencia.longitud,

@@ -9,7 +9,7 @@ export class SendMessageService {
   constructor(private _http: HttpClient) {}
   sendMessagingDevices(message, title, data, user) {
     let notification = {
-      message: message,
+      messageBody: message,
       title: title,
       data: data,
       user: user
@@ -22,7 +22,6 @@ export class SendMessageService {
     let data = {
       user: userLoged
     };
-    console.log(userLoged);
     this._http
       .post(this.urlControlador + "registerAndUpdateTokenUser", data)
       .subscribe();
