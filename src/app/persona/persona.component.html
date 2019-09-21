@@ -54,14 +54,18 @@
         <i class="material-icons">
           insert_chart
         </i>
-        <div class="navbar-item">
-          <div class="buttons">
-            <a class="button is-primary" (click)="onlogout()">
-              <strong>Salir</strong>
-            </a>
-          </div>
-        </div>
       </a>
+
+      <div class="navbar-item">
+        <div class="buttons">
+          <button class="button is-primary" (click)="onlogout()">
+            <strong>Salir</strong>
+          </button>
+          <button class="button is-primary" (click)="notificarUsuario()">
+            <strong>Notificar!</strong>
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="navbar-end">

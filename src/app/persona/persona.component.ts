@@ -64,14 +64,17 @@ export class PersonaComponent implements OnInit {
   }
 
   ngOnInit() {
-    const userLoged = JSON.parse(
-      sessionStorage.getItem("personaLoged")
-    ) as persona;
-    this.messagingService.requestPermission(userLoged);
+    this.activatedRouter.params.subscribe(params => {
+      this.idPerson = params["id"];
+    });
+    this.getPersonFindId();
     this.messagingService.receiveMessage();
     this.messagingService.currentMessage.subscribe(message => {
       if (message) {
         console.log(message);
+        const userLoged: persona = JSON.parse(
+          sessionStorage.getItem("personaLoged")
+        );
         const url =
           "/persona/" +
           userLoged.id +
@@ -90,13 +93,15 @@ export class PersonaComponent implements OnInit {
         );
       }
     });
-    this.activatedRouter.params.subscribe(params => {
-      this.idPerson = params["id"];
-    });
-    this.getPersonFindId();
     //if (this.permissionsService.hasPermission("JEFE")) {
     this.listIncidenciaNotificacion = this.incidenciaService.getAllIncidencias();
     //}
+  }
+  notificarUsuario() {
+    const userLoged = JSON.parse(
+      sessionStorage.getItem("personaLoged")
+    ) as persona;
+    this.messagingService.requestPermission(userLoged);
   }
 
   /**
