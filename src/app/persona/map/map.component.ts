@@ -22,7 +22,7 @@ import { persona } from "src/app/modelos/persona";
 export class MapComponent implements OnInit {
   latitudCenter: number = -9.211581;
   longitudCenter: number = -75.984001;
-  zoom = 11;
+  zoom = 16;
   listaIncidencia: Observable<incidencias[]>;
   listArea: Observable<area[]>;
   listIndice: Array<indice> = new Array<indice>();
@@ -37,7 +37,7 @@ export class MapComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private activedRouter: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.listaIncidencia = this.incidenciaService.getAllIncidencias();

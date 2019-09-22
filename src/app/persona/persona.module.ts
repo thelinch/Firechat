@@ -62,6 +62,7 @@ import { MessagingService } from "../services/messaging.service";
     ChartsModule,
     AgmCoreModule.forRoot({
       apiKey: "AIzaSyDjUlVzErtcnc8NA2PY4SyxDOcZf3az6DY"
+
     })
   ],
 
@@ -80,4 +81,4 @@ import { MessagingService } from "../services/messaging.service";
     ParametroService
   ]
 })
-export class PersonaModule {}
+export class PersonaModule { }
