@@ -1,99 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Firechat</title>
-    <base href="/" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+<head>
+  <meta charset="utf-8" />
+  <title>APPEQC</title>
+  <base href="/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">-->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css"
-      type="text/css"
-    />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://unpkg.com/file-upload-with-preview/dist/file-upload-with-preview.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
-      crossorigin="anonymous"
-    />
-    <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#1976d2" />
-  <link rel="stylesheet" href="styles.d92fa71e86affafc74ab.css"></head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css"
+    type="text/css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css"
+    href="https://unpkg.com/file-upload-with-preview/dist/file-upload-with-preview.min.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+    integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#1976d2" />
+<link rel="stylesheet" href="styles.d92fa71e86affafc74ab.css"></head>
 
-  <body>
-    <app-root>
-      <div id="loading">
-        <style scoped>
-          @import url(https://fonts.googleapis.com/css?family=Roboto:100);
+<body>
+  <app-root>
+    <div id="loading">
+      <style scoped>
+        @import url(https://fonts.googleapis.com/css?family=Roboto:100);
 
-          body {
-            margin-top: 100px;
-            background-color: #007bff;
-            color: #fff;
-            text-align: center;
+        body {
+          margin-top: 100px;
+          background-color: #007bff;
+          color: #fff;
+          text-align: center;
+        }
+
+        h1 {
+          font: 2em "Roboto", sans-serif;
+          margin-bottom: 40px;
+        }
+
+        #loading {
+          display: inline-block;
+          width: 50px;
+          height: 50px;
+          border: 3px solid rgba(255, 255, 255, 3);
+          border-radius: 50%;
+          border-top-color: #fff;
+          animation: spin 1s ease-in-out infinite;
+          -webkit-animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+          to {
+            -webkit-transform: rotate(360deg);
           }
+        }
 
-          h1 {
-            font: 2em "Roboto", sans-serif;
-            margin-bottom: 40px;
+        @-webkit-keyframes spin {
+          to {
+            -webkit-transform: rotate(360deg);
           }
+        }
+      </style>
+    </div>
+  </app-root>
+  <noscript>
+    Disculpa;APPEQC Necesita que javascript este habilitado
+  </noscript>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/ng2-charts@1.6.0/bundles/ng2-charts.umd.min.js"></script>
+<script type="text/javascript" src="runtime.223d8fa6c10b11ccf38e.js"></script><script type="text/javascript" src="polyfills.e637e0bc8ee0114440f1.js"></script><script type="text/javascript" src="scripts.d2350948bb6f0dd9a083.js"></script><script type="text/javascript" src="main.e9c70dd8d70adee43985.js"></script></body>
 
-          #loading {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(255, 255, 255, 3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            -webkit-animation: spin 1s ease-in-out infinite;
-          }
-
-          @keyframes spin {
-            to {
-              -webkit-transform: rotate(360deg);
-            }
-          }
-
-          @-webkit-keyframes spin {
-            to {
-              -webkit-transform: rotate(360deg);
-            }
-          }
-        </style>
-      </div>
-    </app-root>
-    <noscript>
-      Disculpa;APPEQC Necesita que javascript este habilitado
-    </noscript>
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://unpkg.com/ng2-charts@1.6.0/bundles/ng2-charts.umd.min.js"></script>
-  <script type="text/javascript" src="runtime.4a16d4ab5b390e6318d9.js"></script><script type="text/javascript" src="polyfills.e637e0bc8ee0114440f1.js"></script><script type="text/javascript" src="scripts.d2350948bb6f0dd9a083.js"></script><script type="text/javascript" src="main.e9c70dd8d70adee43985.js"></script></body>
 </html>
