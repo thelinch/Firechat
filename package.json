@@ -30,7 +30,7 @@
     "@types/googlemaps": "^3.30.16",
     "angularfire2": "^5.0.1",
     "bulma": "^0.7.2",
-    "chart.js": "^2.7.3",
+    "chart.js": "^2.9.4",
     "core-js": "^2.5.4",
     "file-upload-with-preview": "^3.0.4",
     "firebase": "^5.4.2",
